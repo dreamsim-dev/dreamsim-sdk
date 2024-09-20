@@ -15,9 +15,10 @@ jobs:
           fetch-depth: 0
       - name: Split
         run: |
+          git checkout upm
+          git pull
           git checkout main
           git subtree split -P "$PKG_ROOT" -b upm
-          git checkout upm
           git push -u origin upm
         env:
           PKG_ROOT: Assets/DreamsimPackageRoot
