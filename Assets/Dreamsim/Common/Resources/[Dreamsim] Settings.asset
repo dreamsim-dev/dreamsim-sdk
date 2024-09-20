@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f211115ab9942119a8cb8014a429b68, type: 3}
+  m_Name: '[Dreamsim] Settings'
+  m_EditorClassIdentifier: 
+  _analytics:
+    _purchaseValidatorSlug: 
+    _appsFlyer:
+      _iosAppId: 
+      _iosDevKey: 
+      _androidDevKey: 
+      _debug: 0
+    _devToDev:
+      _iosAppId: 
+      _androidAppId: 
+      _logLevel: 3
+  _advertisement:
+    _levelPlay:
+      _iosAppKey: 
+      _androidAppKey: 
+      _useRewardedVideo: 1
+  _gdpr:
+    _googleMobileAdsTestDeviceHashedIds: []
