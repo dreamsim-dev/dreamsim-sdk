@@ -1,0 +1,24 @@
+{
+  "name": "world.dreamsim.sdk",
+  "displayName": "Dreamsim SDK",
+  "version": "1.0.0",
+  "unity": "2022.3",
+  "description": "Aggregated SDK for publishing",
+  "keywords": [ "android", "ios", "sdk", "plugin" ],
+  "category": "plugins",
+  "dependencies": {
+    "com.unity.purchasing": "4.12.2",
+    "com.google.ads.mobile": "9.2.0",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "appsflyer-unity-plugin": "https://github.com/AppsFlyerSDK/appsflyer-unity-plugin.git#upm",
+    "com.devtodev.sdk.analytics": "https://github.com/devtodev-analytics/package_Analytics.git",
+    "com.devtodev.sdk.analytics.google": "https://github.com/devtodev-analytics/package_Google.git",
+    "com.devtodev.sdk.messaging": "https://github.com/devtodev-analytics/package_Messaging.git",
+    "com.yasirkula.ingamedebugconsole": "https://github.com/yasirkula/UnityIngameDebugConsole.git",
+    "com.lexscite.device-helper": "https://github.com/lexscite/UnityDeviceHelper.git#upm"
+  },
+  "author": {
+    "name": "Lexscite",
+    "email": "lexscite@gmail.com"
+  }
+}
