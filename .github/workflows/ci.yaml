@@ -9,14 +9,14 @@ jobs:
     name: split upm branch
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main branch
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: Split
         run: |
-          git subtree split -P "$PKG_ROOT" -b upm
           git pull
+          git subtree split -P "$PKG_ROOT" -b upm
           git push -u origin upm
         env:
           PKG_ROOT: Assets/DreamsimPackageRoot
