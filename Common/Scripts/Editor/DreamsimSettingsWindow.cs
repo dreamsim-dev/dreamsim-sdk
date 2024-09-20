@@ -7,7 +7,7 @@ namespace Dreamsim.Editor
     {
         private DreamsimSettings _settings;
     
-        [MenuItem("Window/Dreamsim/Settings")]
+        [MenuItem("Dreamsim/Settings")]
         public static void Editor_Settings()
         {
             var window = GetWindow(typeof(DreamsimSettingsWindow)) as DreamsimSettingsWindow;
