@@ -5,6 +5,7 @@ on:
     - main
 permissions:
   actions: write
+  repository-projects: write
 jobs:
   split-upm:
     name: split upm branch
