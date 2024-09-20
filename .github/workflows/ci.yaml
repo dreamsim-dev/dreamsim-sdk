@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-permissions: write-all
 jobs:
   split-upm:
     name: split upm branch
@@ -16,6 +15,7 @@ jobs:
       - name: Split
         run: |
           git subtree split -P "$PKG_ROOT" -b upm
+          git pull
           git push -u origin upm
         env:
           PKG_ROOT: Assets/DreamsimPackageRoot
