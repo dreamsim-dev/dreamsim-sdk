@@ -7,8 +7,7 @@
   "keywords": [ "android", "ios", "sdk", "plugin" ],
   "category": "plugins",
   "dependencies": {
-    "com.unity.purchasing": "4.12.2",
-    "com.google.ads.mobile": "9.2.0"
+    "com.unity.purchasing": "4.12.2"
   },
   "author": {
     "name": "Lexscite",
