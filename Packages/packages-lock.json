@@ -65,6 +65,13 @@
       "dependencies": {},
       "hash": "e5197f8f3eb15a86ae2c6a90d243d42c7a8d5587"
     },
+    "com.unity.ads.ios-support": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.burst": {
       "version": "1.8.13",
       "depth": 1,

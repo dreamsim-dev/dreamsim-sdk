@@ -1,0 +1,18 @@
+{
+    "name": "Dreamsim.Publishing.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7cc09a6c1fa41ad44b95365e48a5aa72"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
