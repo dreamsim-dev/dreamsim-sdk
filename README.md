@@ -17,7 +17,5 @@ UPM package for publishing purposes.
    https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
    ```
 4. Fill in Dreamsim settings (Toolbar -> Dreamsim -> Settings)
-## Getting Started
-Use DreamsimApp.OnInitialized event in order to initialize systems after Dreamsim SDK initialization.
 ## Additional Dependencies
 - Unity Purchasing
