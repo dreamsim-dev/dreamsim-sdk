@@ -1,0 +1,194 @@
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.Purchasing;
+
+namespace Dreamsim.Publishing
+{
+public class Analytics : MonoBehaviour
+{
+    private static Analytics _instance;
+    
+    [SerializeField]
+    private AppsFlyerManager _appsFlyerManager;
+
+    [SerializeField]
+    private DevToDevManager _devToDevManager;
+    
+    [SerializeField]
+    private NetworkReachabilityTracker _networkReachabilityTracker;
+
+    private PurchaseValidator _purchaseValidator;
+
+    public static string AdvertisingId { get; private set; }
+    public static bool TrackingEnabled { get; private set; }
+
+    private static readonly List<IInternalAnalyticsLogger> Loggers = new()
+    {
+        new FacebookLogger(),
+        new DevToDevLogger(),
+        new AppsFlyerLogger(),
+        new FirebaseLogger()
+    };
+
+    internal async UniTask InitAsync(Settings.AnalyticsSettings settings, Settings.GDPRSettings gdprSettings)
+    {
+        _purchaseValidator = new PurchaseValidator(settings.PurchaseValidatorSlug);
+        await ProcessConsentAsync(gdprSettings.GoogleMobileAdsTestDeviceHashedIds);
+        _appsFlyerManager.Init(settings.AppsFlyer);
+        _devToDevManager.Init(settings.DevToDev, _appsFlyerManager.GetAppsFlyerId());
+        _networkReachabilityTracker.Run();
+        DreamsimLogger.Log("Analytics initialized");
+    }
+
+    private async UniTask ProcessConsentAsync(List<string> testDeviceHashedIds)
+    {
+        #if UNITY_IOS
+        var consentFlow = new IOSConsentFlow();
+        await consentFlow.ProcessAsync();
+        #endif
+
+        var googleConsentFlow = new GoogleConsentFlow();
+        try
+        {
+            await googleConsentFlow.ProcessAsync(testDeviceHashedIds);
+        }
+        catch (Exception e)
+        {
+            DreamsimLogger.LogError("Failed to process Google Consent Flow");
+            DreamsimLogger.LogException(e);
+        }
+
+        #if UNITY_IOS
+        AdvertisingId = consentFlow.AdvertisingId;
+        TrackingEnabled = consentFlow.TrackingEnabled && googleConsentFlow.TrackingEnabled;
+        #elif UNITY_ANDROID
+        AdvertisingId = googleConsentFlow.AdvertisingId;
+        TrackingEnabled = googleConsentFlow.TrackingEnabled;
+        #endif
+
+        #if UNITY_IOS && !UNITY_EDITOR
+        if (new Version(UnityEngine.iOS.Device.systemVersion).CompareTo(new Version("14.5")) != -1)
+        {
+            AudienceNetwork.AdSettings.SetAdvertiserTrackingEnabled(TrackingEnabled);
+            AudienceNetwork.AdSettings.SetDataProcessingOptions(new string[] { });
+        }
+        #elif UNITY_ANDROID && !UNITY_EDITOR
+        AudienceNetwork.AdSettings.SetDataProcessingOptions(new string[] { });
+        #endif
+
+        DreamsimLogger.Log($"Analytics: AdvertisingId requested ({AdvertisingId})");
+    }
+
+    public static void Log(string eventName)
+    {
+        CallLoggersAction(l => l.Log(eventName), $"Custom event ({eventName})");
+    }
+
+    public static void Log(string eventName, List<EventParam> eventParams)
+    {
+        CallLoggersAction(l => l.Log(eventName,eventParams), $"Custom event ({eventName})");
+    }
+
+    public static async void LogPurchase(PurchaseEventArgs args)
+    {
+        var isValid = await _instance._purchaseValidator.ValidateAsync(args);
+        if (isValid) CallLoggersAction(l => l.LogPurchase(args), "Purchase");
+        
+        const string pref = "[Dreamsim].Purchasing.EverPurchased";
+        var everPurchased = PlayerPrefs.GetInt(pref, 0) == 1;
+        if (!everPurchased)
+        {
+            LogFirstPurchase(args);
+            PlayerPrefs.SetInt(pref, 1);
+        }
+    }
+    
+    public static void LogPurchaseInitiation(Product product)
+    {
+        CallLoggersAction(l => l.LogPurchaseInitiation(product), $"Purchase initiation");
+    }
+    
+    public static void LogRewardedAdImpression(string adSource)
+    {
+        CallLoggersAction(l => l.LogRewardedAdImpression(adSource), $"Ad impression ({adSource})");
+    }
+    
+    public static void LogRewardedAdRequest(string adSource)
+    {
+        CallLoggersAction(l => l.LogRewardedAdRequest(adSource), $"Ad requested ({adSource})");
+    }
+    
+    public static void LogRewardedAdClicked(string adSource)
+    {
+        CallLoggersAction(l => l.LogRewardedAdClicked(adSource), $"Ad clicked ({adSource})"); }
+    
+    public static void LogRewardedAdRewardReceived(string adSource)
+    {
+        CallLoggersAction(l => l.LogRewardedAdRewardReceived(adSource), "Ad reward");
+        
+        const string pref = "[Dreamsim].Advertisement.RewardedVideo.TotalRewardsReceived";
+        const int interval = 30;
+        var total = PlayerPrefs.GetInt(pref, 0) + 1;
+        if (total % interval == 0)
+        {
+            LogRewardedAdRewardReceivedTimes(interval);
+        }
+        
+        PlayerPrefs.SetInt(pref, total);
+    }
+
+    public static void LogTutorialStart()
+    {
+        CallLoggersAction(l => l.LogTutorialStart(), "Tutorial started");
+    }
+
+    public static void LogTutorialSkipped()
+    {
+        CallLoggersAction(l => l.LogTutorialSkipped(), "Tutorial skipped");
+    }
+    
+    public static void LogTutorialStepCompletion(int step)
+    {
+        CallLoggersAction(l => l.LogTutorialStepCompletion(step), $"Tutorial step ({step})");
+    }
+
+    public static void LogTutorialCompletion()
+    {
+        CallLoggersAction(l => l.LogTutorialCompletion(), "Tutorial completed");
+    }
+
+    public static void LogLevelUp(int level)
+    {
+        CallLoggersAction(l => l.LogLevelUp(level), $"Level up ({level})");
+    }
+    
+    public static void LogContentView(string contentId)
+    {
+        CallLoggersAction(l => l.LogContentView(contentId), $"Content view ({contentId})");
+    }
+    
+    internal static void LogNetworkReachability(bool isReachable)
+    {
+        CallLoggersAction(l => l.LogNetworkReachability(isReachable), $"Network reachability ({isReachable})");
+    }
+    
+    private static void LogFirstPurchase(PurchaseEventArgs args)
+    {
+        CallLoggersAction(l => l.LogFirstPurchase(args), "First purchase");
+    }
+    
+    private static void LogRewardedAdRewardReceivedTimes(int times)
+    {
+        CallLoggersAction(l => l.LogRewardedAdRewardReceivedTimes(times),
+            $"Reward received {times} times");
+    }
+
+    private static void CallLoggersAction(Action<IInternalAnalyticsLogger> action, string logMsg)
+    {
+        if (!Application.isEditor) Loggers.ForEach(action);
+        DreamsimLogger.Log($"Analytics event triggered: {logMsg}");
+    }
+}
+}

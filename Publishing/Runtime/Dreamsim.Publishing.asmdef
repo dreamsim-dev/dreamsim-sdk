@@ -1,0 +1,24 @@
+{
+    "name": "Dreamsim.Publishing",
+    "rootNamespace": "Dreamsim.Publishing",
+    "references": [
+        "GUID:a0f66c683f372c54390bc073468e59da",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:2a37df438292d4903b4e5159c5de3bf9",
+        "GUID:d5e37fcacdf247142b67d68b95b6aecd",
+        "GUID:60bfecf5cb232594891bc622f40d6bed",
+        "GUID:c3afa6ec1f81742b483b2ec724eb38bc",
+        "GUID:760a4c7888534400e882b82c5b3fba06",
+        "GUID:3de88c88fbbb8f944b9210d496af9762",
+        "GUID:00c479e63b1c74419820a39073267645"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
