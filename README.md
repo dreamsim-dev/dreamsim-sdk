@@ -1,5 +1,17 @@
 # Dreamsim SDK
 UPM package for publishing purposes.
+## Features
+- Analytics
+  - AppsFlyer
+  - devtodev
+  - Firebase
+  - Facebook
+- Network reachability tracking (analytics event)
+- Advertisement
+  - IronSource/LevelPlay
+- ATT (App Tracking Transparency) flow
+- DMA (Google AdMob consent) flow
+- In-app purchases server-based fraud filter
 ## Installation
 1. Add OpenUPM as a scoped registry using [documentation](https://developers.google.com/admob/unity/quick-start#import_the_mobile_ads_for_unity_plugin) or simply add following entry into manifest.json:
    ```
