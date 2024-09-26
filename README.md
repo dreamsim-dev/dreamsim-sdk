@@ -32,3 +32,110 @@ UPM package for publishing purposes.
 ## Additional Dependencies
 - Unity Purchasing
 - JsonDotNet (?)
+## Initialization
+Add following code somewhere at your composition root. Before any analytics event may happen.
+```
+// Creating basic SDK GameObject.
+DreamsimCommon.Create();
+// Create publishing SDK GameObject.
+DreamsimPublishing.Create();
+
+// Initializing publishing part of the SDK.
+// Await this method before any analytics event may happen.
+await DreamsimPublishing.InitAsync();
+```
+## Advertisement
+### Serving
+Use following method to show ad. Use different placements for each ad point in application.
+```
+DreamsimPublishing.Advertisement.RewardedVideo.Show(string placement)
+```
+Check app availability via following method.
+```
+DreamsimPublishing.Advertisement.RewardedVideo.IsAvailable
+```
+### Callbacks
+```
+// Ad completed (give reward here).
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted
+
+// Ad closed (application took control).
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdClosed
+
+/// Loading error.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdLoadFailed
+
+// Impression error.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdShowFailed
+
+// Availability changed.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAvailabilityChanged
+
+// Ad opened (impression).
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened
+
+// Ad clicked. Ad itself. Not button.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked
+```
+## Analytics
+### Custom events
+Use only if no basic alternative presents.
+```
+DreamsimPublishing.Analytics.Log(string eventName)
+```
+```
+DreamsimPublishing.Analytics.Log(string eventName, List<EventParam> eventParams)
+```
+### Basic events
+
+In-app purchase.
+```
+DreamsimPublishing.Analytics.LogPurchase(PurchaseEventArgs args)
+```
+Purchase initiation (e.g. purchase button click).
+```
+DreamsimPublishing.Analytics.LogPurchaseInitiation(Product product)
+```
+Rewarded video ad request (e.g. ad button click).
+```
+DreamsimPublishing.Analytics.LogRewardedAdRequest(string adSource)
+```
+Click on rewarded video ad.
+```
+DreamsimPublishing.Analytics.LogRewardedAdClicked(string adSource)
+```
+Reward received.
+```
+DreamsimPublishing.Analytics.LogRewardedAdRewardReceived(string adSource)
+```
+Tutorial start.
+```
+DreamsimPublishing.Analytics.LogTutorialStart()
+```
+Tutorial skip (explicit opt-out).
+```
+DreamsimPublishing.Analytics.LogTutorialSkipped()
+```
+Tutorial step completion (starts from 1).
+```
+DreamsimPublishing.Analytics.LogTutorialStepCompletion(int step)
+```
+Tutorial completion.
+```
+DreamsimPublishing.Analytics.LogTutorialCompletion()
+```
+LevelUP (e.g. new work applied in case of "sim" game).
+```
+DreamsimPublishing.Analytics.LogLevelUp(int level)
+```
+Content view (contentId is unique string). Prefer using enum with ToString() method.
+```
+DreamsimPublishing.Analytics.LogContentView(string contentId)
+```
+### Automatically logging events
+```
+DreamsimPublishing.Analytics.LogFirstPurchase(PurchaseEventArgs args)
+```
+```
+DreamsimPublishing.Analytics.LogRewardedAdRewardReceivedTimes(int times)
+```

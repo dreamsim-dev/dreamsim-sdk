@@ -8,8 +8,6 @@ namespace Dreamsim.Publishing
 {
 public class Analytics : MonoBehaviour
 {
-    private static Analytics _instance;
-    
     [SerializeField]
     private AppsFlyerManager _appsFlyerManager;
 
@@ -81,19 +79,19 @@ public class Analytics : MonoBehaviour
         DreamsimLogger.Log($"Analytics: AdvertisingId requested ({AdvertisingId})");
     }
 
-    public static void Log(string eventName)
+    public void Log(string eventName)
     {
         CallLoggersAction(l => l.Log(eventName), $"Custom event ({eventName})");
     }
 
-    public static void Log(string eventName, List<EventParam> eventParams)
+    public void Log(string eventName, List<EventParam> eventParams)
     {
         CallLoggersAction(l => l.Log(eventName,eventParams), $"Custom event ({eventName})");
     }
 
-    public static async void LogPurchase(PurchaseEventArgs args)
+    public async void LogPurchase(PurchaseEventArgs args)
     {
-        var isValid = await _instance._purchaseValidator.ValidateAsync(args);
+        var isValid = await _purchaseValidator.ValidateAsync(args);
         if (isValid) CallLoggersAction(l => l.LogPurchase(args), "Purchase");
         
         const string pref = "[Dreamsim].Purchasing.EverPurchased";
@@ -105,26 +103,26 @@ public class Analytics : MonoBehaviour
         }
     }
     
-    public static void LogPurchaseInitiation(Product product)
+    public void LogPurchaseInitiation(Product product)
     {
         CallLoggersAction(l => l.LogPurchaseInitiation(product), $"Purchase initiation");
     }
     
-    public static void LogRewardedAdImpression(string adSource)
+    public void LogRewardedAdImpression(string adSource)
     {
         CallLoggersAction(l => l.LogRewardedAdImpression(adSource), $"Ad impression ({adSource})");
     }
     
-    public static void LogRewardedAdRequest(string adSource)
+    public void LogRewardedAdRequest(string adSource)
     {
         CallLoggersAction(l => l.LogRewardedAdRequest(adSource), $"Ad requested ({adSource})");
     }
     
-    public static void LogRewardedAdClicked(string adSource)
+    public void LogRewardedAdClicked(string adSource)
     {
         CallLoggersAction(l => l.LogRewardedAdClicked(adSource), $"Ad clicked ({adSource})"); }
     
-    public static void LogRewardedAdRewardReceived(string adSource)
+    public void LogRewardedAdRewardReceived(string adSource)
     {
         CallLoggersAction(l => l.LogRewardedAdRewardReceived(adSource), "Ad reward");
         
@@ -139,53 +137,53 @@ public class Analytics : MonoBehaviour
         PlayerPrefs.SetInt(pref, total);
     }
 
-    public static void LogTutorialStart()
+    public void LogTutorialStart()
     {
         CallLoggersAction(l => l.LogTutorialStart(), "Tutorial started");
     }
 
-    public static void LogTutorialSkipped()
+    public void LogTutorialSkipped()
     {
         CallLoggersAction(l => l.LogTutorialSkipped(), "Tutorial skipped");
     }
     
-    public static void LogTutorialStepCompletion(int step)
+    public void LogTutorialStepCompletion(int step)
     {
         CallLoggersAction(l => l.LogTutorialStepCompletion(step), $"Tutorial step ({step})");
     }
 
-    public static void LogTutorialCompletion()
+    public void LogTutorialCompletion()
     {
         CallLoggersAction(l => l.LogTutorialCompletion(), "Tutorial completed");
     }
 
-    public static void LogLevelUp(int level)
+    public void LogLevelUp(int level)
     {
         CallLoggersAction(l => l.LogLevelUp(level), $"Level up ({level})");
     }
     
-    public static void LogContentView(string contentId)
+    public void LogContentView(string contentId)
     {
         CallLoggersAction(l => l.LogContentView(contentId), $"Content view ({contentId})");
     }
     
-    internal static void LogNetworkReachability(bool isReachable)
+    internal void LogNetworkReachability(bool isReachable)
     {
         CallLoggersAction(l => l.LogNetworkReachability(isReachable), $"Network reachability ({isReachable})");
     }
     
-    private static void LogFirstPurchase(PurchaseEventArgs args)
+    private void LogFirstPurchase(PurchaseEventArgs args)
     {
         CallLoggersAction(l => l.LogFirstPurchase(args), "First purchase");
     }
     
-    private static void LogRewardedAdRewardReceivedTimes(int times)
+    private void LogRewardedAdRewardReceivedTimes(int times)
     {
         CallLoggersAction(l => l.LogRewardedAdRewardReceivedTimes(times),
             $"Reward received {times} times");
     }
 
-    private static void CallLoggersAction(Action<IInternalAnalyticsLogger> action, string logMsg)
+    private void CallLoggersAction(Action<IInternalAnalyticsLogger> action, string logMsg)
     {
         if (!Application.isEditor) Loggers.ForEach(action);
         DreamsimLogger.Log($"Analytics event triggered: {logMsg}");

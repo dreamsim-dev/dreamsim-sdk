@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Dreamsim.Publishing;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
@@ -28,7 +27,7 @@ public class NetworkReachabilityTracker : MonoBehaviour
             {
                 _firstTime = false;
                 _lastResult = result;
-                Analytics.LogNetworkReachability(result);
+                DreamsimPublishing.Analytics.LogNetworkReachability(result);
             }
 
             await UniTask.WaitForSeconds(_timeInterval, ignoreTimeScale: true);
