@@ -8,6 +8,7 @@ public class Test : MonoBehaviour
     {
         DreamsimCommon.Create();
         DreamsimPublishing.Create();
+        
         await DreamsimPublishing.InitAsync();
     }
 }
