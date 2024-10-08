@@ -19,6 +19,17 @@ namespace Dreamsim.CI
 public class Builder
 {
     #if UNITY_IPHONE || UNITY_IOS
+    private const string ExportOptionsContents =
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+        + "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        + "\n<plist version=\"1.0\">\n"
+        + "    <dict>\n"
+        + "        <key>method</key>\n"
+        + "        <string>app-store</string>\n"
+        + "        <key>destination</key>\n"
+        + "        <string>upload</string>\n"
+        + "    </dict>\n</plist>";
+
     /// <summary>
     /// Necessary action to export iOS app using CLI
     /// </summary>
@@ -26,18 +37,17 @@ public class Builder
     public static void UpdateUploadToken(BuildTarget target, string path)
     {
         var pbxFilename =
- path + "/Unity-iPhone.xcodeproj/project.pbxproj";
+            path + "/Unity-iPhone.xcodeproj/project.pbxproj";
         var project = new PBXProject();
         project.ReadFromFile(pbxFilename);
-     
+
         var targetGuid =
- project.GetUnityMainTargetGuid(); //Unity 2019.3 or newer only
+            project.GetUnityMainTargetGuid(); //Unity 2019.3 or newer only
         var token =
- project.GetBuildPropertyForAnyConfig(targetGuid, "USYM_UPLOAD_AUTH_TOKEN");
-        
-        if (string.IsNullOrEmpty(token))
-            token = "FakeToken";
-        
+            project.GetBuildPropertyForAnyConfig(targetGuid, "USYM_UPLOAD_AUTH_TOKEN");
+
+        if (string.IsNullOrEmpty(token)) token = "FakeToken";
+
         project.SetBuildProperty(targetGuid, "USYM_UPLOAD_AUTH_TOKEN", token);
         project.WriteToFile(pbxFilename);
     }
@@ -50,19 +60,16 @@ public class Builder
         string path)
     {
         const string deployPlistName = "exportOptions.plist";
-        var deployPlistSource =
-            Path.Combine(Application.dataPath,
-                "Dreamsim/CI",
-                deployPlistName);
         var deployPlistDestination = Path.Combine(path, deployPlistName);
-        File.Copy(deployPlistSource, deployPlistDestination);
+        File.WriteAllText(deployPlistDestination, ExportOptionsContents);
     }
 
     /// <summary>
     /// Avoid missing compliance questions
     /// </summary>
     [PostProcessBuild]
-    public static void SetNonExemptEncryptionKey(BuildTarget target, string path) {
+    public static void SetNonExemptEncryptionKey(BuildTarget target, string path)
+    {
         var plistPath = Path.Combine(path, "Info.plist");
         var plist = new PlistDocument();
         plist.ReadFromFile(plistPath);

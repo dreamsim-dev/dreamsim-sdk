@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using DevToDev.Analytics;
 using UnityEngine;
+[assembly: InternalsVisibleTo("Dreamsim.Publishing.Editor")]
 
 namespace Dreamsim.Publishing
 {
@@ -30,10 +32,27 @@ namespace Dreamsim.Publishing
              internal bool UseRewardedVideo => _useRewardedVideo;
          }
 
+         [Serializable]
+         public class AdMobSettings
+         {
+             [SerializeField]
+             private string _iosAppId;
+
+             [SerializeField]
+             private string _androidAppId;
+
+             internal string iOSAppId => _iosAppId;
+             internal string AndroidAppId => _androidAppId;
+         }
+
          [SerializeField]
          private LevelPlaySettings _levelPlay;
 
+         [SerializeField]
+         private AdMobSettings _adMob;
+
          internal LevelPlaySettings LevelPlay => _levelPlay;
+         internal AdMobSettings AdMob => _adMob;
      }
      
      [Serializable]

@@ -28,5 +28,8 @@ MonoBehaviour:
       _iosAppKey: 
       _androidAppKey: 
       _useRewardedVideo: 1
+    _adMob:
+      _iosAppId: 2
+      _androidAppId: 5
   _gdpr:
     _googleMobileAdsTestDeviceHashedIds: []
