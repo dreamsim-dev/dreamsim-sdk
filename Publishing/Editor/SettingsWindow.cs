@@ -46,6 +46,11 @@ namespace Dreamsim.Publishing.Editor
 
             settingsObject.ApplyModifiedProperties();
             EditorGUI.EndChangeCheck();
+
+            if (GUILayout.Button("Update Dependencies"))
+            {
+                DependenciesUpdater.Update(_settings);
+            }
         }
 
         private void SeparateLine()

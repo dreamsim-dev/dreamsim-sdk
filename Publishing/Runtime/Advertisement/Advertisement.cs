@@ -6,7 +6,7 @@ namespace Dreamsim.Publishing
 {
 public class Advertisement : MonoBehaviour
 {
-    public static readonly RewardedVideoListener RewardedVideo = new();
+    public readonly RewardedVideoListener RewardedVideo = new();
 
     private bool _isInitialized;
 

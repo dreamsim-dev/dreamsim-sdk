@@ -40,7 +40,18 @@ UPM package for publishing purposes.
    ```
    https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
    ```
-5. Fill in Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings)
+### Integration
+1. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings)
+2. Fill GoogleMobileAdsSettings.
+3. Fill FacebookSDKSettings.
+4. Add following sting to Android.manifest under "manifest" section:
+   ```
+   <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+   ```
+5. Add following sting to Android.manifest under "application" section:
+   ```
+   <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-5596173413050708~1787262028"/>
+   ```
 ### Additional Dependencies
 - Unity Purchasing
 - JsonDotNet (?)
