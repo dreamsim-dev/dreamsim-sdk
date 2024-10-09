@@ -22,14 +22,14 @@ MonoBehaviour:
     _devToDev:
       _iosAppId: 
       _androidAppId: 
-      _logLevel: 3
+      _logLevel: 0
   _advertisement:
     _levelPlay:
       _iosAppKey: 
       _androidAppKey: 
       _useRewardedVideo: 1
     _adMob:
-      _iosAppId: 2
-      _androidAppId: 5
+      _iosAppId: 
+      _androidAppId: 
   _gdpr:
     _googleMobileAdsTestDeviceHashedIds: []
