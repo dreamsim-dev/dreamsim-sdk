@@ -31,19 +31,19 @@ UPM package for publishing purposes.
     - UniTask ([GitHub](https://github.com/Cysharp/UniTask))
     - DeviceHelper ([GitHub](https://github.com/lexscite/UnityDeviceHelper))
     - IngameDebugConsole ([GitHub](https://github.com/yasirkula/UnityIngameDebugConsole))
-3. Manually install following dependencies (via .unitypackage)
+3. Manually install following dependencies (via .unitypackage):
     - Facebook SDK ([GitHub](https://github.com/facebook/facebook-sdk-for-unity))
     - GoogleMobileAds SDK ([GitHub](https://github.com/googleads/googleads-mobile-unity))
     - IronSource/LevelPlay SDK ([Documentation](https://developers.is.com/ironsource-mobile/unity/unity-plugin))
     - Firebase SDK (Analytics) ([GItHub](https://github.com/firebase/firebase-unity-sdk))
-4. Install upm branch of this repository via PackageManager
+4. Install upm branch of this repository via PackageManager.
    ```
    https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
    ```
 ### Integration
-1. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings)
-2. Fill GoogleMobileAdsSettings.
-3. Fill FacebookSDKSettings.
+1. Fill FacebookSDKSettings.asset.
+2. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings).
+3. Press "Update Dependencies" button in Dreamsim Publishing Settings.
 4. Add following sting to Android.manifest under "manifest" section:
    ```
    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
