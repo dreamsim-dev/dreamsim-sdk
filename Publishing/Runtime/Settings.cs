@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using DevToDev.Analytics;
 using UnityEngine;
@@ -23,11 +24,11 @@ namespace Dreamsim.Publishing
 
              [SerializeField] private bool _useRewardedVideo;
              
-             internal string AppKey => Application.isEditor
+             internal string AppKey => (Application.isEditor
                  ? string.Empty
                  : Application.platform == RuntimePlatform.Android
                      ? _androidAppKey
-                     : _iosAppKey;
+                     : _iosAppKey).Trim();
 
              internal bool UseRewardedVideo => _useRewardedVideo;
          }
@@ -41,8 +42,8 @@ namespace Dreamsim.Publishing
              [SerializeField]
              private string _androidAppId;
 
-             internal string iOSAppId => _iosAppId;
-             internal string AndroidAppId => _androidAppId;
+             internal string iOSAppId => _iosAppId.Trim();
+             internal string AndroidAppId => _androidAppId.Trim();
          }
 
          [SerializeField]
@@ -73,17 +74,17 @@ namespace Dreamsim.Publishing
              [SerializeField]
              private bool _debug;
          
-             internal string AppId => Application.isEditor
+             internal string AppId => (Application.isEditor
                  ? string.Empty
                  : Application.platform == RuntimePlatform.Android
                      ? string.Empty
-                     : _iosAppId;
+                     : _iosAppId).Trim();
 
-             internal string DevKey => Application.isEditor
+             internal string DevKey => (Application.isEditor
                  ? string.Empty
                  : Application.platform == RuntimePlatform.Android
                      ? _androidDevKey
-                     : _iosDevKey;
+                     : _iosDevKey).Trim();
 
              internal bool Debug => _debug;
          }
@@ -101,11 +102,11 @@ namespace Dreamsim.Publishing
              [SerializeField]
              private DTDLogLevel _logLevel;
 
-             internal string AppId => Application.isEditor
+             internal string AppId => (Application.isEditor
                  ? string.Empty
                  : Application.platform == RuntimePlatform.Android
                      ? _androidAppId
-                     : _iosAppId;
+                     : _iosAppId).Trim();
 
              internal DTDLogLevel LogLevel => _logLevel;
          }
@@ -119,7 +120,7 @@ namespace Dreamsim.Publishing
          [SerializeField]
          private DevToDevSettings _devToDev;
 
-         internal string PurchaseValidatorSlug => _purchaseValidatorSlug;
+         internal string PurchaseValidatorSlug => _purchaseValidatorSlug.Trim();
          internal AppsFlyerSettings AppsFlyer => _appsFlyer;
          internal DevToDevSettings DevToDev => _devToDev;
      }
@@ -148,7 +149,14 @@ namespace Dreamsim.Publishing
      public static Settings Create()
      {
          var settings = CreateInstance<Settings>();
-         UnityEditor.AssetDatabase.CreateAsset(settings, $"Assets/Dreamsim/Common/Resources/{AssetFileName}.asset");
+         const string relativePath = "Dreamsim/Common/Resources";
+         var dir = Path.Combine(Application.dataPath, relativePath);
+         if (!Directory.Exists(dir))
+         {
+             Directory.CreateDirectory(dir);
+         }
+         
+         UnityEditor.AssetDatabase.CreateAsset(settings, $"Assets/{relativePath}/{AssetFileName}.asset");
          return settings;
      }
      #endif
