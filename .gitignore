@@ -64,3 +64,5 @@ crashlytics-build.properties
 Assets/GeneratedLocalRepo
 UserSettings/
 Assets/Firebase/Plugins/x86_64
+Assets/DreamsimPackageRoot/package-lock.json
+Assets/DreamsimPackageRoot/package-lock.json.meta
