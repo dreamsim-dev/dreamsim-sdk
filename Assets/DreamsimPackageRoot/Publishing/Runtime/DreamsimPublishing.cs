@@ -48,7 +48,7 @@ public class DreamsimPublishing : MonoBehaviour
         {
             hasError = true;
             var error = e.Message;
-            DreamsimLogger.Log($"Error occured during initialization\n{error}");
+            DreamsimLogger.LogError($"Error occured during initialization\n{error}");
         }
         
         if (!hasError)
