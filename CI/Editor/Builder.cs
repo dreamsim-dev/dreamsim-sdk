@@ -16,7 +16,7 @@ using UnityEditor.iOS.Xcode;
 
 namespace Dreamsim.CI
 {
-public class Builder
+public static class Builder
 {
     #if UNITY_IPHONE || UNITY_IOS
     private const string ExportOptionsContents =
@@ -56,7 +56,7 @@ public class Builder
     /// Necessary action to export iOS app using CLI
     /// </summary>
     [PostProcessBuild]
-    public static void CopyExportOptionsPlist(BuildTarget target,
+    public static void CreateExportOptionsPlist(BuildTarget target,
         string path)
     {
         const string deployPlistName = "exportOptions.plist";
@@ -93,21 +93,34 @@ public class Builder
         var options = BuildOptions.None;
         var buildNumber = GetArgumentValue("-build-number");
 
-        var targetFile = Resources.Load<TextAsset>("[Dreamsim] BuildNumber");
-        File.WriteAllText(AssetDatabase.GetAssetPath(targetFile), buildNumber);
-        EditorUtility.SetDirty(targetFile);
-
         PlayerSettings.iOS.buildNumber = buildNumber;
         PlayerSettings.Android.bundleVersionCode = int.Parse(buildNumber);
         EditorUserBuildSettings.buildAppBundle = true;
-
         PlayerSettings.SplashScreen.showUnityLogo = false;
+
+        CreateBuildNumberFile(buildNumber);
 
         PlayerSettings.Android.keystorePass = GetArgumentValue("-keystorepass");
         PlayerSettings.Android.keyaliasName = GetArgumentValue("-keyaliasname");
         PlayerSettings.Android.keyaliasPass = GetArgumentValue("-keyaliaspass");
 
         BuildPipeline.BuildPlayer(scenes, buildLocation, target, options);
+    }
+
+    private static void CreateBuildNumberFile(string buildNumber)
+    {
+        const string filename = "[Dreamsim] BuildNumber";
+        const string relativeDir = "Dreamsim/Common/Resources";
+        var fullDirPath = Path.Combine(Application.dataPath, relativeDir);
+        if (!Directory.Exists(fullDirPath))
+        {
+            Directory.CreateDirectory(fullDirPath);
+        }
+        
+        const string relativePath = relativeDir + "/" + filename + ".txt";
+        var fullPath = Path.Combine(Application.dataPath, relativePath);
+        if (!File.Exists(fullPath)) File.Create(fullPath);
+        File.WriteAllText(fullPath, buildNumber);
     }
 
     private static BuildTarget GetTargetFromCliArg()
