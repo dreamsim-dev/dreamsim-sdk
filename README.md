@@ -71,7 +71,7 @@ await DreamsimPublishing.InitAsync();
 // Use following method to show ad. Use different placements for each ad point in application.
 DreamsimPublishing.Advertisement.RewardedVideo.Show(string placement)
 
-// Check app availability via following method.
+// Check ad availability via following method.
 DreamsimPublishing.Advertisement.RewardedVideo.IsAvailable
 ```
 ### Callbacks
