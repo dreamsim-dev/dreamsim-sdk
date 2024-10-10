@@ -92,7 +92,6 @@ namespace Dreamsim.Publishing
          [Serializable]
          public class DevToDevSettings
          {
-
              [SerializeField]
              private string _iosAppId;
 
@@ -138,7 +137,7 @@ namespace Dreamsim.Publishing
          internal List<string> GoogleMobileAdsTestDeviceHashedIds => _googleMobileAdsTestDeviceHashedIds;
      }
      
-     private const string AssetFileName = "[Dreamsim] Settings";
+     private const string AssetFileName = "[Dreamsim] Publishing Settings";
 
      public static Settings Find()
      {
@@ -149,7 +148,7 @@ namespace Dreamsim.Publishing
      public static Settings Create()
      {
          var settings = CreateInstance<Settings>();
-         const string relativePath = "Dreamsim/Common/Resources";
+         const string relativePath = "Dreamsim/Publishing/Resources";
          var dir = Path.Combine(Application.dataPath, relativePath);
          if (!Directory.Exists(dir))
          {
