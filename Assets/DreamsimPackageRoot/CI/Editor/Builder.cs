@@ -25,7 +25,7 @@ public static class Builder
         + "\n<plist version=\"1.0\">\n"
         + "    <dict>\n"
         + "        <key>method</key>\n"
-        + "        <string>app-store</string>\n"
+        + "        <string>app-store-connect</string>\n"
         + "        <key>destination</key>\n"
         + "        <string>upload</string>\n"
         + "    </dict>\n</plist>";
