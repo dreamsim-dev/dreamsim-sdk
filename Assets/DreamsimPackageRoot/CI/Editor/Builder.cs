@@ -120,6 +120,7 @@ public static class Builder
         const string relativePath = relativeDir + "/" + filename + ".txt";
         var fullPath = Path.Combine(Application.dataPath, relativePath);
         if (!File.Exists(fullPath)) File.Create(fullPath);
+        AssetDatabase.ImportAsset(relativePath);
         File.WriteAllText(fullPath, buildNumber);
     }
 
