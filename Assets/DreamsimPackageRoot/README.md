@@ -26,6 +26,7 @@ UPM package for publishing purposes.
    ]
    ```
 2. Install following dependencies via PackageManager:
+    - UnityPurchasing
     - GoogleMobileAds SDK ([GitHub](https://github.com/googleads/googleads-mobile-unity))
     - AppsFlyer SDK ([GitHub](https://github.com/AppsFlyerSDK/appsflyer-unity-plugin), [Documentation](https://dev.appsflyer.com/hc/docs/installation))
     - devtodev SDK Analytics + Messaging ([GitHub](https://github.com/devtodev-analytics/Unity-sdk-3.0), [Documentation](https://docs.devtodev.com/integration/integration-of-sdk-v2/sdk-integration/unity))
@@ -40,7 +41,7 @@ UPM package for publishing purposes.
    ```
    https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
    ```
-### Integration
+## Integration
 1. Fill FacebookSDKSettings.asset.
 2. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings).
 3. Press "Update Dependencies" button in Dreamsim Publishing Settings.
@@ -52,9 +53,6 @@ UPM package for publishing purposes.
    ```
    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-5596173413050708~1787262028"/>
    ```
-### Additional Dependencies
-- Unity Purchasing
-- JsonDotNet (?)
 ## Initialization
 Add following code somewhere at your composition root. Before any analytics event may happen.
 ```cs
