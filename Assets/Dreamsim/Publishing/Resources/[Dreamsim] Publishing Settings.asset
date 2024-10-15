@@ -35,5 +35,9 @@ MonoBehaviour:
     _adMob:
       _iosAppId: 
       _androidAppId: 
+  _facebook:
+    _appLabel: 
+    _appId: 
+    _clientToken: 
   _gdpr:
     _googleMobileAdsTestDeviceHashedIds: []

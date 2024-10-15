@@ -149,6 +149,23 @@ namespace Dreamsim.Publishing
      }
 
      [Serializable]
+     public class FacebookSettings
+     {
+         [SerializeField]
+         private string _appLabel;
+         
+         [SerializeField]
+         private string _appId;
+
+         [SerializeField]
+         private string _clientToken;
+
+         public string AppLabel => _appLabel;
+         public string AppId => _appId;
+         public string ClientToken => _clientToken;
+     }
+
+     [Serializable]
      public class GDPRSettings
      {
          /// <summary>
@@ -194,11 +211,15 @@ namespace Dreamsim.Publishing
      private AdvertisementSettings _advertisement;
 
      [SerializeField]
+     private FacebookSettings _facebook;
+
+     [SerializeField]
      private GDPRSettings _gdpr;
 
      internal GeneralSettings General => _general;
      internal AnalyticsSettings Analytics => _analytics;
      internal AdvertisementSettings Advertisement => _advertisement;
+     internal FacebookSettings Facebook => _facebook;
      internal GDPRSettings GDPR => _gdpr;
  }
 }

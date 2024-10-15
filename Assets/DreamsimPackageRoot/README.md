@@ -63,16 +63,15 @@ UPM package for publishing purposes.
    https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
    ```
 ## Integration
-1. Fill FacebookSDKSettings.asset.
-2. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings).
-3. Press "Update Dependencies" button in Dreamsim Publishing Settings.
-4. Add following sting to Android.manifest under "manifest" section:
+1. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings).
+2. Press "Update Dependencies" button in Dreamsim Publishing Settings.
+3. Add following sting to Android.manifest under "manifest" section:
    ```
    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
    ```
-5. Add following sting to Android.manifest under "application" section:
+4. Add following sting to Android.manifest under "application" section and replace [ADMOB_APP_ID] with actual AdMob app id:
    ```
-   <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-5596173413050708~1787262028"/>
+   <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="[ADMOB_APP_ID]"/>
    ```
 ## Initialization
 Add following code somewhere at your composition root. Before any analytics event may happen.
@@ -172,8 +171,8 @@ DreamsimPublishing.Analytics.LogFirstPurchase(PurchaseEventArgs args);
 // Rewrad received 30 (by default) times
 DreamsimPublishing.Analytics.LogRewardedAdRewardReceivedTimes(int times);
 ```
-### Cross Promo
-Don't forget to log cross promo impression (see Analytics section). Use following method instead of simple Application.OpenURL:
+## Cross Promo
+Don't forget to log cross promo impression (see [Analytics Basic Events](#basic-events) section). Use following method instead of simple Application.OpenURL:
 ```cs
 // Automatically generates attribution link and opens provided app's store page
 DreamsimPublishing.CrossPromo.AttributeAndOpenStore(string appId, string campaign, List<EventParam> eventParams);
