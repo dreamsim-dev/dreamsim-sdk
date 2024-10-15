@@ -32,11 +32,11 @@ public class Analytics : MonoBehaviour
         new FirebaseLogger()
     };
 
-    internal async UniTask InitAsync(Settings.AnalyticsSettings settings, Settings.GDPRSettings gdprSettings)
+    internal async UniTask InitAsync(string storeAppId, Settings.AnalyticsSettings settings, Settings.GDPRSettings gdprSettings)
     {
         _purchaseValidator = new PurchaseValidator(settings.PurchaseValidatorSlug);
         await ProcessConsentAsync(gdprSettings.GoogleMobileAdsTestDeviceHashedIds);
-        _appsFlyerManager.Init(settings.AppsFlyer);
+        _appsFlyerManager.Init(storeAppId, settings.AppsFlyer);
         _devToDevManager.Init(settings.DevToDev, _appsFlyerManager.GetAppsFlyerId());
         _networkReachabilityTracker.Run();
         InitAdvertisementEvents();

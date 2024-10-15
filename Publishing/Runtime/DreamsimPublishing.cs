@@ -47,7 +47,13 @@ public class DreamsimPublishing : MonoBehaviour
 
         try
         {
-            if (settings.General.UseAnalytics) await Analytics.InitAsync(settings.Analytics, settings.GDPR);
+            if (settings.General.UseAnalytics)
+            {
+                await Analytics.InitAsync(settings.General.StoreAppId,
+                    settings.Analytics,
+                    settings.GDPR);
+            }
+
             if (settings.General.useAdvertisement) await Advertisement.InitAsync(settings.Advertisement);
         }
         catch (Exception e)
