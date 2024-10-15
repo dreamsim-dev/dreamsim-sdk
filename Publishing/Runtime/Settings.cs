@@ -4,12 +4,36 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using DevToDev.Analytics;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 [assembly: InternalsVisibleTo("Dreamsim.Publishing.Editor")]
 
 namespace Dreamsim.Publishing
 {
  public class Settings : ScriptableObject
  {
+     [Serializable]
+     public class GeneralSettings
+     {
+         [SerializeField]
+         private string _iosStoreAppId;
+
+         [SerializeField]
+         private bool _useAnalytics = true;
+
+         [SerializeField]
+         private bool _useAdvertisement = true;
+
+         internal bool UseAnalytics => _useAnalytics;
+         internal bool useAdvertisement => _useAdvertisement;
+
+         internal string StoreAppId => (Application.isEditor
+             ? string.Empty
+             : Application.platform == RuntimePlatform.Android
+                 ? Application.identifier
+                 : _iosStoreAppId).Trim();
+     }
+     
      [Serializable]
      public class AdvertisementSettings
      {
@@ -161,6 +185,9 @@ namespace Dreamsim.Publishing
      #endif
 
      [SerializeField]
+     private GeneralSettings _general;
+
+     [SerializeField]
      private AnalyticsSettings _analytics;
 
      [SerializeField]
@@ -169,6 +196,7 @@ namespace Dreamsim.Publishing
      [SerializeField]
      private GDPRSettings _gdpr;
 
+     internal GeneralSettings General => _general;
      internal AnalyticsSettings Analytics => _analytics;
      internal AdvertisementSettings Advertisement => _advertisement;
      internal GDPRSettings GDPR => _gdpr;

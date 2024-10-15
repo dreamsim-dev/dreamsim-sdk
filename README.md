@@ -35,7 +35,28 @@ UPM package for publishing purposes.
     - IngameDebugConsole ([GitHub](https://github.com/yasirkula/UnityIngameDebugConsole))
 3. Manually install following dependencies (via .unitypackage):
     - Facebook SDK ([GitHub](https://github.com/facebook/facebook-sdk-for-unity))
+      - In case of build problems add addToAllTargets="true" to FacebookSDK/Plugins/Editor/Dependencies.xml
+        ```xml
+        <dependencies>
+          <androidPackages>
+              <androidPackage spec="com.parse.bolts:bolts-android:1.4.0" />
+              <androidPackage spec="com.facebook.android:facebook-core:[17.0.0,18)" />
+              <androidPackage spec="com.facebook.android:facebook-applinks:[17.0.0,18)" />
+              <androidPackage spec="com.facebook.android:facebook-login:[17.0.0,18)" />
+              <androidPackage spec="com.facebook.android:facebook-share:[17.0.0,18)" />
+              <androidPackage spec="com.facebook.android:facebook-gamingservices:[17.0.0,18)" />
+          </androidPackages>
+          <iosPods>
+              <iosPod name="FBSDKCoreKit_Basics" version="~> 17.0.1" addToAllTargets="true" />
+              <iosPod name="FBSDKCoreKit" version="~> 17.0.1" addToAllTargets="true" />
+              <iosPod name="FBSDKLoginKit" version="~> 17.0.1" addToAllTargets="true" />
+              <iosPod name="FBSDKShareKit" version="~> 17.0.1" addToAllTargets="true" />
+              <iosPod name="FBSDKGamingServicesKit" version="~> 17.0.1" addToAllTargets="true" />
+          </iosPods>
+        </dependencies>
+        ```
     - IronSource/LevelPlay SDK ([Documentation](https://developers.is.com/ironsource-mobile/unity/unity-plugin))
+      - Don't forget to add EmbedInMobiSDK.cs and IronSourceAdQualityDependencies.xml (also described in documentation)
     - Firebase SDK (Analytics) ([GItHub](https://github.com/firebase/firebase-unity-sdk))
 4. Install upm branch of this repository via PackageManager.
    ```
@@ -101,48 +122,59 @@ DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked;
 ### Custom Events
 Use only if no basic alternative presents.
 ```cs
-DreamsimPublishing.Analytics.Log(string eventName)
+DreamsimPublishing.Analytics.Log(string eventName);
 
-DreamsimPublishing.Analytics.Log(string eventName, List<EventParam> eventParams)
+DreamsimPublishing.Analytics.Log(string eventName, List<EventParam> eventParams);
 ```
 ### Basic Events
 ```cs
 // In-app purchase.
-DreamsimPublishing.Analytics.LogPurchase(PurchaseEventArgs args)
+DreamsimPublishing.Analytics.LogPurchase(PurchaseEventArgs args);
 
 // Purchase initiation (e.g. purchase button click).
-DreamsimPublishing.Analytics.LogPurchaseInitiation(Product product)
-
-// Rewarded video ad request (e.g. ad button click).
-DreamsimPublishing.Analytics.LogRewardedAdRequest(string adSource)
-
-// Click on rewarded video ad.
-DreamsimPublishing.Analytics.LogRewardedAdClicked(string adSource)
-
-// Reward received.
-DreamsimPublishing.Analytics.LogRewardedAdRewardReceived(string adSource)
+DreamsimPublishing.Analytics.LogPurchaseInitiation(Product product);
 
 // Tutorial start.
-DreamsimPublishing.Analytics.LogTutorialStart()
+DreamsimPublishing.Analytics.LogTutorialStart();
 
 // Tutorial skip (explicit opt-out).
-DreamsimPublishing.Analytics.LogTutorialSkipped()
+DreamsimPublishing.Analytics.LogTutorialSkipped();
 
 // Tutorial step completion (starts from 1).
-DreamsimPublishing.Analytics.LogTutorialStepCompletion(int step)
+DreamsimPublishing.Analytics.LogTutorialStepCompletion(int step);
 
 // Tutorial completion.
-DreamsimPublishing.Analytics.LogTutorialCompletion()
+DreamsimPublishing.Analytics.LogTutorialCompletion();
 
 // LevelUP (e.g. new work applied in case of "sim" game).
-DreamsimPublishing.Analytics.LogLevelUp(int level)
+DreamsimPublishing.Analytics.LogLevelUp(int level);
 
 // Content view (contentId is unique string). Prefer using enum with ToString() method.
-DreamsimPublishing.Analytics.LogContentView(string contentId)
+DreamsimPublishing.Analytics.LogContentView(string contentId);
+
+// Cross promo impression
+DreamsimPublishing.CrossPromo.LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams);
 ```
 ### Automatically Logging Events
 ```cs
-DreamsimPublishing.Analytics.LogFirstPurchase(PurchaseEventArgs args)
+// Rewarded video ad request (e.g. ad button click).
+DreamsimPublishing.Analytics.LogRewardedAdRequest(string adSource);
 
-DreamsimPublishing.Analytics.LogRewardedAdRewardReceivedTimes(int times)
+// Click on rewarded video ad.
+DreamsimPublishing.Analytics.LogRewardedAdClicked(string adSource);
+
+// Reward received.
+DreamsimPublishing.Analytics.LogRewardedAdRewardReceived(string adSource);
+
+// First purchase
+DreamsimPublishing.Analytics.LogFirstPurchase(PurchaseEventArgs args);
+
+// Rewrad received 30 (by default) times
+DreamsimPublishing.Analytics.LogRewardedAdRewardReceivedTimes(int times);
+```
+### Cross Promo
+Don't forget to log cross promo impression (see Analytics section). Use following method instead of simple Application.OpenURL:
+```cs
+// Automatically generates attribution link and opens provided app's store page
+DreamsimPublishing.CrossPromo.AttributeAndOpenStore(string appId, string campaign, List<EventParam> eventParams);
 ```

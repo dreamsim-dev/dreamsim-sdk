@@ -66,6 +66,11 @@ public class FacebookLogger : IInternalAnalyticsLogger
         // Intentionally empty
     }
 
+    public void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
+    {
+        // Intentionally empty
+    }
+
     public void LogTutorialStepCompletion(int step)
     {
         // Intentionally empty
