@@ -50,11 +50,11 @@ public class SettingsWindow : EditorWindow
         var settingsObject = settingsEditor.serializedObject;
         settingsObject.UpdateIfRequiredOrScript();
 
+        EditorGUI.BeginChangeCheck();
         var generalProp = settingsObject.FindProperty("_general");
         EditorGUILayout.PropertyField(generalProp);
         SeparateLine();
 
-        EditorGUI.BeginChangeCheck();
         if (_settings.General.UseAnalytics)
         {
             var analyticsProp = settingsObject.FindProperty("_analytics");
