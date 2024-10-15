@@ -87,9 +87,6 @@ namespace Dreamsim.Publishing
          public class AppsFlyerSettings
          {
              [SerializeField]
-             private string _iosAppId;
-                 
-             [SerializeField]
              private string _iosDevKey;
 
              [SerializeField]
@@ -97,12 +94,6 @@ namespace Dreamsim.Publishing
 
              [SerializeField]
              private bool _debug;
-         
-             internal string AppId => (Application.isEditor
-                 ? string.Empty
-                 : Application.platform == RuntimePlatform.Android
-                     ? string.Empty
-                     : _iosAppId).Trim();
 
              internal string DevKey => (Application.isEditor
                  ? string.Empty

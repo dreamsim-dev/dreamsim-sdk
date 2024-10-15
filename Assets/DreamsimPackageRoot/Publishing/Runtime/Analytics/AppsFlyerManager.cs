@@ -7,10 +7,10 @@ namespace Dreamsim.Publishing
 {
 public class AppsFlyerManager : MonoBehaviour, IAppsFlyerUserInvite
 {
-    public void Init(Settings.AnalyticsSettings.AppsFlyerSettings settings)
+    public void Init(string storeAppId, Settings.AnalyticsSettings.AppsFlyerSettings settings)
     {
         var devKey = settings.DevKey;
-        var appId = settings.AppId;
+        var appId = Application.platform == RuntimePlatform.IPhonePlayer ? "id" + storeAppId : string.Empty;
 
         AppsFlyer.initSDK(devKey, appId);
         AppsFlyer.setIsDebug(settings.Debug);
@@ -24,12 +24,12 @@ public class AppsFlyerManager : MonoBehaviour, IAppsFlyerUserInvite
     }
 
     public string GetAppsFlyerId() { return AppsFlyer.getAppsFlyerId(); }
-    
+
     internal void AttributeAndOpenStore(string appId, string campaign, List<EventParam> eventParams)
     {
         var @params = eventParams
             .ToDictionary(eventParam => eventParam.Key, eventParam => eventParam.Value.ToString());
-        
+
         AppsFlyer.attributeAndOpenStore(appId, campaign, @params, this);
     }
 
