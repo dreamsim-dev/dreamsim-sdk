@@ -76,6 +76,14 @@ public class AppsFlyerLogger : IInternalAnalyticsLogger
 
     public void LogRewardedAdRewardReceivedTimes(int times) { AppsFlyer.sendEvent(AFInAppEvents.ADD_TO_CART, null); }
 
+    public void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
+    {
+        var @params = eventParams
+            .ToDictionary(eventParam => eventParam.Key, eventParam => eventParam.Value.ToString());
+        
+        AppsFlyer.recordCrossPromoteImpression(appId, campaign, @params);
+    }
+
     public void LogTutorialStart()
     {
         AppsFlyer.sendEvent("tutorial_start", null);

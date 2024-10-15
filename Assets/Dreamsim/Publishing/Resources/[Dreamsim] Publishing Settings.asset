@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f211115ab9942119a8cb8014a429b68, type: 3}
   m_Name: '[Dreamsim] Publishing Settings'
   m_EditorClassIdentifier: 
+  _general:
+    _iosStoreAppId: 
+    _useAnalytics: 1
+    _useAdvertisement: 1
   _analytics:
     _purchaseValidatorSlug: 
     _appsFlyer:
@@ -27,7 +31,7 @@ MonoBehaviour:
     _levelPlay:
       _iosAppKey: 
       _androidAppKey: 
-      _useRewardedVideo: 1
+      _useRewardedVideo: 0
     _adMob:
       _iosAppId: 
       _androidAppId: 

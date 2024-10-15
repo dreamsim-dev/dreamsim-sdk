@@ -71,6 +71,11 @@ public class FirebaseLogger : IInternalAnalyticsLogger
         FirebaseAnalytics.LogEvent($"ad_reward_received_{times}_times");
     }
 
+    public void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
+    {
+        // Intentionally empty
+    }
+
     public void LogTutorialStart()
     {
         FirebaseAnalytics.LogEvent("tutorial_start");

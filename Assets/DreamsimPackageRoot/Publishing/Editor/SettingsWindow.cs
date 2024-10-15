@@ -6,22 +6,30 @@ namespace Dreamsim.Publishing.Editor
 public class SettingsWindow : EditorWindow
 {
     private const string Title = "Dreamsim Publishing Settings";
+    
+    private static SettingsWindow _instance;
 
     private Settings _settings;
 
     [MenuItem("Dreamsim/Publishing Settings")]
     public static void Editor_Settings()
     {
-        var window = GetWindow(typeof(SettingsWindow)) as SettingsWindow;
-        window!.titleContent = new GUIContent(Title);
-        window.FindSettings();
+        OpenWindow();
+    }
+
+    private static void OpenWindow()
+    {
+        const int w = 500;
+        const int h = 800;
+        _instance = GetWindow<SettingsWindow>();
+        _instance!.titleContent = new GUIContent(Title);
+        _instance.minSize = new Vector2(w, h);
     }
 
     private void OnGUI()
     {
         FindSettings();
 
-        EditorGUI.BeginChangeCheck();
         var style = EditorStyles.boldLabel;
         style.padding = new RectOffset(3, 0, 0, 0);
         style.fontSize = 19;
@@ -36,26 +44,41 @@ public class SettingsWindow : EditorWindow
         var settingsObject = settingsEditor.serializedObject;
         settingsObject.UpdateIfRequiredOrScript();
 
-        var analyticsProp = settingsObject.FindProperty("_analytics");
-        EditorGUILayout.PropertyField(analyticsProp);
+        var generalProp = settingsObject.FindProperty("_general");
+        EditorGUILayout.PropertyField(generalProp);
         SeparateLine();
 
-        var advertisementProp = settingsObject.FindProperty("_advertisement");
-        EditorGUILayout.PropertyField(advertisementProp);
-        SeparateLine();
+        EditorGUI.BeginChangeCheck();
+        if (_settings.General.UseAnalytics)
+        {
+            var analyticsProp = settingsObject.FindProperty("_analytics");
+            EditorGUILayout.PropertyField(analyticsProp);
+            SeparateLine();   
+        }
+
+        if (_settings.General.useAdvertisement)
+        {
+            var advertisementProp = settingsObject.FindProperty("_advertisement");
+            EditorGUILayout.PropertyField(advertisementProp);
+            SeparateLine();
+        }
 
         var gdprProp = settingsObject.FindProperty("_gdpr");
-        EditorGUILayout.PropertyField(gdprProp);
+        EditorGUILayout.PropertyField(gdprProp, GUILayout.ExpandHeight(true));
 
         settingsObject.ApplyModifiedProperties();
         EditorGUI.EndChangeCheck();
-        SeparateLine();
-        GUILayout.Space(10);
 
-        if (GUILayout.Button("Update Dependencies"))
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Update Dependencies", GUILayout.Height(30), GUILayout.Width(200)))
         {
             DependenciesUpdater.Update(_settings);
         }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        
+        GUILayout.Space(20);
     }
 
     private void SeparateLine()

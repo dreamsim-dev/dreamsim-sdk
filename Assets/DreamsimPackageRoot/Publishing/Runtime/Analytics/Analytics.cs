@@ -13,7 +13,7 @@ public class Analytics : MonoBehaviour
 
     [SerializeField]
     private DevToDevManager _devToDevManager;
-    
+
     [SerializeField]
     private NetworkReachabilityTracker _networkReachabilityTracker;
 
@@ -21,6 +21,8 @@ public class Analytics : MonoBehaviour
 
     public static string AdvertisingId { get; private set; }
     public static bool TrackingEnabled { get; private set; }
+
+    internal AppsFlyerManager AppsFlyerManager => _appsFlyerManager;
 
     private static readonly List<IInternalAnalyticsLogger> Loggers = new()
     {
@@ -37,6 +39,7 @@ public class Analytics : MonoBehaviour
         _appsFlyerManager.Init(settings.AppsFlyer);
         _devToDevManager.Init(settings.DevToDev, _appsFlyerManager.GetAppsFlyerId());
         _networkReachabilityTracker.Run();
+        InitAdvertisementEvents();
         DreamsimLogger.Log("Analytics initialized");
     }
 
@@ -79,21 +82,18 @@ public class Analytics : MonoBehaviour
         DreamsimLogger.Log($"Analytics: AdvertisingId requested ({AdvertisingId})");
     }
 
-    public void Log(string eventName)
-    {
-        CallLoggersAction(l => l.Log(eventName), $"Custom event ({eventName})");
-    }
+    public void Log(string eventName) { CallLoggersAction(l => l.Log(eventName), $"Custom event ({eventName})"); }
 
     public void Log(string eventName, List<EventParam> eventParams)
     {
-        CallLoggersAction(l => l.Log(eventName,eventParams), $"Custom event ({eventName})");
+        CallLoggersAction(l => l.Log(eventName, eventParams), $"Custom event ({eventName})");
     }
 
     public async void LogPurchase(PurchaseEventArgs args)
     {
         var isValid = await _purchaseValidator.ValidateAsync(args);
-        if (isValid) CallLoggersAction(l => l.LogPurchase(args), "Purchase");
-        
+        if (isValid) CallLoggersAction(l => l.LogPurchase(args), $"Purchase ({args.purchasedProduct.definition.id})");
+
         const string pref = "[Dreamsim].Purchasing.EverPurchased";
         var everPurchased = PlayerPrefs.GetInt(pref, 0) == 1;
         if (!everPurchased)
@@ -102,30 +102,65 @@ public class Analytics : MonoBehaviour
             PlayerPrefs.SetInt(pref, 1);
         }
     }
-    
+
     public void LogPurchaseInitiation(Product product)
     {
-        CallLoggersAction(l => l.LogPurchaseInitiation(product), $"Purchase initiation");
+        CallLoggersAction(l => l.LogPurchaseInitiation(product), $"Purchase initiation ({product.definition.id})");
     }
-    
+
     public void LogRewardedAdImpression(string adSource)
     {
         CallLoggersAction(l => l.LogRewardedAdImpression(adSource), $"Ad impression ({adSource})");
     }
-    
-    public void LogRewardedAdRequest(string adSource)
+
+    public void LogTutorialStart() { CallLoggersAction(l => l.LogTutorialStart(), "Tutorial started"); }
+
+    public void LogTutorialSkipped() { CallLoggersAction(l => l.LogTutorialSkipped(), "Tutorial skipped"); }
+
+    public void LogTutorialStepCompletion(int step)
+    {
+        CallLoggersAction(l => l.LogTutorialStepCompletion(step), $"Tutorial step ({step})");
+    }
+
+    public void LogTutorialCompletion() { CallLoggersAction(l => l.LogTutorialCompletion(), "Tutorial completed"); }
+
+    public void LogLevelUp(int level) { CallLoggersAction(l => l.LogLevelUp(level), $"Level up ({level})"); }
+
+    public void LogContentView(string contentId)
+    {
+        CallLoggersAction(l => l.LogContentView(contentId), $"Content view ({contentId})");
+    }
+
+    internal void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
+    {
+        CallLoggersAction(l => l.LogCrossPromoImpression(appId, campaign, eventParams),
+            $"Cross promo ({appId}, {campaign})");
+    }
+
+    internal void LogNetworkReachability(bool isReachable)
+    {
+        CallLoggersAction(l => l.LogNetworkReachability(isReachable), $"Network reachability ({isReachable})");
+    }
+
+    private void LogFirstPurchase(PurchaseEventArgs args)
+    {
+        CallLoggersAction(l => l.LogFirstPurchase(args), "First purchase");
+    }
+
+    private void LogRewardedAdRequest(string adSource)
     {
         CallLoggersAction(l => l.LogRewardedAdRequest(adSource), $"Ad requested ({adSource})");
     }
-    
-    public void LogRewardedAdClicked(string adSource)
+
+    private void LogRewardedAdClicked(string adSource)
     {
-        CallLoggersAction(l => l.LogRewardedAdClicked(adSource), $"Ad clicked ({adSource})"); }
-    
-    public void LogRewardedAdRewardReceived(string adSource)
+        CallLoggersAction(l => l.LogRewardedAdClicked(adSource), $"Ad clicked ({adSource})");
+    }
+
+    private void LogRewardedAdRewardReceived(string adSource)
     {
-        CallLoggersAction(l => l.LogRewardedAdRewardReceived(adSource), "Ad reward");
-        
+        CallLoggersAction(l => l.LogRewardedAdRewardReceived(adSource), $"Ad reward ({adSource})");
+
         const string pref = "[Dreamsim].Advertisement.RewardedVideo.TotalRewardsReceived";
         const int interval = 30;
         var total = PlayerPrefs.GetInt(pref, 0) + 1;
@@ -133,50 +168,10 @@ public class Analytics : MonoBehaviour
         {
             LogRewardedAdRewardReceivedTimes(interval);
         }
-        
+
         PlayerPrefs.SetInt(pref, total);
     }
 
-    public void LogTutorialStart()
-    {
-        CallLoggersAction(l => l.LogTutorialStart(), "Tutorial started");
-    }
-
-    public void LogTutorialSkipped()
-    {
-        CallLoggersAction(l => l.LogTutorialSkipped(), "Tutorial skipped");
-    }
-    
-    public void LogTutorialStepCompletion(int step)
-    {
-        CallLoggersAction(l => l.LogTutorialStepCompletion(step), $"Tutorial step ({step})");
-    }
-
-    public void LogTutorialCompletion()
-    {
-        CallLoggersAction(l => l.LogTutorialCompletion(), "Tutorial completed");
-    }
-
-    public void LogLevelUp(int level)
-    {
-        CallLoggersAction(l => l.LogLevelUp(level), $"Level up ({level})");
-    }
-    
-    public void LogContentView(string contentId)
-    {
-        CallLoggersAction(l => l.LogContentView(contentId), $"Content view ({contentId})");
-    }
-    
-    internal void LogNetworkReachability(bool isReachable)
-    {
-        CallLoggersAction(l => l.LogNetworkReachability(isReachable), $"Network reachability ({isReachable})");
-    }
-    
-    private void LogFirstPurchase(PurchaseEventArgs args)
-    {
-        CallLoggersAction(l => l.LogFirstPurchase(args), "First purchase");
-    }
-    
     private void LogRewardedAdRewardReceivedTimes(int times)
     {
         CallLoggersAction(l => l.LogRewardedAdRewardReceivedTimes(times),
@@ -187,6 +182,28 @@ public class Analytics : MonoBehaviour
     {
         if (!Application.isEditor) Loggers.ForEach(action);
         DreamsimLogger.Log($"Analytics event triggered: {logMsg}");
+    }
+
+    private void InitAdvertisementEvents()
+    {
+        DreamsimPublishing.Advertisement.RewardedVideo.OnAdRequested += OnRewardedAdRequested;
+        DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked += OnRewardedAdClicked;
+        DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted += OnRewardedAdCompleted;
+    }
+
+    private void OnRewardedAdRequested(string adSource)
+    {
+        DreamsimPublishing.Analytics.LogRewardedAdRequest(adSource);
+    }
+
+    private void OnRewardedAdClicked(string adSource)
+    {
+        DreamsimPublishing.Analytics.LogRewardedAdClicked(adSource);
+    }
+
+    private void OnRewardedAdCompleted(string adSource)
+    {
+        DreamsimPublishing.Analytics.LogRewardedAdRewardReceived(adSource);
     }
 }
 }

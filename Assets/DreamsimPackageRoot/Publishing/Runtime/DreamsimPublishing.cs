@@ -15,9 +15,13 @@ public class DreamsimPublishing : MonoBehaviour
     [SerializeField]
     private Advertisement _advertisement;
 
+    [SerializeField]
+    private CrossPromoHelper _crossPromoHelper;
+
     public static Analytics Analytics => _instance._analytics;
     public static Advertisement Advertisement => _instance._advertisement;
-    
+    public static CrossPromoHelper CrossPromo => _instance._crossPromoHelper;
+
     private Settings _settings;
 
     public static void Create()
@@ -37,12 +41,14 @@ public class DreamsimPublishing : MonoBehaviour
                 + "Initialization won't continue");
         }
 
+        var settings = _instance._settings;
+
         var hasError = false;
-        
+
         try
         {
-            await Analytics.InitAsync(_instance._settings.Analytics, _instance._settings.GDPR);
-            await Advertisement.InitAsync(_instance._settings.Advertisement);
+            if (settings.General.UseAnalytics) await Analytics.InitAsync(settings.Analytics, settings.GDPR);
+            if (settings.General.useAdvertisement) await Advertisement.InitAsync(settings.Advertisement);
         }
         catch (Exception e)
         {
@@ -50,11 +56,14 @@ public class DreamsimPublishing : MonoBehaviour
             var error = e.Message;
             DreamsimLogger.LogError($"Error occured during initialization\n{error}");
         }
-        
+
         if (!hasError)
         {
             DreamsimLogger.Log("Analytics initialized successfully");
         }
+
+        var storeAppId = settings.General.StoreAppId;
+        DreamsimLogger.Log($"Publishing initialized ({storeAppId})");
     }
 }
 }

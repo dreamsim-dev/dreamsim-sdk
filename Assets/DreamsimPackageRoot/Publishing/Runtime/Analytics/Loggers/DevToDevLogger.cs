@@ -76,6 +76,11 @@ public class DevToDevLogger : IInternalAnalyticsLogger
         DTDAnalytics.CustomEvent($"ad_reward_received_{times}_times");
     }
 
+    public void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
+    {
+        // Intentionally empty
+    }
+
     public void LogTutorialStart()
     {
         DTDAnalytics.Tutorial(-1);
