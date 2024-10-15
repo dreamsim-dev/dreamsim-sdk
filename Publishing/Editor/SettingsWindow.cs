@@ -6,16 +6,13 @@ namespace Dreamsim.Publishing.Editor
 public class SettingsWindow : EditorWindow
 {
     private const string Title = "Dreamsim Publishing Settings";
-    
+
     private static SettingsWindow _instance;
 
     private Settings _settings;
 
     [MenuItem("Dreamsim/Publishing Settings")]
-    public static void Editor_Settings()
-    {
-        OpenWindow();
-    }
+    public static void Editor_Settings() { OpenWindow(); }
 
     private static void OpenWindow()
     {
@@ -28,8 +25,17 @@ public class SettingsWindow : EditorWindow
 
     private void OnGUI()
     {
+        // Your GUI Code
         FindSettings();
 
+        var padding = new RectOffset(0, 0, 0, 0);
+        var area = new Rect(padding.right,
+            padding.top,
+            position.width - (padding.right + padding.left),
+            position.height - (padding.top + padding.bottom));
+
+        GUILayout.BeginArea(area);
+        
         var style = EditorStyles.boldLabel;
         style.padding = new RectOffset(3, 0, 0, 0);
         style.fontSize = 19;
@@ -53,7 +59,7 @@ public class SettingsWindow : EditorWindow
         {
             var analyticsProp = settingsObject.FindProperty("_analytics");
             EditorGUILayout.PropertyField(analyticsProp);
-            SeparateLine();   
+            SeparateLine();
         }
 
         if (_settings.General.useAdvertisement)
@@ -63,22 +69,30 @@ public class SettingsWindow : EditorWindow
             SeparateLine();
         }
 
+        var facebookProp = settingsObject.FindProperty("_facebook");
+        EditorGUILayout.PropertyField(facebookProp);
+        SeparateLine();
+
         var gdprProp = settingsObject.FindProperty("_gdpr");
         EditorGUILayout.PropertyField(gdprProp, GUILayout.ExpandHeight(true));
+        SeparateLine();
 
         settingsObject.ApplyModifiedProperties();
         EditorGUI.EndChangeCheck();
 
+        GUILayout.Space(20);
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Update Dependencies", GUILayout.Height(30), GUILayout.Width(200)))
         {
             DependenciesUpdater.Update(_settings);
         }
+
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        
         GUILayout.Space(20);
+        
+        GUILayout.EndArea();
     }
 
     private void SeparateLine()
