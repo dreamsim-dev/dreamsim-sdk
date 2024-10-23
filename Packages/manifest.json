@@ -6,15 +6,33 @@
       "scopes": [
         "com.google"
       ]
+    },
+    {
+      "name": "AppLovin MAX Unity",
+      "url": "https://unity.packages.applovin.com/",
+      "scopes": [
+        "com.applovin.mediation.ads",
+        "com.applovin.mediation.adapters",
+        "com.applovin.mediation.dsp"
+      ]
+    },
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.google.external-dependency-manager"
+      ]
     }
   ],
   "dependencies": {
     "appsflyer-unity-plugin": "https://github.com/AppsFlyerSDK/appsflyer-unity-plugin.git#upm",
+    "com.applovin.mediation.ads": "8.0.0",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.devtodev.sdk.analytics": "https://github.com/devtodev-analytics/package_Analytics.git",
     "com.devtodev.sdk.analytics.google": "https://github.com/devtodev-analytics/package_Google.git",
     "com.devtodev.sdk.messaging": "https://github.com/devtodev-analytics/package_Messaging.git",
     "com.google.ads.mobile": "9.2.0",
+    "com.google.external-dependency-manager": "1.2.183",
     "com.lexscite.device-helper": "https://github.com/lexscite/UnityDeviceHelper.git#upm",
     "com.unity.ads.ios-support": "1.0.0",
     "com.unity.collab-proxy": "2.5.1",
