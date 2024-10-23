@@ -37,6 +37,18 @@ namespace Dreamsim.Publishing
      [Serializable]
      public class AdvertisementSettings
      {
+         internal enum Mediators 
+         {
+             None = 0,
+             IronSource = 1,
+             AppLovin = 2,
+         }
+         
+         [SerializeField]
+         private Mediators _mediation;
+         
+         internal Mediators Mediation => _mediation;
+         
          [Serializable]
          public class LevelPlaySettings
          {
