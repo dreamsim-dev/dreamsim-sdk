@@ -16,7 +16,8 @@ public class Advertisement : MonoBehaviour
 
     internal async UniTask InitAsync(Settings.AdvertisementSettings settings)
     {
-        switch (settings.Mediation)
+        //TODO: По сути одно и тоже, есть ли смысл делать на препроцессоре?
+        /*switch (settings.Mediation)
         {
             case Settings.AdvertisementSettings.Mediators.IronSource:
                 _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
@@ -28,7 +29,7 @@ public class Advertisement : MonoBehaviour
                 break;
             case Settings.AdvertisementSettings.Mediators.None: break;
             default: throw new ArgumentOutOfRangeException();
-        }
+        }*/
         
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
