@@ -16,7 +16,6 @@ public class Advertisement : MonoBehaviour
 
     internal async UniTask InitAsync(Settings.AdvertisementSettings settings)
     {
-        //TODO: Предварительно, потом переделать на DefineSymbols
         switch (settings.Mediation)
         {
             case Settings.AdvertisementSettings.Mediators.IronSource:
@@ -24,12 +23,20 @@ public class Advertisement : MonoBehaviour
                 await InitMediationAsync(settings.LevelPlay.UseRewardedVideo);
                 break;
             case Settings.AdvertisementSettings.Mediators.AppLovin:
-                //_mediation = new AppLovinMediation(settings.AppLovin.AppKey);
-                //await InitMediationAsync(settings.AppLovin.UseRewardedVideo);
+                _mediation = new AppLovinMediation(settings.AppLovin.AppKey);
+                await InitMediationAsync(settings.AppLovin.UseRewardedVideo);
                 break;
             case Settings.AdvertisementSettings.Mediators.None: break;
             default: throw new ArgumentOutOfRangeException();
         }
+        
+        #if DREAMSIM_USE_IRONSOURCE
+        _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
+        await InitMediationAsync(settings.LevelPlay.UseRewardedVideo);
+        #elif DREAMSIM_USE_APPLOVIN
+        _mediation = new AppLovinMediation(settings.AppLovin.AppKey);
+        await InitMediationAsync(settings.AppLovin.UseRewardedVideo);
+        #endif
     }
 
     private async UniTask InitMediationAsync(bool useRewardedVideo)

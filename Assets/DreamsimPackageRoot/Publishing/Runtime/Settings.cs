@@ -68,6 +68,26 @@ namespace Dreamsim.Publishing
 
              internal bool UseRewardedVideo => _useRewardedVideo;
          }
+         
+         [Serializable]
+         public class AppLovinSettings
+         {
+             [SerializeField]
+             private string _iosAppKey;
+             
+             [SerializeField]
+             private string _androidAppKey;
+
+             [SerializeField] private bool _useRewardedVideo;
+             
+             internal string AppKey => (Application.isEditor
+                 ? string.Empty
+                 : Application.platform == RuntimePlatform.Android
+                     ? _androidAppKey
+                     : _iosAppKey).Trim();
+
+             internal bool UseRewardedVideo => _useRewardedVideo;
+         }
 
          [Serializable]
          public class AdMobSettings
@@ -84,11 +104,15 @@ namespace Dreamsim.Publishing
 
          [SerializeField]
          private LevelPlaySettings _levelPlay;
+         
+         [SerializeField]
+         private AppLovinSettings _appLovin;
 
          [SerializeField]
          private AdMobSettings _adMob;
 
          internal LevelPlaySettings LevelPlay => _levelPlay;
+         internal AppLovinSettings AppLovin => _appLovin;
          internal AdMobSettings AdMob => _adMob;
      }
      
