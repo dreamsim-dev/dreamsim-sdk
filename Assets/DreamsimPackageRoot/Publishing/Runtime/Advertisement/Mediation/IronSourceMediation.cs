@@ -15,13 +15,13 @@ namespace Dreamsim.Publishing
         public event Action<string, AdInfo> OnAdOpened;
         public event Action<string> OnAdClicked;
         
-        public IronSourceMediation(string appKey) : base(appKey) { }
+        public IronSourceMediation(string key) : base(key) { }
 
         public void Init()
         {
             IronSourceRewardedVideoEvents.onAdReadyEvent += Handle_OnAdReady;
             
-            IronSource.Agent.init(_appKey);
+            IronSource.Agent.init(_key);
         }
 
         public void ValidateIntegration()

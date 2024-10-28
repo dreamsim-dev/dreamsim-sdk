@@ -73,19 +73,23 @@ namespace Dreamsim.Publishing
          public class AppLovinSettings
          {
              [SerializeField]
-             private string _iosAppKey;
+             private string _sdkKey;
              
              [SerializeField]
-             private string _androidAppKey;
+             private string _iosUnitId;
+             
+             [SerializeField]
+             private string _androidUnitId;
 
              [SerializeField] private bool _useRewardedVideo;
              
-             internal string AppKey => (Application.isEditor
+             internal string UnitId => (Application.isEditor
                  ? string.Empty
                  : Application.platform == RuntimePlatform.Android
-                     ? _androidAppKey
-                     : _iosAppKey).Trim();
+                     ? _androidUnitId
+                     : _iosUnitId).Trim();
 
+             internal string SdkKey => _sdkKey.Trim();
              internal bool UseRewardedVideo => _useRewardedVideo;
          }
 

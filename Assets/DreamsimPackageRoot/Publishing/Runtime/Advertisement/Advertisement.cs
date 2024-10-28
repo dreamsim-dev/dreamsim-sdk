@@ -16,26 +16,11 @@ public class Advertisement : MonoBehaviour
 
     internal async UniTask InitAsync(Settings.AdvertisementSettings settings)
     {
-        //TODO: По сути одно и тоже, есть ли смысл делать на препроцессоре?
-        /*switch (settings.Mediation)
-        {
-            case Settings.AdvertisementSettings.Mediators.IronSource:
-                _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
-                await InitMediationAsync(settings.LevelPlay.UseRewardedVideo);
-                break;
-            case Settings.AdvertisementSettings.Mediators.AppLovin:
-                _mediation = new AppLovinMediation(settings.AppLovin.AppKey);
-                await InitMediationAsync(settings.AppLovin.UseRewardedVideo);
-                break;
-            case Settings.AdvertisementSettings.Mediators.None: break;
-            default: throw new ArgumentOutOfRangeException();
-        }*/
-        
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
         await InitMediationAsync(settings.LevelPlay.UseRewardedVideo);
         #elif DREAMSIM_USE_APPLOVIN
-        _mediation = new AppLovinMediation(settings.AppLovin.AppKey);
+        _mediation = new AppLovinMediation(settings.AppLovin.SdkKey, settings.AppLovin.UnitId);
         await InitMediationAsync(settings.AppLovin.UseRewardedVideo);
         #endif
     }
