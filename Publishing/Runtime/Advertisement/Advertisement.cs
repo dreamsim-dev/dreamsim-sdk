@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
@@ -42,24 +41,13 @@ public class Advertisement : MonoBehaviour
         _mediation.SetMetaData("Mintegral_COPPA", "false");
         _mediation.SetMetaData("Chartboost_Coppa","false");
         
-        if (useRewardedVideo)
-        {
-            RewardedVideo.Init(_mediation);
-        }
+        if (useRewardedVideo) { RewardedVideo.Init(_mediation); }
         
         _mediation.ImpressionDataReady();
-
-        var advertisingId = _mediation.GetAdvertiserId();
-        DreamsimLogger.Log(string.IsNullOrEmpty(advertisingId)
-            ? "Mediator initiating without advertising id"
-            : $"Mediator initiating with advertising id ({advertisingId})");
-
+        _mediation.InitiatingWithoutAdvertising();
         _mediation.Init();
 
-        if (Application.isEditor)
-        {
-            Handle_SkdInitialized();
-        }
+        if (Application.isEditor) { Handle_SkdInitialized(); }
 
         await UniTask.WaitUntil(() => _isInitialized);
     }

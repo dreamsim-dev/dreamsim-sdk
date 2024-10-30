@@ -18,7 +18,7 @@ namespace Dreamsim.Publishing
         
         void ValidateIntegration();
 
-        string GetAdvertiserId();
+        void InitiatingWithoutAdvertising();
         
         void SetConsent(bool consent);
 

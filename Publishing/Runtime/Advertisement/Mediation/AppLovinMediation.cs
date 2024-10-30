@@ -2,6 +2,9 @@
 
 namespace Dreamsim.Publishing
 {
+
+#if DREAMSIM_USE_APPLOVIN
+
     public class AppLovinMediation : MediationBase, IMediationBridge
     {
         public event Action OnAdReady;
@@ -14,18 +17,35 @@ namespace Dreamsim.Publishing
         public event Action<string, AdInfo> OnAdOpened;
         public event Action<string> OnAdClicked;
         
-        public AppLovinMediation(string key, string adUnitId) : base(key, adUnitId) { }
+        private readonly string _adUnitId;
 
-        public void Init()
+        public AppLovinMediation(string key) : base(key)
         {
-            MaxSdk.SetSdkKey(_key);
-            MaxSdk.InitializeSdk();
+            _adUnitId = key;
         }
         
-        public void ValidateIntegration() { throw new NotImplementedException(); }
-        public string GetAdvertiserId() { throw new NotImplementedException(); }
-        public void SetConsent(bool consent) { throw new NotImplementedException(); }
-        public void SetMetaData(string key, string value) { throw new NotImplementedException(); }
+        public void Init()
+        {
+            MaxSdk.InitializeSdk();
+        }
+
+        public void ValidateIntegration()
+        {
+            MaxSdk.IsInitialized();
+        }
+
+        public void InitiatingWithoutAdvertising() { throw new NotImplementedException(); }
+
+        public void SetConsent(bool consent)
+        {
+            MaxSdk.SetHasUserConsent(consent);    
+        }
+
+        public void SetMetaData(string key, string value)
+        {
+            MaxSdk.SetExtraParameter(key, value); //TODO: не уверен что это именно то
+        }
+
         public void OnApplicationPause(bool isPaused) { throw new NotImplementedException(); }
 
         public void SubscribeSdkInitializationCompleted(Action handle_SkdInitialized)
@@ -139,4 +159,7 @@ namespace Dreamsim.Publishing
             _retryAttempt = 0;
         }
     }
+
+#endif
+
 }
