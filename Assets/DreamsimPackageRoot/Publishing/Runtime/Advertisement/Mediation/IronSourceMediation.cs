@@ -3,6 +3,9 @@ using DevToDev.Analytics;
 
 namespace Dreamsim.Publishing
 {
+
+#if DREAMSIM_USE_IRONSOURCE
+
     public class IronSourceMediation : MediationBase, IMediationBridge
     {
         public event Action OnAdReady;
@@ -15,13 +18,18 @@ namespace Dreamsim.Publishing
         public event Action<string, AdInfo> OnAdOpened;
         public event Action<string> OnAdClicked;
         
-        public IronSourceMediation(string key) : base(key) { }
+        private readonly string _appKey;
+
+        public IronSourceMediation(string key) : base(key)
+        {
+            _appKey = key;
+        }
 
         public void Init()
         {
             IronSourceRewardedVideoEvents.onAdReadyEvent += Handle_OnAdReady;
             
-            IronSource.Agent.init(_key);
+            IronSource.Agent.init(_appKey);
         }
 
         public void ValidateIntegration()
@@ -29,9 +37,12 @@ namespace Dreamsim.Publishing
             IronSource.Agent.validateIntegration();
         }
 
-        public string GetAdvertiserId()
+        public void InitiatingWithoutAdvertising()
         {
-            return IronSource.Agent.getAdvertiserId();
+            var advertisingId = IronSource.Agent.getAdvertiserId();
+            DreamsimLogger.Log(string.IsNullOrEmpty(advertisingId)
+                ? "IronSource initiating without advertising id"
+                : $"IronSource initiating with advertising id ({advertisingId})");
         }
 
         public void SetConsent(bool consent)
@@ -222,4 +233,7 @@ namespace Dreamsim.Publishing
             OnAdReady?.Invoke();
         }
     }
+
+#endif
+
 }

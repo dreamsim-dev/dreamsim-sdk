@@ -73,9 +73,6 @@ namespace Dreamsim.Publishing
          public class AppLovinSettings
          {
              [SerializeField]
-             private string _sdkKey;
-             
-             [SerializeField]
              private string _iosUnitId;
              
              [SerializeField]
@@ -88,8 +85,7 @@ namespace Dreamsim.Publishing
                  : Application.platform == RuntimePlatform.Android
                      ? _androidUnitId
                      : _iosUnitId).Trim();
-
-             internal string SdkKey => _sdkKey.Trim();
+             
              internal bool UseRewardedVideo => _useRewardedVideo;
          }
 
