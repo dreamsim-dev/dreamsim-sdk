@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using DevToDev.Analytics;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
@@ -7,83 +6,59 @@ namespace Dreamsim.Publishing
 public class Advertisement : MonoBehaviour
 {
     public readonly RewardedVideoListener RewardedVideo = new();
+    
+    private static IMediationBridge _mediation;
 
     private bool _isInitialized;
 
-    public static void ValidateIntegration() { IronSource.Agent.validateIntegration(); }
+    public static void ValidateIntegration() { _mediation.ValidateIntegration(); }
 
     internal async UniTask InitAsync(Settings.AdvertisementSettings settings)
     {
-        await InitLevelPlayAsync(settings.LevelPlay);
+        #if DREAMSIM_USE_IRONSOURCE
+        _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
+        await InitMediationAsync(settings.LevelPlay.UseRewardedVideo);
+        #elif DREAMSIM_USE_APPLOVIN
+        _mediation = new AppLovinMediation(settings.AppLovin.SdkKey, settings.AppLovin.UnitId);
+        await InitMediationAsync(settings.AppLovin.UseRewardedVideo);
+        #endif
     }
 
-    private async UniTask InitLevelPlayAsync(Settings.AdvertisementSettings.LevelPlaySettings settings)
+    private async UniTask InitMediationAsync(bool useRewardedVideo)
     {
-        DreamsimLogger.Log("LevelPlay initialization started");
-        IronSourceEvents.onSdkInitializationCompletedEvent += Handle_LevelPlaySkdInitialized;
+        DreamsimLogger.Log("Mediator initialization started");
+        _mediation.SubscribeSdkInitializationCompleted(Handle_SkdInitialized);
         var trackingEnabled = Analytics.TrackingEnabled;
-        IronSource.Agent.setConsent(trackingEnabled);
-        DreamsimLogger.Log($"LevelPlay consent set to {trackingEnabled}");
-
-        IronSource.Agent.setMetaData("Facebook_IS_CacheFlag", "IMAGE");
-        IronSource.Agent.setMetaData("Meta_Mixed_Audience", "true");
-        IronSource.Agent.setMetaData("Vungle_coppa", "false");
-        IronSource.Agent.setMetaData("AdMob_TFCD", "false");
-        IronSource.Agent.setMetaData("AdMob_TFUA", "false");
-        IronSource.Agent.setMetaData("InMobi_AgeRestricted", "false");
-        IronSource.Agent.setMetaData("Mintegral_COPPA", "false");
-        IronSource.Agent.setMetaData("Chartboost_Coppa","false");
-
-        if (settings.UseRewardedVideo)
-        {
-            RewardedVideo.Init();
-        }
+        _mediation.SetConsent(trackingEnabled);
+        DreamsimLogger.Log($"Mediator consent set to {trackingEnabled}");
         
-        IronSourceEvents.onImpressionDataReadyEvent += Handle_ImpressionDataReady;
+        _mediation.SetMetaData("Facebook_IS_CacheFlag", "IMAGE");
+        _mediation.SetMetaData("Meta_Mixed_Audience", "true");
+        _mediation.SetMetaData("Vungle_coppa", "false");
+        _mediation.SetMetaData("AdMob_TFCD", "false");
+        _mediation.SetMetaData("AdMob_TFUA", "false");
+        _mediation.SetMetaData("InMobi_AgeRestricted", "false");
+        _mediation.SetMetaData("Mintegral_COPPA", "false");
+        _mediation.SetMetaData("Chartboost_Coppa","false");
+        
+        if (useRewardedVideo) { RewardedVideo.Init(_mediation); }
+        
+        _mediation.ImpressionDataReady();
+        _mediation.InitiatingWithoutAdvertising();
+        _mediation.Init();
 
-        var advertisingId = IronSource.Agent.getAdvertiserId();
-        DreamsimLogger.Log(string.IsNullOrEmpty(advertisingId)
-            ? "LevelPlay initiating without advertising id"
-            : $"LevelPlay initiating with advertising id ({advertisingId})");
-
-        IronSource.Agent.init(settings.AppKey);
-
-        if (Application.isEditor)
-        {
-            Handle_LevelPlaySkdInitialized();
-        }
+        if (Application.isEditor) { Handle_SkdInitialized(); }
 
         await UniTask.WaitUntil(() => _isInitialized);
     }
 
-    private void OnApplicationPause(bool isPaused) { IronSource.Agent.onApplicationPause(isPaused); }
+    private void OnApplicationPause(bool isPaused) { _mediation.OnApplicationPause(isPaused); }
 
-    private void Handle_LevelPlaySkdInitialized()
+    private void Handle_SkdInitialized()
     {
-        DreamsimLogger.Log("LevelPlay initialized");
+        DreamsimLogger.Log("Mediator initialized");
         RewardedVideo.Load();
         _isInitialized = true;
-    }
-
-    private void Handle_ImpressionDataReady(IronSourceImpressionData impressionData)
-    {
-        if (impressionData?.revenue == null) return;
-
-        Firebase.Analytics.Parameter[] adParameters =
-        {
-            new("ad_platform", "ironSource"),
-            new("ad_source", impressionData.adNetwork),
-            new("ad_unit_name", impressionData.instanceName),
-            new("ad_format", impressionData.adUnit),
-            new("currency", "USD"),
-            new("value", impressionData.revenue.Value)
-        };
-
-        Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_impression", adParameters);
-        DTDAnalytics.AdImpression(impressionData.adNetwork,
-            impressionData.revenue.Value,
-            impressionData.placement,
-            impressionData.adUnit);
     }
 }
 }

@@ -37,6 +37,18 @@ namespace Dreamsim.Publishing
      [Serializable]
      public class AdvertisementSettings
      {
+         internal enum Mediators 
+         {
+             None = 0,
+             IronSource = 1,
+             AppLovin = 2,
+         }
+         
+         [SerializeField]
+         private Mediators _mediation;
+         
+         internal Mediators Mediation => _mediation;
+         
          [Serializable]
          public class LevelPlaySettings
          {
@@ -56,6 +68,26 @@ namespace Dreamsim.Publishing
 
              internal bool UseRewardedVideo => _useRewardedVideo;
          }
+         
+         [Serializable]
+         public class AppLovinSettings
+         {
+             [SerializeField]
+             private string _iosUnitId;
+             
+             [SerializeField]
+             private string _androidUnitId;
+
+             [SerializeField] private bool _useRewardedVideo;
+             
+             internal string UnitId => (Application.isEditor
+                 ? string.Empty
+                 : Application.platform == RuntimePlatform.Android
+                     ? _androidUnitId
+                     : _iosUnitId).Trim();
+             
+             internal bool UseRewardedVideo => _useRewardedVideo;
+         }
 
          [Serializable]
          public class AdMobSettings
@@ -72,11 +104,15 @@ namespace Dreamsim.Publishing
 
          [SerializeField]
          private LevelPlaySettings _levelPlay;
+         
+         [SerializeField]
+         private AppLovinSettings _appLovin;
 
          [SerializeField]
          private AdMobSettings _adMob;
 
          internal LevelPlaySettings LevelPlay => _levelPlay;
+         internal AppLovinSettings AppLovin => _appLovin;
          internal AdMobSettings AdMob => _adMob;
      }
      

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
@@ -17,6 +18,7 @@ public static class DependenciesUpdater
     {
         UpdateGADSettings(settings.Advertisement.AdMob.AndroidAppId, settings.Advertisement.AdMob.iOSAppId);
         UpdateFacebookSettings(settings.Facebook.AppLabel, settings.Facebook.AppId, settings.Facebook.ClientToken);
+        UpdateMediationSettings(settings.Advertisement.Mediation);
     }
 
     private static void UpdateGADSettings(string androidAppId, string iOSAppId)
@@ -41,6 +43,26 @@ public static class DependenciesUpdater
         FacebookSettings.ClientTokens = new List<string> { clientToken };
 
         EditorUtility.SetDirty(FacebookSettings.Instance);
+    }
+
+    private static void UpdateMediationSettings(Settings.AdvertisementSettings.Mediators mediators)
+    {
+        switch (mediators)
+        {
+            case Settings.AdvertisementSettings.Mediators.IronSource:
+                DefineSymbols.Add("DREAMSIM_USE_IRONSOURCE");
+                DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
+                break;
+            case Settings.AdvertisementSettings.Mediators.AppLovin:
+                DefineSymbols.Add("DREAMSIM_USE_APPLOVIN");
+                DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
+                break;
+            case Settings.AdvertisementSettings.Mediators.None: 
+                DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
+                DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
+                break;
+            default: throw new ArgumentOutOfRangeException(nameof(mediators), mediators, null);
+        }
     }
 
     private static XElement CreatePermissionElement(string name)
