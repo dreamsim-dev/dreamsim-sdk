@@ -52,7 +52,12 @@ public class Advertisement : MonoBehaviour
         await UniTask.WaitUntil(() => _isInitialized);
     }
 
-    private void OnApplicationPause(bool isPaused) { _mediation.OnApplicationPause(isPaused); }
+    private void OnApplicationPause(bool isPaused)
+    {
+        #if !UNITY_EDITOR
+        _mediation.OnApplicationPause(isPaused);
+        #endif
+    }
 
     private void Handle_SkdInitialized()
     {
