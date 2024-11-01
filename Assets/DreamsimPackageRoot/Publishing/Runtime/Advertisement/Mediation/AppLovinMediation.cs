@@ -1,5 +1,4 @@
-﻿#define DREAMSIM_USE_APPLOVIN
-using System;
+﻿using System;
 
 namespace Dreamsim.Publishing
 {
