@@ -178,10 +178,7 @@ public class IronSourceMediation : MediationBase, IMediationBridge
         AdInfo adInfo;
         if (Application.isEditor)
         {
-            adInfo = new AdInfo(ironSourceAdInfo?.adNetwork,
-                (double)ironSourceAdInfo?.revenue!,
-                _placement,
-                ironSourceAdInfo.adUnit);
+            adInfo = new AdInfo();
         }
         else
         {
