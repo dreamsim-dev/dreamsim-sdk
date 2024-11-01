@@ -13,10 +13,13 @@ public class Analytics : MonoBehaviour
 
     [SerializeField]
     private DevToDevManager _devToDevManager;
+    
+    [SerializeField]
+    private FirebaseManager _firebaseManager;
 
     [SerializeField]
     private NetworkReachabilityTracker _networkReachabilityTracker;
-
+    
     private PurchaseValidator _purchaseValidator;
 
     public static string AdvertisingId { get; private set; }
@@ -38,6 +41,7 @@ public class Analytics : MonoBehaviour
         await ProcessConsentAsync(gdprSettings.GoogleMobileAdsTestDeviceHashedIds);
         _appsFlyerManager.Init(storeAppId, settings.AppsFlyer);
         _devToDevManager.Init(settings.DevToDev, _appsFlyerManager.GetAppsFlyerId());
+        await _firebaseManager.InitAsync();
         _networkReachabilityTracker.Run();
         InitAdvertisementEvents();
         DreamsimLogger.Log("Analytics initialized");
