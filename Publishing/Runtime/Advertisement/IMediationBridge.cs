@@ -28,9 +28,11 @@ namespace Dreamsim.Publishing
 
         void SubscribeSdkInitializationCompleted(Action action);
 
-        void ImpressionDataReady();
+        void SubscribeImpressionDataReady();
 
         void LoadRewardedVideo();
+
+        void ShowRewardedVideo(string adSource);
         
         void ShowRewardedVideo(string adSource, string placement);
         
@@ -38,7 +40,7 @@ namespace Dreamsim.Publishing
 
         void SetManualLoadRewardedVideo(bool isOn);
 
-        void SubscribeAdOpened(Action<string, AdInfo> onAdOpened, string placement);
+        void SubscribeAdOpened(Action<string, AdInfo> onAdOpened);
         
         void SubscribeAdClosed(Action<string> onAdClosed);
         

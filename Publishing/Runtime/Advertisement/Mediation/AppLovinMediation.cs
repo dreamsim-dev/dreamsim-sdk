@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define DREAMSIM_USE_APPLOVIN
+using System;
 
 namespace Dreamsim.Publishing
 {
@@ -53,11 +54,21 @@ namespace Dreamsim.Publishing
             MaxSdkCallbacks.OnSdkInitializedEvent += _ => { handle_SkdInitialized?.Invoke(); };
         }
         
-        public void ImpressionDataReady() { throw new NotImplementedException(); }
+        public void SubscribeImpressionDataReady() { throw new NotImplementedException(); }
 
         public void LoadRewardedVideo()
         {
             MaxSdk.LoadRewardedAd(_adUnitId);
+        }
+
+        public void ShowRewardedVideo(string adSource)
+        {
+            _adSource = adSource;
+            
+            if (!MaxSdk.IsRewardedAdReady(_adUnitId)) return;
+            
+            OnAdRequested?.Invoke(_adSource);
+            MaxSdk.ShowRewardedAd(_adUnitId);
         }
 
         public void ShowRewardedVideo(string adSource, string placement)
@@ -73,10 +84,9 @@ namespace Dreamsim.Publishing
         public bool IsRewardedVideoAvailable() { throw new NotImplementedException(); }
         public void SetManualLoadRewardedVideo(bool isOn) { throw new NotImplementedException(); }
 
-        public void SubscribeAdOpened(Action<string, AdInfo> onAdOpened, string placement)
+        public void SubscribeAdOpened(Action<string, AdInfo> onAdOpened)
         {
             OnAdOpened = onAdOpened;
-            
             MaxSdkCallbacks.Rewarded.OnAdDisplayedEvent += Handle_OnAdOpened;
         }
 
