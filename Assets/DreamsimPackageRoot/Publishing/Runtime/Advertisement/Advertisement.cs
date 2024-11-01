@@ -63,7 +63,7 @@ public class Advertisement : MonoBehaviour
             RewardedVideo.Init(_mediation);
         }
 
-        _mediation.ImpressionDataReady();
+        _mediation.SubscribeImpressionDataReady();
         _mediation.InitiatingWithoutAdvertising();
         _mediation.Init();
 

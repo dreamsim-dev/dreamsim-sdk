@@ -4,8 +4,6 @@ namespace Dreamsim.Publishing
 {
 public class RewardedVideoListener
 {
-    private const string DefaultPlacement = "DefaultRewardedVideo";
-
     public event Action<string> OnAdRequested;
     public event Action<string> OnAdCompleted;
     public event Action<string> OnAdClosed;
@@ -27,23 +25,23 @@ public class RewardedVideoListener
 
         _mediation.OnAdReady += () => DreamsimLogger.Log("Rewarded video ready");
         _mediation.OnAdShowFailed += _ => DreamsimLogger.LogError("Rewarded video show failed");
-
-        _mediation.SubscribeAdOpened(OnAdOpened, DefaultPlacement);
-        _mediation.SubscribeAdClosed(OnAdClosed);
-        _mediation.SubscribeAdAvailable(OnAvailabilityChanged);
-        _mediation.SubscribeAdUnavailable(OnAvailabilityChanged);
-        _mediation.SubscribeAdLoadFailed(OnAdLoadFailed);
-        _mediation.SubscribeAdShowFailed(OnAdShowFailed);
-        _mediation.SubscribeAdRewarded(OnAdCompleted);
-        _mediation.SubscribeAdClicked(OnAdClicked);
+        _mediation.OnAdRequested += adSource => OnAdRequested?.Invoke(adSource);
+        
+        _mediation.SubscribeAdOpened((adSource, adInfo) => OnAdOpened?.Invoke(adSource, adInfo));
+        _mediation.SubscribeAdClosed(adSource => OnAdClosed?.Invoke(adSource));
+        _mediation.SubscribeAdAvailable(adSource => OnAvailabilityChanged?.Invoke(adSource));
+        _mediation.SubscribeAdUnavailable(adSource => OnAvailabilityChanged?.Invoke(adSource));
+        _mediation.SubscribeAdLoadFailed(adSource => OnAdLoadFailed?.Invoke(adSource));
+        _mediation.SubscribeAdShowFailed(adSource => OnAdShowFailed?.Invoke(adSource));
+        _mediation.SubscribeAdRewarded(adSource => OnAdCompleted?.Invoke(adSource));
+        _mediation.SubscribeAdClicked(adSource => OnAdClicked?.Invoke(adSource));
 
         DreamsimLogger.Log("Rewarded ads initialized");
     }
 
-    public void Show(string adSource, string placement = DefaultPlacement)
-    {
-        _mediation.ShowRewardedVideo(adSource, placement);
-    }
+    public void Show(string adSource) { _mediation.ShowRewardedVideo(adSource); }
+
+    public void Show(string adSource, string placement) { _mediation.ShowRewardedVideo(adSource, placement); }
 
     internal void Load() { _mediation.LoadRewardedVideo(); }
 }

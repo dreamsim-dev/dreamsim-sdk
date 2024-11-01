@@ -7,6 +7,8 @@ namespace Dreamsim.Publishing
 #if DREAMSIM_USE_IRONSOURCE
 public class IronSourceMediation : MediationBase, IMediationBridge
 {
+    private const string DefaultPlacement = "DefaultRewardedVideo";
+
     public event Action OnAdReady;
     public event Action<string> OnAdRequested;
     public event Action<string> OnAdCompleted;
@@ -58,7 +60,10 @@ public class IronSourceMediation : MediationBase, IMediationBridge
         IronSourceEvents.onSdkInitializationCompletedEvent += action;
     }
 
-    public void ImpressionDataReady() { IronSourceEvents.onImpressionDataReadyEvent += Handle_ImpressionDataReady; }
+    public void SubscribeImpressionDataReady()
+    {
+        IronSourceEvents.onImpressionDataReadyEvent += Handle_ImpressionDataReady;
+    }
 
     public void LoadRewardedVideo()
     {
@@ -68,6 +73,11 @@ public class IronSourceMediation : MediationBase, IMediationBridge
         }
 
         DreamsimLogger.Log("Ad loading started");
+    }
+
+    public void ShowRewardedVideo(string adSource)
+    {
+        ShowRewardedVideo(adSource, DefaultPlacement);
     }
 
     public void ShowRewardedVideo(string adSource, string placement)
@@ -114,60 +124,52 @@ public class IronSourceMediation : MediationBase, IMediationBridge
             impressionData.adUnit);
     }
 
-    public void SubscribeAdOpened(Action<string, AdInfo> onAdOpened, string placement)
+    public void SubscribeAdOpened(Action<string, AdInfo> onAdOpened)
     {
-        OnAdOpened = onAdOpened;
-        _placement = placement;
-
+        OnAdOpened += onAdOpened;
         IronSourceRewardedVideoEvents.onAdOpenedEvent += Handle_OnAdOpened;
     }
 
     public void SubscribeAdClosed(Action<string> onAdClosed)
     {
-        OnAdClosed = onAdClosed;
-
+        OnAdClosed += onAdClosed;
         IronSourceRewardedVideoEvents.onAdClosedEvent += Handle_OnAdClosed;
     }
 
     public void SubscribeAdAvailable(Action<bool> onAdAvailable)
     {
-        OnAvailabilityChanged = onAdAvailable;
-
+        OnAvailabilityChanged += onAdAvailable;
         IronSourceRewardedVideoEvents.onAdAvailableEvent += Handle_OnAdAvailable;
     }
 
     public void SubscribeAdUnavailable(Action<bool> onAdUnavailable)
     {
-        OnAvailabilityChanged = onAdUnavailable;
+        OnAvailabilityChanged += onAdUnavailable;
 
         IronSourceRewardedVideoEvents.onAdUnavailableEvent += Handle_OnAdUnavailable;
     }
 
     public void SubscribeAdLoadFailed(Action<string> onAdLoadFailed)
     {
-        OnAdLoadFailed = onAdLoadFailed;
-
+        OnAdLoadFailed += onAdLoadFailed;
         IronSourceRewardedVideoEvents.onAdLoadFailedEvent += Handle_OnAdLoadFailed;
     }
 
     public void SubscribeAdShowFailed(Action<string> onAdShowFailed)
     {
-        OnAdShowFailed = onAdShowFailed;
-
+        OnAdShowFailed += onAdShowFailed;
         IronSourceRewardedVideoEvents.onAdShowFailedEvent += Handle_OnAdShowFailed;
     }
 
     public void SubscribeAdRewarded(Action<string> onAdRewarded)
     {
-        OnAdCompleted = onAdRewarded;
-
+        OnAdCompleted += onAdRewarded;
         IronSourceRewardedVideoEvents.onAdRewardedEvent += Handle_OnAdRewarded;
     }
 
     public void SubscribeAdClicked(Action<string> onAdClicked)
     {
-        OnAdClicked = onAdClicked;
-
+        OnAdClicked += onAdClicked;
         IronSourceRewardedVideoEvents.onAdClickedEvent += Handle_OnAdClicked;
     }
 
