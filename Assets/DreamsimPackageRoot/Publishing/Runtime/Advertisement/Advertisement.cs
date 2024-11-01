@@ -28,10 +28,10 @@ public class Advertisement : MonoBehaviour
         var useRewardedVideo = false;
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
-        var useRewardedVideo = settings.LevelPlay.UseRewardedVideo;
+        useRewardedVideo = settings.LevelPlay.UseRewardedVideo;
         #elif DREAMSIM_USE_APPLOVIN
         _mediation = new AppLovinMediation(settings.AppLovin.SdkKey, settings.AppLovin.UnitId);
-        var useRewardedVideo = settings.AppLovin.UseRewardedVideo;
+        useRewardedVideo = settings.AppLovin.UseRewardedVideo;
         #endif
         
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
