@@ -27,10 +27,12 @@ public class AutoKeystore : IPreprocessBuildWithReport
     {
         if (Environment.GetCommandLineArgs().Contains("-keyaliaspass"))
         {
-            Debug.Log("Set keystore settings from command line arguments");
+            DreamsimLogger.Log("Set keystore settings from command line arguments");
             return;
         }
+
         if (report.summary.platform != BuildTarget.Android) return;
+
         if (!File.Exists(KeystorePasswordsFile))
         {
             MakeTemplate();
@@ -39,8 +41,7 @@ public class AutoKeystore : IPreprocessBuildWithReport
         }
 
         var keystorePasswords =
-            JsonUtility.FromJson<KeystorePasswords>(
-                File.ReadAllText(KeystorePasswordsFile));
+            JsonUtility.FromJson<KeystorePasswords>(File.ReadAllText(KeystorePasswordsFile));
 
         PlayerSettings.Android.keystorePass =
             keystorePasswords.keystorePass;
@@ -66,10 +67,7 @@ public class AutoKeystore : IPreprocessBuildWithReport
             KeystorePasswordsFilename);
     }
 
-    private static void OpenKeystoreFile()
-    {
-        Process.Start(KeystorePasswordsFile);
-    }
+    private static void OpenKeystoreFile() { Process.Start(KeystorePasswordsFile); }
 }
 
 public class KeystorePasswords

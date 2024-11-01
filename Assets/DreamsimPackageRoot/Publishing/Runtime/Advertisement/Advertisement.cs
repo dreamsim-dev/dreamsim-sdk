@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
@@ -24,18 +25,20 @@ public class Advertisement : MonoBehaviour
         #endif
         #endif
 
-        // ReSharper disable once ConvertToConstant.Local
-        var useRewardedVideo = false;
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
-        useRewardedVideo = settings.LevelPlay.UseRewardedVideo;
         #elif DREAMSIM_USE_APPLOVIN
         _mediation = new AppLovinMediation(settings.AppLovin.SdkKey, settings.AppLovin.UnitId);
-        useRewardedVideo = settings.AppLovin.UseRewardedVideo;
         #endif
-        
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        await InitMediationAsync(useRewardedVideo);
+
+        if (settings.UseRewardedVideo)
+        {
+            await InitMediationAsync(settings.UseRewardedVideo);
+        }
+        else
+        {
+            DreamsimLogger.LogError("No ad type used");
+        }
     }
 
     private async UniTask InitMediationAsync(bool useRewardedVideo)

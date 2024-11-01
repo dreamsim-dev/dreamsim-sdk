@@ -17,7 +17,7 @@ namespace Dreamsim.Publishing
                 var status = await FirebaseApp.CheckAndFixDependenciesAsync();
                 
                 if (status == DependencyStatus.Available) Init();
-                else Debug.LogError("Could not resolve all Firebase dependencies: " + status);
+                else DreamsimLogger.LogError("Could not resolve all Firebase dependencies: " + status);
             }
             else Init();
         }

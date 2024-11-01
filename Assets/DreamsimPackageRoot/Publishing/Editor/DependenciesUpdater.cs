@@ -45,23 +45,23 @@ public static class DependenciesUpdater
         EditorUtility.SetDirty(FacebookSettings.Instance);
     }
 
-    private static void UpdateMediationSettings(Settings.AdvertisementSettings.Mediators mediators)
+    private static void UpdateMediationSettings(Settings.AdvertisementSettings.MediationType mediationType)
     {
-        switch (mediators)
+        switch (mediationType)
         {
-            case Settings.AdvertisementSettings.Mediators.IronSource:
+            case Settings.AdvertisementSettings.MediationType.LevelPlay:
                 DefineSymbols.Add("DREAMSIM_USE_IRONSOURCE");
                 DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
                 break;
-            case Settings.AdvertisementSettings.Mediators.AppLovin:
+            case Settings.AdvertisementSettings.MediationType.AppLovinMAX:
                 DefineSymbols.Add("DREAMSIM_USE_APPLOVIN");
                 DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
                 break;
-            case Settings.AdvertisementSettings.Mediators.None: 
+            case Settings.AdvertisementSettings.MediationType.None: 
                 DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
                 DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
                 break;
-            default: throw new ArgumentOutOfRangeException(nameof(mediators), mediators, null);
+            default: throw new ArgumentOutOfRangeException(nameof(mediationType), mediationType, null);
         }
     }
 
