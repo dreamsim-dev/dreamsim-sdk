@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using DevToDev.Analytics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -37,17 +39,12 @@ namespace Dreamsim.Publishing
      [Serializable]
      public class AdvertisementSettings
      {
-         internal enum Mediators 
+         internal enum MediationType 
          {
              None = 0,
-             IronSource = 1,
-             AppLovin = 2,
+             LevelPlay = 1,
+             AppLovinMAX = 2,
          }
-         
-         [SerializeField]
-         private Mediators _mediation;
-         
-         internal Mediators Mediation => _mediation;
          
          [Serializable]
          public class LevelPlaySettings
@@ -57,16 +54,12 @@ namespace Dreamsim.Publishing
              
              [SerializeField]
              private string _androidAppKey;
-
-             [SerializeField] private bool _useRewardedVideo;
              
              internal string AppKey => (Application.isEditor
                  ? string.Empty
                  : Application.platform == RuntimePlatform.Android
                      ? _androidAppKey
                      : _iosAppKey).Trim();
-
-             internal bool UseRewardedVideo => _useRewardedVideo;
          }
          
          [Serializable]
@@ -77,16 +70,12 @@ namespace Dreamsim.Publishing
              
              [SerializeField]
              private string _androidUnitId;
-
-             [SerializeField] private bool _useRewardedVideo;
              
              internal string UnitId => (Application.isEditor
                  ? string.Empty
                  : Application.platform == RuntimePlatform.Android
                      ? _androidUnitId
                      : _iosUnitId).Trim();
-             
-             internal bool UseRewardedVideo => _useRewardedVideo;
          }
 
          [Serializable]
@@ -101,6 +90,14 @@ namespace Dreamsim.Publishing
              internal string iOSAppId => _iosAppId.Trim();
              internal string AndroidAppId => _androidAppId.Trim();
          }
+         
+         [SerializeField]
+         private MediationType _mediation;
+
+         [SerializeField] private bool _useRewardedVideo = true;
+         
+         internal MediationType Mediation => _mediation;
+         internal bool UseRewardedVideo => _useRewardedVideo;
 
          [SerializeField]
          private LevelPlaySettings _levelPlay;

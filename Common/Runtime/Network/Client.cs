@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Dreamsim
 {
@@ -34,7 +33,7 @@ public static class Client
         }
         catch (Exception e)
         {
-            Debug.LogException(e);
+            DreamsimLogger.LogException(e);
             throw;
         }
 
@@ -52,12 +51,12 @@ public static class Client
         }
         catch (Exception e)
         {
-            Debug.LogException(e);
+            DreamsimLogger.LogException(e);
             throw;
         }
 
-        Debug.Log($"POST request sent\n\nContents:\n{contents}\n\nResponse:\n{result}\n");
-        Debug.Log(result.Item1.IsSuccessStatusCode ? "POST request: Succeeded" : "POST request: Failed");
+        DreamsimLogger.Log($"POST request sent\n\nContents:\n{contents}\n\nResponse:\n{result}\n");
+        DreamsimLogger.Log(result.Item1.IsSuccessStatusCode ? "POST request: Succeeded" : "POST request: Failed");
 
         return result;
     }
@@ -73,7 +72,7 @@ public static class Client
         }
         catch (Exception e)
         {
-            Debug.LogException(e);
+            DreamsimLogger.LogException(e);
             throw;
         }
 
