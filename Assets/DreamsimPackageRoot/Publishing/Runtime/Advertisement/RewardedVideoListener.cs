@@ -22,12 +22,12 @@ public class RewardedVideoListener
     internal void Init(IMediationBridge mediator)
     {
         _mediation = mediator;
-            
+
         _mediation.SetManualLoadRewardedVideo(true);
-            
+
         _mediation.OnAdReady += () => DreamsimLogger.Log("Rewarded video ready");
         _mediation.OnAdShowFailed += _ => DreamsimLogger.LogError("Rewarded video show failed");
-            
+
         _mediation.SubscribeAdOpened(OnAdOpened, DefaultPlacement);
         _mediation.SubscribeAdClosed(OnAdClosed);
         _mediation.SubscribeAdAvailable(OnAvailabilityChanged);
@@ -45,9 +45,6 @@ public class RewardedVideoListener
         _mediation.ShowRewardedVideo(adSource, placement);
     }
 
-    internal void Load()
-    {
-        _mediation.LoadRewardedVideo();
-    }
+    internal void Load() { _mediation.LoadRewardedVideo(); }
 }
 }

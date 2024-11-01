@@ -1,5 +1,6 @@
 ﻿using System;
 using DevToDev.Analytics;
+using UnityEngine;
 
 namespace Dreamsim.Publishing
 {
@@ -18,7 +19,8 @@ public class IronSourceMediation : MediationBase, IMediationBridge
 
     private readonly string _appKey;
 
-    public IronSourceMediation(string key) : base(key)
+    public IronSourceMediation(string key)
+        : base(key)
     {
         _appKey = key;
     }
@@ -47,20 +49,24 @@ public class IronSourceMediation : MediationBase, IMediationBridge
     public void OnApplicationPause(bool isPaused)
     {
         #if !UNITY_EDITOR
-            IronSource.Agent.onApplicationPause(isPaused);
+        IronSource.Agent.onApplicationPause(isPaused);
         #endif
     }
 
-    public void SubscribeSdkInitializationCompleted(Action handle_SkdInitialized)
+    public void SubscribeSdkInitializationCompleted(Action action)
     {
-        IronSourceEvents.onSdkInitializationCompletedEvent += handle_SkdInitialized;
+        IronSourceEvents.onSdkInitializationCompletedEvent += action;
     }
 
     public void ImpressionDataReady() { IronSourceEvents.onImpressionDataReadyEvent += Handle_ImpressionDataReady; }
 
     public void LoadRewardedVideo()
     {
-        IronSource.Agent.loadRewardedVideo();
+        if (!Application.isEditor)
+        {
+            IronSource.Agent.loadRewardedVideo();
+        }
+
         DreamsimLogger.Log("Ad loading started");
     }
 
@@ -68,7 +74,18 @@ public class IronSourceMediation : MediationBase, IMediationBridge
     {
         _adSource = adSource;
         OnAdRequested?.Invoke(_adSource);
-        IronSource.Agent.showRewardedVideo(placement);
+
+        if (Application.isEditor)
+        {
+            Handle_OnAdOpened(null);
+            Handle_OnAdClicked(null, null);
+            Handle_OnAdRewarded(null, null);
+            Handle_OnAdClosed(null);
+        }
+        else
+        {
+            IronSource.Agent.showRewardedVideo(placement);
+        }
     }
 
     public bool IsRewardedVideoAvailable() { return IronSource.Agent.isRewardedVideoAvailable(); }
@@ -78,6 +95,7 @@ public class IronSourceMediation : MediationBase, IMediationBridge
     private void Handle_ImpressionDataReady(IronSourceImpressionData impressionData)
     {
         if (impressionData?.revenue == null) return;
+        if (Application.isEditor) return;
 
         Firebase.Analytics.Parameter[] adParameters =
         {
@@ -155,10 +173,21 @@ public class IronSourceMediation : MediationBase, IMediationBridge
 
     private void Handle_OnAdOpened(IronSourceAdInfo ironSourceAdInfo)
     {
-        var adInfo = new AdInfo(ironSourceAdInfo.adNetwork,
-            (double)ironSourceAdInfo.revenue!,
-            _placement,
-            ironSourceAdInfo.adUnit);
+        AdInfo adInfo;
+        if (Application.isEditor)
+        {
+            adInfo = new AdInfo(ironSourceAdInfo?.adNetwork,
+                (double)ironSourceAdInfo?.revenue!,
+                _placement,
+                ironSourceAdInfo.adUnit);
+        }
+        else
+        {
+            adInfo = new AdInfo(ironSourceAdInfo?.adNetwork,
+                (double)ironSourceAdInfo!.revenue!,
+                _placement,
+                ironSourceAdInfo.adUnit);
+        }
 
         OnAdOpened?.Invoke(_adSource, adInfo);
     }
