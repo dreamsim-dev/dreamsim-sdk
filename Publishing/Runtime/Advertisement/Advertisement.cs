@@ -19,16 +19,23 @@ public class Advertisement : MonoBehaviour
 
         #if !DREAMSIM_USE_IRONSOURCE && !DREAMSIM_USE_APPLOVIN
         DreamsimLogger.LogError("No mediator selected. Advertisement initialization won't continue");
+        #if !UNITY_EDITOR
         return;
         #endif
+        #endif
 
+        // ReSharper disable once ConvertToConstant.Local
+        var useRewardedVideo = false;
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
-        await InitMediationAsync(settings.LevelPlay.UseRewardedVideo);
+        var useRewardedVideo = settings.LevelPlay.UseRewardedVideo;
         #elif DREAMSIM_USE_APPLOVIN
         _mediation = new AppLovinMediation(settings.AppLovin.SdkKey, settings.AppLovin.UnitId);
-        await InitMediationAsync(settings.AppLovin.UseRewardedVideo);
+        var useRewardedVideo = settings.AppLovin.UseRewardedVideo;
         #endif
+        
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+        await InitMediationAsync(useRewardedVideo);
     }
 
     private async UniTask InitMediationAsync(bool useRewardedVideo)

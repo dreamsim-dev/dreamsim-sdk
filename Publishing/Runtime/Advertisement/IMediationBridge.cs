@@ -26,7 +26,7 @@ namespace Dreamsim.Publishing
         
         void OnApplicationPause(bool isPaused);
 
-        void SubscribeSdkInitializationCompleted(Action handle_SkdInitialized);
+        void SubscribeSdkInitializationCompleted(Action action);
 
         void ImpressionDataReady();
 
