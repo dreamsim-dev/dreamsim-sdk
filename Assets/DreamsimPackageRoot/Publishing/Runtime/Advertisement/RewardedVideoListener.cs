@@ -17,7 +17,7 @@ public class RewardedVideoListener
 
     private IMediationBridge _mediation;
 
-    public bool IsAvailable => _mediation.IsRewardedVideoAvailable();
+    public bool IsAvailable => _mediation?.IsRewardedVideoAvailable() ?? false;
 
     internal void Init(IMediationBridge mediator)
     {
