@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-
 namespace Dreamsim.Publishing
 {
 public class DreamsimPublishing : MonoBehaviour
@@ -65,11 +64,9 @@ public class DreamsimPublishing : MonoBehaviour
 
         if (!hasError)
         {
-            DreamsimLogger.Log("Analytics initialized successfully");
+            var storeAppId = settings.General.StoreAppId;
+            DreamsimLogger.Log($"Publishing initialized ({storeAppId})");
         }
-
-        var storeAppId = settings.General.StoreAppId;
-        DreamsimLogger.Log($"Publishing initialized ({storeAppId})");
     }
 }
 }
