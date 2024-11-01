@@ -57,7 +57,9 @@ namespace Dreamsim.Publishing
 
         public void OnApplicationPause(bool isPaused)
         {
+            #if !UNITY_EDITOR
             IronSource.Agent.onApplicationPause(isPaused);
+            #endif
         }
 
         public void SubscribeSdkInitializationCompleted(Action handle_SkdInitialized)

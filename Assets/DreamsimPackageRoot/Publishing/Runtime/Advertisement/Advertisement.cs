@@ -54,9 +54,7 @@ public class Advertisement : MonoBehaviour
 
     private void OnApplicationPause(bool isPaused)
     {
-        #if !UNITY_EDITOR
-        _mediation.OnApplicationPause(isPaused);
-        #endif
+        if (_isInitialized) _mediation.OnApplicationPause(isPaused);
     }
 
     private void Handle_SkdInitialized()
