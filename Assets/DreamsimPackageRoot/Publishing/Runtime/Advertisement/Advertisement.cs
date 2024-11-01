@@ -6,7 +6,7 @@ namespace Dreamsim.Publishing
 public class Advertisement : MonoBehaviour
 {
     public readonly RewardedVideoListener RewardedVideo = new();
-    
+
     private static IMediationBridge _mediation;
 
     private bool _isInitialized;
@@ -15,6 +15,13 @@ public class Advertisement : MonoBehaviour
 
     internal async UniTask InitAsync(Settings.AdvertisementSettings settings)
     {
+        DreamsimLogger.Log("Advertisement initialization started");
+
+        #if !DREAMSIM_USE_IRONSOURCE && !DREAMSIM_USE_APPLOVIN
+        DreamsimLogger.LogError("No mediator selected. Advertisement initialization won't continue");
+        return;
+        #endif
+
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
         await InitMediationAsync(settings.LevelPlay.UseRewardedVideo);
@@ -31,7 +38,7 @@ public class Advertisement : MonoBehaviour
         var trackingEnabled = Analytics.TrackingEnabled;
         _mediation.SetConsent(trackingEnabled);
         DreamsimLogger.Log($"Mediator consent set to {trackingEnabled}");
-        
+
         _mediation.SetMetaData("Facebook_IS_CacheFlag", "IMAGE");
         _mediation.SetMetaData("Meta_Mixed_Audience", "true");
         _mediation.SetMetaData("Vungle_coppa", "false");
@@ -39,15 +46,21 @@ public class Advertisement : MonoBehaviour
         _mediation.SetMetaData("AdMob_TFUA", "false");
         _mediation.SetMetaData("InMobi_AgeRestricted", "false");
         _mediation.SetMetaData("Mintegral_COPPA", "false");
-        _mediation.SetMetaData("Chartboost_Coppa","false");
-        
-        if (useRewardedVideo) { RewardedVideo.Init(_mediation); }
-        
+        _mediation.SetMetaData("Chartboost_Coppa", "false");
+
+        if (useRewardedVideo)
+        {
+            RewardedVideo.Init(_mediation);
+        }
+
         _mediation.ImpressionDataReady();
         _mediation.InitiatingWithoutAdvertising();
         _mediation.Init();
 
-        if (Application.isEditor) { Handle_SkdInitialized(); }
+        if (Application.isEditor)
+        {
+            Handle_SkdInitialized();
+        }
 
         await UniTask.WaitUntil(() => _isInitialized);
     }
@@ -60,8 +73,11 @@ public class Advertisement : MonoBehaviour
     private void Handle_SkdInitialized()
     {
         DreamsimLogger.Log("Mediator initialized");
+
         RewardedVideo.Load();
         _isInitialized = true;
+
+        DreamsimLogger.Log("Advertisement initialized");
     }
 }
 }
