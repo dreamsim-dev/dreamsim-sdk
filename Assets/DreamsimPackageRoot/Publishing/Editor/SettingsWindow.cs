@@ -90,85 +90,100 @@ public class SettingsWindow : EditorWindow
 
         EditorGUI.BeginChangeCheck();
 
-        {
-            H2("General");
-
-            var iosStoreAppIdProp = settingsObject.FindProperty("_general._iosStoreAppId");
-            EditorGUILayout.PropertyField(iosStoreAppIdProp);
-            Tip("Without \"id\" part");
-            var useAnalyticsProp = settingsObject.FindProperty("_general._useAnalytics");
-            EditorGUILayout.PropertyField(useAnalyticsProp);
-            var useAdvertisementProp = settingsObject.FindProperty("_general._useAdvertisement");
-            EditorGUILayout.PropertyField(useAdvertisementProp);
-            SeparateLine();
-        }
-
-        if (_settings.General.UseAnalytics)
-        {
-            H2("Analytics");
-
-            var purchaseValidationSlugProp = settingsObject.FindProperty("_analytics._purchaseValidatorSlug");
-            EditorGUILayout.PropertyField(purchaseValidationSlugProp);
-            Tip("Provided by the SDK's team");
-            var appsFlyerProp = settingsObject.FindProperty("_analytics._appsFlyer");
-            EditorGUILayout.PropertyField(appsFlyerProp);
-            var devToDevProp = settingsObject.FindProperty("_analytics._devToDev");
-            EditorGUILayout.PropertyField(devToDevProp);
-            SeparateLine();
-        }
-
-        if (_settings.General.useAdvertisement)
-        {
-            H2("Advertisement");
-
-            var mediationProp = settingsObject.FindProperty("_advertisement._mediation");
-            EditorGUILayout.PropertyField(mediationProp);
-            var useRewardedVideoProp = settingsObject.FindProperty("_advertisement._useRewardedVideo");
-            EditorGUILayout.PropertyField(useRewardedVideoProp);
-
-            var levelPlayProp = settingsObject.FindProperty("_advertisement._levelPlay");
-            if (_settings.Advertisement.Mediation == Settings.AdvertisementSettings.MediationType.LevelPlay)
-            {
-                EditorGUILayout.PropertyField(levelPlayProp);
-            }
-
-            var appLovinProp = settingsObject.FindProperty("_advertisement._appLovin");
-            if (_settings.Advertisement.Mediation == Settings.AdvertisementSettings.MediationType.AppLovinMAX)
-            {
-                EditorGUILayout.PropertyField(appLovinProp);
-            }
-
-            var adMobProp = settingsObject.FindProperty("_advertisement._adMob");
-            EditorGUILayout.PropertyField(adMobProp);
-            SeparateLine();
-        }
-
-        {
-            H2("Facebook");
-
-            var appLabelProp = settingsObject.FindProperty("_facebook._appLabel");
-            EditorGUILayout.PropertyField(appLabelProp);
-            var appIdProp = settingsObject.FindProperty("_facebook._appId");
-            EditorGUILayout.PropertyField(appIdProp);
-            var clientTokenProp = settingsObject.FindProperty("_facebook._clientToken");
-            EditorGUILayout.PropertyField(clientTokenProp);
-            SeparateLine();
-        }
-
-        {
-            H2("GDPR");
-
-            var googleMobileAdsTestDeviceHashedIdsProp =
-                settingsObject.FindProperty("_gdpr._googleMobileAdsTestDeviceHashedIds");
-            EditorGUILayout.PropertyField(googleMobileAdsTestDeviceHashedIdsProp);
-            const string link = "https://developers.google.com/admob/unity/privacy#testing";
-            Tip($"How to obtain: <a href=\"{link}\">{link}</a>", link);
-            SeparateLine();
-        }
+        GeneralArea(settingsObject);
+        if (_settings.General.UseAnalytics) AnalyticsArea(settingsObject);
+        if (_settings.General.useAdvertisement) AdvertisementArea(settingsObject);
+        FacebookArea(settingsObject);
+        GDPRArea(settingsObject);
+        ButtonsArea();
 
         settingsObject.ApplyModifiedProperties();
         EditorGUI.EndChangeCheck();
 
+        GUILayout.EndArea();
+    }
+
+    private void GeneralArea(SerializedObject settingsObject)
+    {
+        H2("General");
+
+        var iosStoreAppIdProp = settingsObject.FindProperty("_general._iosStoreAppId");
+        EditorGUILayout.PropertyField(iosStoreAppIdProp);
+        Tip("Without \"id\" part");
+        var useAnalyticsProp = settingsObject.FindProperty("_general._useAnalytics");
+        EditorGUILayout.PropertyField(useAnalyticsProp);
+        var useAdvertisementProp = settingsObject.FindProperty("_general._useAdvertisement");
+        EditorGUILayout.PropertyField(useAdvertisementProp);
+        SeparateLine();
+    }
+
+    private void AnalyticsArea(SerializedObject settingsObject)
+    {
+        H2("Analytics");
+
+        var purchaseValidationSlugProp = settingsObject.FindProperty("_analytics._purchaseValidatorSlug");
+        EditorGUILayout.PropertyField(purchaseValidationSlugProp);
+        Tip("Provided by the SDK's team");
+        var appsFlyerProp = settingsObject.FindProperty("_analytics._appsFlyer");
+        EditorGUILayout.PropertyField(appsFlyerProp);
+        var devToDevProp = settingsObject.FindProperty("_analytics._devToDev");
+        EditorGUILayout.PropertyField(devToDevProp);
+        SeparateLine();
+    }
+
+    private void AdvertisementArea(SerializedObject settingsObject)
+    {
+        H2("Advertisement");
+
+        var mediationProp = settingsObject.FindProperty("_advertisement._mediation");
+        EditorGUILayout.PropertyField(mediationProp);
+        var useRewardedVideoProp = settingsObject.FindProperty("_advertisement._useRewardedVideo");
+        EditorGUILayout.PropertyField(useRewardedVideoProp);
+
+        var levelPlayProp = settingsObject.FindProperty("_advertisement._levelPlay");
+        if (_settings.Advertisement.Mediation == Settings.AdvertisementSettings.MediationType.LevelPlay)
+        {
+            EditorGUILayout.PropertyField(levelPlayProp);
+        }
+
+        var appLovinProp = settingsObject.FindProperty("_advertisement._appLovin");
+        if (_settings.Advertisement.Mediation == Settings.AdvertisementSettings.MediationType.AppLovinMAX)
+        {
+            EditorGUILayout.PropertyField(appLovinProp);
+        }
+
+        var adMobProp = settingsObject.FindProperty("_advertisement._adMob");
+        EditorGUILayout.PropertyField(adMobProp);
+        SeparateLine();
+    }
+
+    private void FacebookArea(SerializedObject settingsObject)
+    {
+        H2("Facebook");
+
+        var appLabelProp = settingsObject.FindProperty("_facebook._appLabel");
+        EditorGUILayout.PropertyField(appLabelProp);
+        var appIdProp = settingsObject.FindProperty("_facebook._appId");
+        EditorGUILayout.PropertyField(appIdProp);
+        var clientTokenProp = settingsObject.FindProperty("_facebook._clientToken");
+        EditorGUILayout.PropertyField(clientTokenProp);
+        SeparateLine();
+    }
+
+    private void GDPRArea(SerializedObject settingsObject)
+    {
+        H2("GDPR");
+
+        var googleMobileAdsTestDeviceHashedIdsProp =
+            settingsObject.FindProperty("_gdpr._googleMobileAdsTestDeviceHashedIds");
+        EditorGUILayout.PropertyField(googleMobileAdsTestDeviceHashedIdsProp);
+        const string link = "https://developers.google.com/admob/unity/privacy#testing";
+        Tip($"How to obtain: <a href=\"{link}\">{link}</a>", link);
+        SeparateLine();
+    }
+
+    private void ButtonsArea()
+    {
         GUILayout.Space(20);
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
@@ -180,8 +195,6 @@ public class SettingsWindow : EditorWindow
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
         GUILayout.Space(20);
-
-        GUILayout.EndArea();
     }
 
     private void SeparateLine()
