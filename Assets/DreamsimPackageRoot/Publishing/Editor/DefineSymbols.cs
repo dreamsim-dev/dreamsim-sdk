@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
 namespace Dreamsim.Publishing.Editor
 {
@@ -7,7 +8,8 @@ namespace Dreamsim.Publishing.Editor
     {
         public static void Add(string scriptingDefine)
         {
-            var buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+            var buildTargetGroup = Application.platform == RuntimePlatform.Android 
+                ? BuildTargetGroup.Android : BuildTargetGroup.iOS;
             var defineSymbolsForGroup = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
             
             if (defineSymbolsForGroup.Contains(scriptingDefine)) return;
@@ -18,7 +20,8 @@ namespace Dreamsim.Publishing.Editor
 
         public static void Remove(string scriptingDefine)
         {
-            var buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+            var buildTargetGroup = Application.platform == RuntimePlatform.Android 
+                ? BuildTargetGroup.Android : BuildTargetGroup.iOS;
             var defineSymbolsForGroup = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
             var list = defineSymbolsForGroup.Split(';').ToList();
             
