@@ -45,8 +45,20 @@ public class IronSourceMediation : MediationBase, IMediationBridge
     }
 
     public void SetConsent(bool consent) { IronSource.Agent.setConsent(consent); }
-
-    public void SetMetaData(string key, string value) { IronSource.Agent.setMetaData(key, value); }
+    
+    public void SetCOPPA() 
+    {
+        // TODO: Пока оставил эти две меты здесь, но видимо тоже нужно отделить
+        IronSource.Agent.setMetaData("Facebook_IS_CacheFlag", "IMAGE");
+        IronSource.Agent.setMetaData("Meta_Mixed_Audience", "true");
+        
+        IronSource.Agent.setMetaData("Vungle_coppa", "false");
+        IronSource.Agent.setMetaData("AdMob_TFCD", "false");
+        IronSource.Agent.setMetaData("AdMob_TFUA", "false");
+        IronSource.Agent.setMetaData("InMobi_AgeRestricted", "false");
+        IronSource.Agent.setMetaData("Mintegral_COPPA", "false");
+        IronSource.Agent.setMetaData("Chartboost_Coppa", "false");
+    }
 
     public void OnApplicationPause(bool isPaused)
     {

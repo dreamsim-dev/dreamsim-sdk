@@ -41,10 +41,7 @@ namespace Dreamsim.Publishing
             MaxSdk.SetHasUserConsent(consent);    
         }
 
-        public void SetMetaData(string key, string value)
-        {
-            MaxSdk.SetExtraParameter(key, value); //TODO: не уверен что это именно то
-        }
+        public void SetCOPPA() { throw new NotImplementedException(); }
 
         public void OnApplicationPause(bool isPaused) { throw new NotImplementedException(); }
 
