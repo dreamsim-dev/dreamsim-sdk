@@ -22,7 +22,7 @@ namespace Dreamsim.Publishing
         
         void SetConsent(bool consent);
 
-        void SetMetaData(string key, string value);
+        void SetCOPPA();
         
         void OnApplicationPause(bool isPaused);
 
