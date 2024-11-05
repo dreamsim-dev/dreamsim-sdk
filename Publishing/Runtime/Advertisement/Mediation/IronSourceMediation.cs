@@ -44,20 +44,21 @@ public class IronSourceMediation : MediationBase, IMediationBridge
             : $"IronSource initiating with advertising id ({advertisingId})");
     }
 
+    public void SetMetaData(string key, string value)
+    {
+        IronSource.Agent.setMetaData(key, value);
+    }
+
     public void SetConsent(bool consent) { IronSource.Agent.setConsent(consent); }
     
-    public void SetCOPPA() 
+    public void SetCOPPA(bool value) 
     {
-        // TODO: Пока оставил эти две меты здесь, но видимо тоже нужно отделить
-        IronSource.Agent.setMetaData("Facebook_IS_CacheFlag", "IMAGE");
-        IronSource.Agent.setMetaData("Meta_Mixed_Audience", "true");
-        
-        IronSource.Agent.setMetaData("Vungle_coppa", "false");
-        IronSource.Agent.setMetaData("AdMob_TFCD", "false");
-        IronSource.Agent.setMetaData("AdMob_TFUA", "false");
-        IronSource.Agent.setMetaData("InMobi_AgeRestricted", "false");
-        IronSource.Agent.setMetaData("Mintegral_COPPA", "false");
-        IronSource.Agent.setMetaData("Chartboost_Coppa", "false");
+        IronSource.Agent.setMetaData("Vungle_coppa", value.ToString());
+        IronSource.Agent.setMetaData("AdMob_TFCD", value.ToString());
+        IronSource.Agent.setMetaData("AdMob_TFUA", value.ToString());
+        IronSource.Agent.setMetaData("InMobi_AgeRestricted", value.ToString());
+        IronSource.Agent.setMetaData("Mintegral_COPPA", value.ToString());
+        IronSource.Agent.setMetaData("Chartboost_Coppa", value.ToString());
     }
 
     public void OnApplicationPause(bool isPaused)
