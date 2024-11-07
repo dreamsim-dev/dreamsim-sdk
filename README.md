@@ -1,17 +1,20 @@
 # Dreamsim SDK
 UPM package for publishing purposes.
 ## Features
+- CI
 - Analytics
     - AppsFlyer
     - devtodev
     - Firebase
     - Facebook
-- Network reachability tracking (analytics event)
 - Advertisement
-    - IronSource/LevelPlay
-- ATT (App Tracking Transparency) flow
-- DMA (Google AdMob consent) flow
+    - LevelPlay (IronSource)
+    - ApplovinMAX (WIP)
+- Consent flow
+  - ATT (App Tracking Transparency) flow
+  - DMA (Google AdMob consent) flow
 - In-app purchases server-based fraud filter
+- Network reachability logging
 ## Installation
 1. Add OpenUPM as a scoped registry using [documentation](https://developers.google.com/admob/unity/quick-start#import_the_mobile_ads_for_unity_plugin) or simply add following entry into manifest.json (at root level):
    ```json
@@ -25,7 +28,7 @@ UPM package for publishing purposes.
      }
    ]
    ```
-2. Install following dependencies via PackageManager:
+2. Install following dependencies via PackageManager (do not manually install ExternalDependenciesManager as it comes with GoogleMobileAds):
     - UnityPurchasing
     - GoogleMobileAds SDK ([GitHub](https://github.com/googleads/googleads-mobile-unity))
     - AppsFlyer SDK ([GitHub](https://github.com/AppsFlyerSDK/appsflyer-unity-plugin), [Documentation](https://dev.appsflyer.com/hc/docs/installation))
@@ -55,21 +58,25 @@ UPM package for publishing purposes.
           </iosPods>
         </dependencies>
         ```
+   - Firebase SDK (Analytics) ([GItHub](https://github.com/firebase/firebase-unity-sdk))
+4. Install mediation plugin
     - IronSource/LevelPlay SDK ([Documentation](https://developers.is.com/ironsource-mobile/unity/unity-plugin))
       - Don't forget to add EmbedInMobiSDK.cs and IronSourceAdQualityDependencies.xml (also described in documentation)
-    - Firebase SDK (Analytics) ([GItHub](https://github.com/firebase/firebase-unity-sdk))
-4. Install upm branch of this repository via PackageManager.
+    - ApplovinMAX
+5. Install upm branch of this repository via PackageManager.
    ```
    https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
    ```
 ## Integration
-1. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings).
-2. Press "Update Dependencies" button in Dreamsim Publishing Settings.
-3. Add following sting to Android.manifest under "manifest" section:
+1. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings) (not via ScriptableObject).
+2. Select mediator.
+3. Fill mediator settings.
+4. Press "Update Dependencies" button in Dreamsim Publishing Settings.
+5. Add following sting to Android.manifest under "manifest" section:
    ```
    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
    ```
-4. Add following sting to Android.manifest under "application" section and replace [ADMOB_APP_ID] with actual AdMob app id:
+6. Add following sting to Android.manifest under "application" section and replace [ADMOB_APP_ID] with actual AdMob app id:
    ```
    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="[ADMOB_APP_ID]"/>
    ```
