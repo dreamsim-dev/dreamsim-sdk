@@ -20,9 +20,11 @@ namespace Dreamsim.Publishing
 
         void InitiatingWithoutAdvertising();
         
+        void SetMetaData(string key, string value);
+        
         void SetConsent(bool consent);
 
-        void SetMetaData(string key, string value);
+        void SetCOPPA(bool value);
         
         void OnApplicationPause(bool isPaused);
 

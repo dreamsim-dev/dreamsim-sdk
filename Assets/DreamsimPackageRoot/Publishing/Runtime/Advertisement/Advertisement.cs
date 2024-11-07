@@ -49,14 +49,12 @@ public class Advertisement : MonoBehaviour
         _mediation.SetConsent(trackingEnabled);
         DreamsimLogger.Log($"Mediator consent set to {trackingEnabled}");
 
+        #if DREAMSIM_USE_IRONSOURCE
         _mediation.SetMetaData("Facebook_IS_CacheFlag", "IMAGE");
         _mediation.SetMetaData("Meta_Mixed_Audience", "true");
-        _mediation.SetMetaData("Vungle_coppa", "false");
-        _mediation.SetMetaData("AdMob_TFCD", "false");
-        _mediation.SetMetaData("AdMob_TFUA", "false");
-        _mediation.SetMetaData("InMobi_AgeRestricted", "false");
-        _mediation.SetMetaData("Mintegral_COPPA", "false");
-        _mediation.SetMetaData("Chartboost_Coppa", "false");
+        #endif
+        
+        _mediation.SetCOPPA(false);
 
         if (useRewardedVideo)
         {

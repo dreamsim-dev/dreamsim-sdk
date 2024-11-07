@@ -35,16 +35,14 @@ namespace Dreamsim.Publishing
         }
 
         public void InitiatingWithoutAdvertising() { throw new NotImplementedException(); }
+        public void SetMetaData(string key, string value) { throw new NotImplementedException(); }
 
         public void SetConsent(bool consent)
         {
             MaxSdk.SetHasUserConsent(consent);    
         }
 
-        public void SetMetaData(string key, string value)
-        {
-            MaxSdk.SetExtraParameter(key, value); //TODO: не уверен что это именно то
-        }
+        public void SetCOPPA(bool value) { throw new NotImplementedException(); }
 
         public void OnApplicationPause(bool isPaused) { throw new NotImplementedException(); }
 
