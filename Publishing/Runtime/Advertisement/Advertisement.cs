@@ -28,7 +28,7 @@ public class Advertisement : MonoBehaviour
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
         #elif DREAMSIM_USE_APPLOVIN
-        _mediation = new AppLovinMediation(settings.AppLovin.SdkKey, settings.AppLovin.UnitId);
+        _mediation = new AppLovinMediation(settings.AppLovin.UnitId);
         #endif
 
         if (settings.UseRewardedVideo)
