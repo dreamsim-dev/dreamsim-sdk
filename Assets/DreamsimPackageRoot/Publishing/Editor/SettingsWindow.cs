@@ -9,7 +9,7 @@ public class SettingsWindow : EditorWindow
 
     private static SettingsWindow _instance;
 
-    private Settings _settings;
+    private static Settings _settings;
 
     [MenuItem("Dreamsim/Publishing Settings")]
     public static void Editor_Settings() { OpenWindow(); }
@@ -181,7 +181,7 @@ public class SettingsWindow : EditorWindow
         Tip($"How to obtain: <a href=\"{link}\">{link}</a>", link);
         SeparateLine();
     }
-
+    
     private void ButtonsArea()
     {
         GUILayout.Space(20);
@@ -189,7 +189,7 @@ public class SettingsWindow : EditorWindow
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Update Dependencies", GUILayout.Height(30), GUILayout.Width(200)))
         {
-            DependenciesUpdater.Update(_settings);
+            DependenciesUpdate();
         }
 
         GUILayout.FlexibleSpace();
@@ -207,13 +207,20 @@ public class SettingsWindow : EditorWindow
         EditorGUI.DrawRect(rect, new Color(0.12f, 0.12f, 0.12f));
     }
 
-    private void FindSettings()
+    private static void FindSettings()
     {
         _settings = Settings.Find();
         if (_settings == null)
         {
             _settings = Settings.Create();
         }
+    }
+
+    [InitializeOnLoadMethod]
+    private static void DependenciesUpdate()
+    {
+        FindSettings();
+        DependenciesUpdater.Update(_settings);
     }
 }
 }
