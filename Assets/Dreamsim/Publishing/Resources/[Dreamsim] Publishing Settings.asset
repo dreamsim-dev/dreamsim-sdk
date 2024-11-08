@@ -27,15 +27,14 @@ MonoBehaviour:
       _androidAppId: 
       _logLevel: 0
   _advertisement:
-    _mediation: 1
+    _mediation: 0
+    _useRewardedVideo: 1
     _levelPlay:
       _iosAppKey: 
       _androidAppKey: 
-      _useRewardedVideo: 0
     _appLovin:
       _iosUnitId: 
       _androidUnitId: 
-      _useRewardedVideo: 0
     _adMob:
       _iosAppId: 
       _androidAppId: 
