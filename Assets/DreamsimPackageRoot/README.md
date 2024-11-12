@@ -64,9 +64,9 @@ UPM package for publishing purposes.
     - IronSource/LevelPlay SDK ([Documentation](https://developers.is.com/ironsource-mobile/unity/unity-plugin))
       - Don't forget to add EmbedInMobiSDK.cs and IronSourceAdQualityDependencies.xml (also described in documentation)
     - ApplovinMAX
-5. Install upm branch of this repository via PackageManager.
+5. Install upm branch of this repository via PackageManager (replace [VERSION] with actual value).
    ```
-   https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
+   https://github.com/dreamsim-dev/dreamsim-sdk.git#[VERSION]
    ```
 ## Integration
 1. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings) (not via ScriptableObject).
