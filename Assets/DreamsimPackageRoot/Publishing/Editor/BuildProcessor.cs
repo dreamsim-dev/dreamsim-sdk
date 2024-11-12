@@ -66,14 +66,26 @@ public class BuildProcessor : IPreprocessBuildWithReport
         pbxProject.AddFrameworkToProject(mainTargetGuid, "AdSupport.framework", true);
         pbxProject.AddFrameworkToProject(mainTargetGuid, "AppTrackingTransparency.framework", true);
 
-        var frameworkTargetGuid = pbxProject.GetUnityFrameworkTargetGuid();
-        pbxProject.SetBuildProperty(frameworkTargetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "NO");
-
         var manager = new ProjectCapabilityManager(projectPath, entitlementsFileName, null, mainTargetGuid);
         manager.AddBackgroundModes(BackgroundModesOptions.RemoteNotifications);
         manager.AddPushNotifications(false);
         manager.WriteToFile();
 
+        pbxProject.WriteToFile(projectPath);
+        #endif
+    }
+
+    [PostProcessBuild(1000)]
+    public static void Third(BuildTarget target, string path)
+    {
+        #if UNITY_IOS
+        var projectPath = PBXProject.GetPBXProjectPath(path);
+        var pbxProject = new PBXProject();
+        pbxProject.ReadFromFile(projectPath);
+        
+        var frameworkTargetGuid = pbxProject.GetUnityFrameworkTargetGuid();
+        pbxProject.SetBuildProperty(frameworkTargetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "NO");
+        
         pbxProject.WriteToFile(projectPath);
         #endif
     }
