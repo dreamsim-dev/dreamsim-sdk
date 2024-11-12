@@ -2,7 +2,8 @@
     "name": "Dreamsim.Publishing.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:7cc09a6c1fa41ad44b95365e48a5aa72"
+        "GUID:7cc09a6c1fa41ad44b95365e48a5aa72",
+        "GUID:a0f66c683f372c54390bc073468e59da"
     ],
     "includePlatforms": [
         "Editor"
