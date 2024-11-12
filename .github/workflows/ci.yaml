@@ -4,9 +4,11 @@ on:
     branches:
       - main
 permissions: write-all
+env:
+  BRANCH: 1.0.3
 jobs:
   split-upm:
-    name: split mediation-bridge branch
+    name: split "$BRANCH" branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,7 +17,7 @@ jobs:
           fetch-depth: 0
       - name: Split
         run: |
-          git subtree split -P "$PKG_ROOT" -b mediation-bridge
-          git push -u -f origin mediation-bridge
+          git subtree split -P "$PKG_ROOT" -b "$BRANCH"
+          git push -u -f origin "$BRANCH"
         env:
           PKG_ROOT: Assets/DreamsimPackageRoot
