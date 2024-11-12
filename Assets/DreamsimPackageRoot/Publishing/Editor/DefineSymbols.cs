@@ -3,30 +3,36 @@ using UnityEditor;
 
 namespace Dreamsim.Publishing.Editor
 {
-    public static class DefineSymbols
+public static class DefineSymbols
+{
+    public static void Add(string symbol)
     {
-        public static void Add(string scriptingDefine)
-        {
-            var buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-            var defineSymbolsForGroup = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
-            
-            if (defineSymbolsForGroup.Contains(scriptingDefine)) return;
-            
-            var defines = defineSymbolsForGroup + ";" + scriptingDefine;
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, defines);
-        }
-
-        public static void Remove(string scriptingDefine)
-        {
-            var buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-            var defineSymbolsForGroup = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
-            var list = defineSymbolsForGroup.Split(';').ToList();
-            
-            if (!list.Contains(scriptingDefine)) return;
-            
-            list.Remove(scriptingDefine);
-            var defines = string.Join(";", list);
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, defines);
-        }
+        Add(symbol, BuildTargetGroup.Android);
+        Add(symbol, BuildTargetGroup.iOS);
     }
+
+    public static void Remove(string symbol)
+    {
+        Remove(symbol, BuildTargetGroup.Android);
+        Remove(symbol, BuildTargetGroup.iOS);
+    }
+
+    private static void Add(string symbol, BuildTargetGroup targetGroup)
+    {
+        var defineSymbolsForGroup = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
+        if (defineSymbolsForGroup.Contains(symbol)) return;
+        var defines = defineSymbolsForGroup + ";" + symbol;
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, defines);
+    }
+
+    private static void Remove(string symbol, BuildTargetGroup targetGroup)
+    {
+        var defineSymbolsForGroup = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
+        var list = defineSymbolsForGroup.Split(';').ToList();
+        if (!list.Contains(symbol)) return;
+        list.Remove(symbol);
+        var defines = string.Join(";", list);
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, defines);
+    }
+}
 }

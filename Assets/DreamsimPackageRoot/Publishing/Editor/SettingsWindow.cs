@@ -187,9 +187,10 @@ public class SettingsWindow : EditorWindow
         GUILayout.Space(20);
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
+        
         if (GUILayout.Button("Update Dependencies", GUILayout.Height(30), GUILayout.Width(200)))
         {
-            DependenciesUpdate();
+            DependenciesUpdater.Update(_settings);
         }
 
         GUILayout.FlexibleSpace();
@@ -214,13 +215,6 @@ public class SettingsWindow : EditorWindow
         {
             _settings = Settings.Create();
         }
-    }
-
-    [InitializeOnLoadMethod]
-    private static void DependenciesUpdate()
-    {
-        FindSettings();
-        DependenciesUpdater.Update(_settings);
     }
 }
 }
