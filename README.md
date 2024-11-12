@@ -166,6 +166,9 @@ DreamsimPublishing.CrossPromo.LogCrossPromoImpression(string appId, string campa
 // Rewarded video ad request (e.g. ad button click).
 DreamsimPublishing.Analytics.LogRewardedAdRequest(string adSource);
 
+// Rewarded video ad impression
+DreamsimPublishing.Analytics.LogRewardedAdImpression(string adSource);
+
 // Click on rewarded video ad.
 DreamsimPublishing.Analytics.LogRewardedAdClicked(string adSource);
 
@@ -179,7 +182,7 @@ DreamsimPublishing.Analytics.LogFirstPurchase(PurchaseEventArgs args);
 DreamsimPublishing.Analytics.LogRewardedAdRewardReceivedTimes(int times);
 ```
 ## Cross Promo
-Don't forget to log cross promo impression (see [Analytics Basic Events](#basic-events) section). Use following method instead of simple Application.OpenURL:
+Don't forget to log cross promo impression (see [Analytics Basic Events](#basic-events) section). For attribution use following method instead of simple Application.OpenURL:
 ```cs
 // Automatically generates attribution link and opens provided app's store page
 DreamsimPublishing.CrossPromo.AttributeAndOpenStore(string appId, string campaign, List<EventParam> eventParams);

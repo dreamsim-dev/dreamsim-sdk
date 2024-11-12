@@ -112,11 +112,6 @@ public class Analytics : MonoBehaviour
         CallLoggersAction(l => l.LogPurchaseInitiation(product), $"Purchase initiation ({product.definition.id})");
     }
 
-    public void LogRewardedAdImpression(string adSource)
-    {
-        CallLoggersAction(l => l.LogRewardedAdImpression(adSource), $"Ad impression ({adSource})");
-    }
-
     public void LogTutorialStart() { CallLoggersAction(l => l.LogTutorialStart(), "Tutorial started"); }
 
     public void LogTutorialSkipped() { CallLoggersAction(l => l.LogTutorialSkipped(), "Tutorial skipped"); }
@@ -135,7 +130,7 @@ public class Analytics : MonoBehaviour
         CallLoggersAction(l => l.LogContentView(contentId), $"Content view ({contentId})");
     }
 
-    internal void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
+    public void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
     {
         CallLoggersAction(l => l.LogCrossPromoImpression(appId, campaign, eventParams),
             $"Cross promo ({appId}, {campaign})");
@@ -154,6 +149,11 @@ public class Analytics : MonoBehaviour
     private void LogRewardedAdRequest(string adSource)
     {
         CallLoggersAction(l => l.LogRewardedAdRequest(adSource), $"Ad requested ({adSource})");
+    }
+
+    private void LogRewardedAdImpression(string adSource)
+    {
+        CallLoggersAction(l => l.LogRewardedAdImpression(adSource), $"Ad impression ({adSource})");
     }
 
     private void LogRewardedAdClicked(string adSource)
@@ -191,23 +191,29 @@ public class Analytics : MonoBehaviour
     private void InitAdvertisementEvents()
     {
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdRequested += OnRewardedAdRequested;
+        DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened += OnRewardedAdOpened;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked += OnRewardedAdClicked;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted += OnRewardedAdCompleted;
     }
 
     private void OnRewardedAdRequested(string adSource)
     {
-        DreamsimPublishing.Analytics.LogRewardedAdRequest(adSource);
+        LogRewardedAdRequest(adSource);
+    }
+
+    private void OnRewardedAdOpened(string adSource, AdInfo adInfo)
+    {
+        LogRewardedAdImpression(adSource);
     }
 
     private void OnRewardedAdClicked(string adSource)
     {
-        DreamsimPublishing.Analytics.LogRewardedAdClicked(adSource);
+        LogRewardedAdClicked(adSource);
     }
 
     private void OnRewardedAdCompleted(string adSource)
     {
-        DreamsimPublishing.Analytics.LogRewardedAdRewardReceived(adSource);
+        LogRewardedAdRewardReceived(adSource);
     }
 }
 }
