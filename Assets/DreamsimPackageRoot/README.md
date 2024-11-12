@@ -60,7 +60,7 @@ UPM package for publishing purposes.
         </dependencies>
         ```
    - Firebase SDK (Analytics) ([GItHub](https://github.com/firebase/firebase-unity-sdk))
-4. Install mediation plugin
+4. Install one of following mediation plugins:
     - IronSource/LevelPlay SDK ([Documentation](https://developers.is.com/ironsource-mobile/unity/unity-plugin))
       - Don't forget to add EmbedInMobiSDK.cs and IronSourceAdQualityDependencies.xml (also described in documentation)
     - ApplovinMAX
