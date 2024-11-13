@@ -9,5 +9,7 @@
       </intent-filter>
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
     </activity>
+    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="" />
   </application>
+  <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 </manifest>
