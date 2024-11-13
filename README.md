@@ -15,6 +15,7 @@ UPM package for publishing purposes.
   - DMA (Google AdMob consent) flow
 - In-app purchases server-based fraud filter
 - Network reachability logging
+- Cross-promo attribution
 ## Installation
 1. Add OpenUPM as a scoped registry using [documentation](https://developers.google.com/admob/unity/quick-start#import_the_mobile_ads_for_unity_plugin) or simply add following entry into manifest.json (at root level):
    ```json
@@ -59,27 +60,19 @@ UPM package for publishing purposes.
         </dependencies>
         ```
    - Firebase SDK (Analytics) ([GItHub](https://github.com/firebase/firebase-unity-sdk))
-4. Install mediation plugin
+4. Install one of following mediation plugins:
     - IronSource/LevelPlay SDK ([Documentation](https://developers.is.com/ironsource-mobile/unity/unity-plugin))
       - Don't forget to add EmbedInMobiSDK.cs and IronSourceAdQualityDependencies.xml (also described in documentation)
     - ApplovinMAX
-5. Install upm branch of this repository via PackageManager.
+5. Install upm branch of this repository via PackageManager (replace [VERSION] with actual value).
    ```
-   https://github.com/dreamsim-dev/dreamsim-sdk.git#upm
+   https://github.com/dreamsim-dev/dreamsim-sdk.git#[VERSION]
    ```
 ## Integration
 1. Fill Dreamsim Publishing Settings (Toolbar -> Dreamsim -> Publishing Settings) (not via ScriptableObject).
 2. Select mediator.
 3. Fill mediator settings.
 4. Press "Update Dependencies" button in Dreamsim Publishing Settings.
-5. Add following sting to Android.manifest under "manifest" section:
-   ```
-   <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-   ```
-6. Add following sting to Android.manifest under "application" section and replace [ADMOB_APP_ID] with actual AdMob app id:
-   ```
-   <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="[ADMOB_APP_ID]"/>
-   ```
 ## Initialization
 Add following code somewhere at your composition root. Before any analytics event may happen.
 ```cs

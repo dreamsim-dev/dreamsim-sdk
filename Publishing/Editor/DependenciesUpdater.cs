@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Xml.Linq;
 using Facebook.Unity.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -10,14 +9,12 @@ namespace Dreamsim.Publishing.Editor
 {
 public static class DependenciesUpdater
 {
-    private const string ManifestPermission = "uses-permission";
-    private static readonly XNamespace XNamespace = "http://schemas.android.com/apk/res/android";
-
     public static void Update(Settings settings)
     {
         UpdateGADSettings(settings.Advertisement.AdMob.AndroidAppId, settings.Advertisement.AdMob.iOSAppId);
         UpdateFacebookSettings(settings.Facebook.AppLabel, settings.Facebook.AppId, settings.Facebook.ClientToken);
         UpdateMediationSettings(settings.Advertisement.Mediation);
+        UpdateAndroidManifest(settings.Advertisement.AdMob.AndroidAppId);
     }
 
     private static void UpdateGADSettings(string androidAppId, string iOSAppId)
@@ -48,26 +45,25 @@ public static class DependenciesUpdater
     {
         switch (mediationType)
         {
-            case Settings.AdvertisementSettings.MediationType.LevelPlay:
-                DefineSymbols.Add("DREAMSIM_USE_IRONSOURCE");
-                DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
-                break;
-            case Settings.AdvertisementSettings.MediationType.AppLovinMAX:
-                DefineSymbols.Add("DREAMSIM_USE_APPLOVIN");
-                DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
-                break;
-            case Settings.AdvertisementSettings.MediationType.None: 
-                DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
-                DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
-                break;
-            default: throw new ArgumentOutOfRangeException(nameof(mediationType), mediationType, null);
+        case Settings.AdvertisementSettings.MediationType.LevelPlay:
+            DefineSymbols.Add("DREAMSIM_USE_IRONSOURCE");
+            DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
+            break;
+        case Settings.AdvertisementSettings.MediationType.AppLovinMAX:
+            DefineSymbols.Add("DREAMSIM_USE_APPLOVIN");
+            DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
+            break;
+        case Settings.AdvertisementSettings.MediationType.None:
+            DefineSymbols.Remove("DREAMSIM_USE_IRONSOURCE");
+            DefineSymbols.Remove("DREAMSIM_USE_APPLOVIN");
+            break;
+        default: throw new ArgumentOutOfRangeException(nameof(mediationType), mediationType, null);
         }
     }
 
-    private static XElement CreatePermissionElement(string name)
+    private static void UpdateAndroidManifest(string adMobAppId)
     {
-        return new XElement(ManifestPermission,
-            new XAttribute(XNamespace + "name", name));
+        AndroidManifestHelper.Update(adMobAppId);
     }
 }
 }
