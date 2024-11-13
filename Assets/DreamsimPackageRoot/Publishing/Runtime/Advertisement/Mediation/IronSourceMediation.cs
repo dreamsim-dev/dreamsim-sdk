@@ -18,6 +18,7 @@ public class IronSourceMediation : MediationBase, IMediationBridge
     public event Action<bool> OnAvailabilityChanged;
     public event Action<string, AdInfo> OnAdOpened;
     public event Action<string> OnAdClicked;
+    public event Action<ImpressionData> OnImpressionDataReady;
 
     private readonly string _appKey;
 
@@ -73,8 +74,9 @@ public class IronSourceMediation : MediationBase, IMediationBridge
         IronSourceEvents.onSdkInitializationCompletedEvent += action;
     }
 
-    public void SubscribeImpressionDataReady()
+    public void SubscribeImpressionDataReady(Action<ImpressionData> onImpressionDataReady)
     {
+        OnImpressionDataReady += onImpressionDataReady;
         IronSourceEvents.onImpressionDataReadyEvent += Handle_ImpressionDataReady;
     }
 
@@ -117,24 +119,24 @@ public class IronSourceMediation : MediationBase, IMediationBridge
 
     private void Handle_ImpressionDataReady(IronSourceImpressionData impressionData)
     {
-        if (impressionData?.revenue == null) return;
-        if (Application.isEditor) return;
-
-        Firebase.Analytics.Parameter[] adParameters =
-        {
-            new("ad_platform", "ironSource"),
-            new("ad_source", impressionData.adNetwork),
-            new("ad_unit_name", impressionData.instanceName),
-            new("ad_format", impressionData.adUnit),
-            new("currency", "USD"),
-            new("value", impressionData.revenue.Value)
-        };
-
-        Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_impression", adParameters);
-        DTDAnalytics.AdImpression(impressionData.adNetwork,
-            impressionData.revenue.Value,
+        var impression = new ImpressionData(
+            impressionData.auctionId,
+            impressionData.adUnit,
+            impressionData.country,
+            impressionData.ab,
+            impressionData.segmentName,
             impressionData.placement,
-            impressionData.adUnit);
+            impressionData.adNetwork,
+            impressionData.instanceName,
+            impressionData.instanceId,
+            impressionData.revenue,
+            impressionData.precision,
+            impressionData.lifetimeRevenue,
+            impressionData.encryptedCPM,
+            impressionData.conversionValue,
+            impressionData.allData);
+        
+        OnImpressionDataReady?.Invoke(impression);
     }
 
     public void SubscribeAdOpened(Action<string, AdInfo> onAdOpened)

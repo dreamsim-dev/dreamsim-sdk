@@ -30,7 +30,7 @@ namespace Dreamsim.Publishing
 
         void SubscribeSdkInitializationCompleted(Action action);
 
-        void SubscribeImpressionDataReady();
+        void SubscribeImpressionDataReady(Action<ImpressionData> onImpressionDataReady);
 
         void LoadRewardedVideo();
 

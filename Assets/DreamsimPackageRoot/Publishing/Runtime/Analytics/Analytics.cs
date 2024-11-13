@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using DevToDev.Analytics;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -194,6 +195,7 @@ public class Analytics : MonoBehaviour
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened += OnRewardedAdOpened;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked += OnRewardedAdClicked;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted += OnRewardedAdCompleted;
+        DreamsimPublishing.Advertisement.OnImpressionDataReady += OnImpressionDataReady;
     }
 
     private void OnRewardedAdRequested(string adSource)
@@ -214,6 +216,29 @@ public class Analytics : MonoBehaviour
     private void OnRewardedAdCompleted(string adSource)
     {
         LogRewardedAdRewardReceived(adSource);
+    }
+    
+    private static void OnImpressionDataReady(ImpressionData impressionData)
+    {
+        if (impressionData?.revenue == null) return;
+        if (Application.isEditor) return;
+
+        Firebase.Analytics.Parameter[] adParameters =
+        {
+            new("ad_platform", "ironSource"),
+            new("ad_source", impressionData.adNetwork),
+            new("ad_unit_name", impressionData.instanceName),
+            new("ad_format", impressionData.adUnit),
+            new("currency", "USD"),
+            new("value", impressionData.revenue.Value)
+        };
+
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_impression", adParameters);
+        
+        DTDAnalytics.AdImpression(impressionData.adNetwork,
+            impressionData.revenue.Value,
+            impressionData.placement,
+            impressionData.adUnit);
     }
 }
 }
