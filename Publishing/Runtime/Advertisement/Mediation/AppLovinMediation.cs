@@ -51,7 +51,7 @@ namespace Dreamsim.Publishing
             MaxSdkCallbacks.OnSdkInitializedEvent += _ => { handle_SkdInitialized?.Invoke(); };
         }
         
-        public void SubscribeImpressionDataReady() { throw new NotImplementedException(); }
+        public void SubscribeImpressionDataReady(Action<ImpressionData> onImpressionDataReady) { throw new NotImplementedException(); }
 
         public void LoadRewardedVideo()
         {
