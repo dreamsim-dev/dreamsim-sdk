@@ -1,7 +1,7 @@
 {
   "name": "world.dreamsim.sdk",
   "displayName": "Dreamsim SDK",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "unity": "2022.3",
   "description": "Aggregated SDK for publishing",
   "keywords": [ "android", "ios", "sdk", "plugin" ],

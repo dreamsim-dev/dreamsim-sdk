@@ -5,7 +5,7 @@ on:
       - main
 permissions: write-all
 env:
-  BRANCH: 1.0.3
+  BRANCH: 1.0.4
 jobs:
   split-upm:
     name: split "$BRANCH" branch
