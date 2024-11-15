@@ -1,54 +1,54 @@
 ﻿namespace Dreamsim.Publishing
 {
-    public class ImpressionData
-    {
-        public readonly string auctionId;
-        public readonly string adUnit;
-        public readonly string country;
-        public readonly string ab;
-        public readonly string segmentName;
-        public readonly string placement;
-        public readonly string adNetwork;
-        public readonly string instanceName;
-        public readonly string instanceId;
-        public readonly double? revenue;
-        public readonly string precision;
-        public readonly double? lifetimeRevenue;
-        public readonly string encryptedCPM;
-        public readonly int? conversionValue;
-        public readonly string allData;
+public struct ImpressionData
+{
+    public readonly string AuctionId;
+    public readonly string AdUnit;
+    public readonly string Country;
+    public readonly string AB;
+    public readonly string SegmentName;
+    public readonly string Placement;
+    public readonly string AdNetwork;
+    public readonly string InstanceName;
+    public readonly string InstanceId;
+    public readonly double? Revenue;
+    public readonly string Precision;
+    public readonly double? LifetimeRevenue;
+    public readonly string EncryptedCPM;
+    public readonly int? ConversionValue;
+    public readonly string AllData;
 
-        public ImpressionData(string auctionId,
-            string adUnit,
-            string country,
-            string ab,
-            string segmentName,
-            string placement,
-            string adNetwork,
-            string instanceName,
-            string instanceId,
-            double? revenue,
-            string precision,
-            double? lifetimeRevenue,
-            string encryptedCPM,
-            int? conversionValue,
-            string allData)
-        {
-            this.auctionId = auctionId;
-            this.adUnit = adUnit;
-            this.country = country;
-            this.ab = ab;
-            this.segmentName = segmentName;
-            this.placement = placement;
-            this.adNetwork = adNetwork;
-            this.instanceName = instanceName;
-            this.instanceId = instanceId;
-            this.revenue = revenue;
-            this.precision = precision;
-            this.lifetimeRevenue = lifetimeRevenue;
-            this.encryptedCPM = encryptedCPM;
-            this.conversionValue = conversionValue;
-            this.allData = allData;
-        }
+    public ImpressionData(string auctionId,
+        string adUnit,
+        string country,
+        string ab,
+        string segmentName,
+        string placement,
+        string adNetwork,
+        string instanceName,
+        string instanceId,
+        double? revenue,
+        string precision,
+        double? lifetimeRevenue,
+        string encryptedCPM,
+        int? conversionValue,
+        string allData)
+    {
+        AuctionId = auctionId;
+        AdUnit = adUnit;
+        Country = country;
+        AB = ab;
+        SegmentName = segmentName;
+        Placement = placement;
+        AdNetwork = adNetwork;
+        InstanceName = instanceName;
+        InstanceId = instanceId;
+        Revenue = revenue;
+        Precision = precision;
+        LifetimeRevenue = lifetimeRevenue;
+        EncryptedCPM = encryptedCPM;
+        ConversionValue = conversionValue;
+        AllData = allData;
     }
+}
 }

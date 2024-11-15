@@ -14,13 +14,13 @@ public class Analytics : MonoBehaviour
 
     [SerializeField]
     private DevToDevManager _devToDevManager;
-    
+
     [SerializeField]
     private FirebaseManager _firebaseManager;
 
     [SerializeField]
     private NetworkReachabilityTracker _networkReachabilityTracker;
-    
+
     private PurchaseValidator _purchaseValidator;
 
     public static string AdvertisingId { get; private set; }
@@ -36,7 +36,9 @@ public class Analytics : MonoBehaviour
         new FirebaseLogger()
     };
 
-    internal async UniTask InitAsync(string storeAppId, Settings.AnalyticsSettings settings, Settings.GDPRSettings gdprSettings)
+    internal async UniTask InitAsync(string storeAppId,
+        Settings.AnalyticsSettings settings,
+        Settings.GDPRSettings gdprSettings)
     {
         _purchaseValidator = new PurchaseValidator(settings.PurchaseValidatorSlug);
         await ProcessConsentAsync(gdprSettings.GoogleMobileAdsTestDeviceHashedIds);
@@ -195,50 +197,38 @@ public class Analytics : MonoBehaviour
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened += OnRewardedAdOpened;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked += OnRewardedAdClicked;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted += OnRewardedAdCompleted;
-        DreamsimPublishing.Advertisement.OnImpressionDataReady += OnImpressionDataReady;
+        DreamsimPublishing.Advertisement.RewardedVideo.OnImpressionDataReady += OnRewardedAdImpressionDataReady;
     }
 
-    private void OnRewardedAdRequested(string adSource)
-    {
-        LogRewardedAdRequest(adSource);
-    }
+    private void OnRewardedAdRequested(string adSource) { LogRewardedAdRequest(adSource); }
 
-    private void OnRewardedAdOpened(string adSource, AdInfo adInfo)
-    {
-        LogRewardedAdImpression(adSource);
-    }
+    private void OnRewardedAdOpened(string adSource, AdInfo adInfo) { LogRewardedAdImpression(adSource); }
 
-    private void OnRewardedAdClicked(string adSource)
-    {
-        LogRewardedAdClicked(adSource);
-    }
+    private void OnRewardedAdClicked(string adSource) { LogRewardedAdClicked(adSource); }
 
-    private void OnRewardedAdCompleted(string adSource)
+    private void OnRewardedAdCompleted(string adSource) { LogRewardedAdRewardReceived(adSource); }
+
+    private static void OnRewardedAdImpressionDataReady(ImpressionData impressionData)
     {
-        LogRewardedAdRewardReceived(adSource);
-    }
-    
-    private static void OnImpressionDataReady(ImpressionData impressionData)
-    {
-        if (impressionData?.revenue == null) return;
         if (Application.isEditor) return;
+        if (impressionData.Revenue == null) return;
 
         Firebase.Analytics.Parameter[] adParameters =
         {
             new("ad_platform", "ironSource"),
-            new("ad_source", impressionData.adNetwork),
-            new("ad_unit_name", impressionData.instanceName),
-            new("ad_format", impressionData.adUnit),
+            new("ad_source", impressionData.AdNetwork),
+            new("ad_unit_name", impressionData.InstanceName),
+            new("ad_format", impressionData.AdUnit),
             new("currency", "USD"),
-            new("value", impressionData.revenue.Value)
+            new("value", impressionData.Revenue.Value)
         };
 
         Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_impression", adParameters);
-        
-        DTDAnalytics.AdImpression(impressionData.adNetwork,
-            impressionData.revenue.Value,
-            impressionData.placement,
-            impressionData.adUnit);
+
+        DTDAnalytics.AdImpression(impressionData.AdNetwork,
+            impressionData.Revenue.Value,
+            impressionData.Placement,
+            impressionData.AdUnit);
     }
 }
 }

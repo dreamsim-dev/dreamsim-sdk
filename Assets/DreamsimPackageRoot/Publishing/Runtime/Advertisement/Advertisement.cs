@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
@@ -7,8 +6,6 @@ namespace Dreamsim.Publishing
 public class Advertisement : MonoBehaviour
 {
     public readonly RewardedVideoListener RewardedVideo = new();
-    
-    public event Action<ImpressionData> OnImpressionDataReady;
 
     private static IMediationBridge _mediation;
 
@@ -63,7 +60,6 @@ public class Advertisement : MonoBehaviour
             RewardedVideo.Init(_mediation);
         }
         
-        _mediation.SubscribeImpressionDataReady(OnImpressionDataReady);
         _mediation.InitiatingWithoutAdvertising();
         _mediation.Init();
 
