@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Dreamsim.Publishing
 {
@@ -16,7 +17,7 @@ public class RewardedVideoListener
 
     private IMediationBridge _mediation;
 
-    public bool IsAvailable => _mediation?.IsRewardedVideoAvailable() ?? false;
+    public bool IsAvailable => Application.isEditor || (_mediation?.IsRewardedVideoAvailable() ?? false);
 
     internal void Init(IMediationBridge mediator)
     {
@@ -27,7 +28,7 @@ public class RewardedVideoListener
         _mediation.OnAdReady += () => DreamsimLogger.Log("Rewarded video ready");
         _mediation.OnAdShowFailed += _ => DreamsimLogger.LogError("Rewarded video show failed");
         _mediation.OnAdRequested += adSource => OnAdRequested?.Invoke(adSource);
-        
+
         _mediation.SubscribeAdOpened((adSource, adInfo) => OnAdOpened?.Invoke(adSource, adInfo));
         _mediation.SubscribeAdClosed(adSource => OnAdClosed?.Invoke(adSource));
         _mediation.SubscribeAdAvailable(adSource => OnAvailabilityChanged?.Invoke(adSource));
