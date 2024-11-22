@@ -6,7 +6,7 @@ namespace Dreamsim.Publishing
 public class Advertisement : MonoBehaviour
 {
     public readonly RewardedVideoListener RewardedVideo = new();
-    public readonly BannerAdListener BannerAd = new();
+    public readonly BannerAdListener Banner = new();
 
     private static IMediationBridge _mediation;
 
@@ -63,7 +63,7 @@ public class Advertisement : MonoBehaviour
 
         if (useBannerAds)
         {
-            BannerAd.Init(_mediation);
+            Banner.Init(_mediation);
         }
         
         _mediation.InitiatingWithoutAdvertising();
@@ -87,7 +87,7 @@ public class Advertisement : MonoBehaviour
         DreamsimLogger.Log("Mediator initialized");
 
         RewardedVideo.Load();
-        BannerAd.LoadBanner();
+        Banner.Load();
         _isInitialized = true;
 
         DreamsimLogger.Log("Advertisement initialized");
