@@ -1,4 +1,5 @@
 using System;
+using com.unity3d.mediation;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
@@ -16,6 +17,19 @@ namespace Dreamsim.Publishing
         
         private IMediationBridge _mediation;
 
+        public enum BannerSize
+        {
+            Banner,             // Standard banner	320 x 50
+            Large,              // Large banner	320 x 90
+            MediumRectangle,    // Medium Rectangular (MREC)	300 x 250
+            Adaptive            // Automatically renders ads to adjust size and orientation for mobile & tablets. Device width X recommended height
+        }
+
+        public enum BannerPosition
+        {
+            Top,
+            Bottom
+        }
         
         internal void Init(IMediationBridge mediator)
         {
@@ -28,39 +42,76 @@ namespace Dreamsim.Publishing
             
             _mediation.SubscribeBannerAdClicked(adSource => OnAdClicked?.Invoke(adSource));
             _mediation.SubscribeBannerAdCollapsed(adSource => OnAdCollapsed?.Invoke(adSource));
-            _mediation.SubscribeBannerAdLeftApplication(adSource=> OnAdLeftApplication.Invoke(adSource));
+            _mediation.SubscribeBannerAdLeftApplication(adSource=> OnAdLeftApplication?.Invoke(adSource));
             _mediation.SubscribeBannerAdExpanded(adSource => OnAdExpanded?.Invoke(adSource));
            
             DreamsimLogger.Log("Banner ads initialized");
         }
 
         
-        public void LoadBanner()
+        public void Load(BannerSize size = BannerSize.Banner, BannerPosition position = BannerPosition.Bottom)
         {
-            IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
-            //_mediation.LoadBanner();
+            #if DREAMSIM_USE_IRONSOURCE
+            if (size == BannerSize.Adaptive)
+            {
+                var adaptiveSize = LevelPlayAdSize.CreateAdaptiveAdSize();  
+                IronSource.Agent.loadBanner(adaptiveSize, ConvertPosition(position)); 
+            }
+            else
+            {
+                var ironSize = ConvertSize(size);  
+                var ironPosition = ConvertPosition(position);
+                IronSource.Agent.loadBanner(ironSize, ironPosition);
+            }
             DreamsimLogger.Log("Banner loading requested");
+            #endif
+            //_mediation.LoadBanner();
+            
         }
-
-        public void ShowBanner()
+        public void Show()
         {
+            #if DREAMSIM_USE_IRONSOURCE
             IronSource.Agent.displayBanner();
-            //_mediation.ShowBanner();
-            DreamsimLogger.Log($"Banner  is shown.");
+            DreamsimLogger.Log($"Banner is shown.");
+            #endif
         }
-
-        public void HideBanner()
+        public void Hide()
         {
+            #if DREAMSIM_USE_IRONSOURCE
             IronSource.Agent.hideBanner();
-            //_mediation.HideBanner();
             DreamsimLogger.Log("Banner hidden.");
+            #endif
+            //_mediation.HideBanner();
+        }
+        public void Destroy()
+        {
+            #if DREAMSIM_USE_IRONSOURCE
+            IronSource.Agent.destroyBanner();
+            DreamsimLogger.Log("Banner destroyed.");
+            #endif
+            //_mediation.DestroyBanner();
+        }
+        
+        private static IronSourceBannerSize ConvertSize(BannerSize size)
+        {
+            return size switch
+            {
+                BannerSize.Banner => IronSourceBannerSize.BANNER,
+                BannerSize.Large => IronSourceBannerSize.LARGE,
+                BannerSize.MediumRectangle => IronSourceBannerSize.RECTANGLE,
+                _ => IronSourceBannerSize.BANNER
+            };
         }
 
-        public void DestroyBanner()
+        private static IronSourceBannerPosition ConvertPosition(BannerPosition position)
         {
-            IronSource.Agent.destroyBanner();
-          //_mediation.DestroyBanner();
-            DreamsimLogger.Log("Banner destroyed.");
+            return position switch
+            {
+                BannerPosition.Top => IronSourceBannerPosition.TOP,
+                BannerPosition.Bottom => IronSourceBannerPosition.BOTTOM,
+                _ => IronSourceBannerPosition.BOTTOM
+            };
         }
     }
 }
+
