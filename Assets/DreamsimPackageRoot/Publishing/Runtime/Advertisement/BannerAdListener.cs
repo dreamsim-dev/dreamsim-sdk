@@ -35,17 +35,7 @@ namespace Dreamsim.Publishing
         {
             _mediation = mediator;
 
-           _mediation.SubscribeBannerAdLoaded(adSource => OnAdLoaded?.Invoke(adSource));
-            _mediation.SubscribeBannerAdLoadFailed(adSource => OnAdLoadFailed?.Invoke(adSource));
-            _mediation.SubscribeBannerAdDisplayed(adSource => OnAdDisplayed?.Invoke(adSource));
-            _mediation.SubscribeBannerAdDisplayFailed(adSource => OnAdDisplayFailed?.Invoke(adSource));
-            
-            _mediation.SubscribeBannerAdClicked(adSource => OnAdClicked?.Invoke(adSource));
-            _mediation.SubscribeBannerAdCollapsed(adSource => OnAdCollapsed?.Invoke(adSource));
-            _mediation.SubscribeBannerAdLeftApplication(adSource=> OnAdLeftApplication?.Invoke(adSource));
-            _mediation.SubscribeBannerAdExpanded(adSource => OnAdExpanded?.Invoke(adSource));
-           
-            DreamsimLogger.Log("Banner ads initialized");
+           DreamsimLogger.Log("Banner ads initialized");
         }
 
         
