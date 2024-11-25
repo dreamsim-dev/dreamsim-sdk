@@ -14,16 +14,7 @@ namespace Dreamsim.Publishing
         event Action<string, AdInfo> OnAdOpened;
         event Action<string> OnAdClicked;
         
-        //Banner
-        event Action<string> OnBannerAdLoaded;
-        event Action<string> OnBannerAdLoadFailed;
-        event Action<string> OnBannerAdDisplayed;
-        event Action<string> OnBannerAdDisplayFailed;
-        event Action<string> OnBannerAdClicked;
-        event Action<string> OnBannerAdCollapsed;
-        event Action<string> OnBannerAdExpanded;
-        event Action<string> OnBannerAdLeftApplication;
-        
+               
         void Init();
         
         void ValidateIntegration();
@@ -68,20 +59,5 @@ namespace Dreamsim.Publishing
         
         void SubscribeAdClicked(Action<string> onAdClicked);
         
-        //Banner
-        void LoadBanner();
-        void ShowBanner();
-        void HideBanner();
-        void DestroyBanner(); 
-        
-        void SubscribeBannerAdLoaded(Action<string> onBannerAdLoaded);
-        void SubscribeBannerAdLoadFailed(Action<string> onBannerAdLoadFailed);
-        void SubscribeBannerAdDisplayed(Action<string> onBannerAdDisplayed);
-        void SubscribeBannerAdDisplayFailed(Action<string> onBannerAdDisplayFailed);
-        void SubscribeBannerAdClicked(Action<string> onBannerAdClicked);
-        void SubscribeBannerAdCollapsed(Action<string> onBannerAdCollapsed);
-        void SubscribeBannerAdExpanded(Action<string> onBannerAdExpanded);
-        void SubscribeBannerAdLeftApplication(Action<string> onBannerAdLeftApplication);
-       
-    }
+      }
 }
