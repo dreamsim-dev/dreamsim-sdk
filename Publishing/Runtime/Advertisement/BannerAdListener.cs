@@ -44,8 +44,11 @@ namespace Dreamsim.Publishing
             #if DREAMSIM_USE_IRONSOURCE
             if (size == BannerSize.Adaptive)
             {
-                var adaptiveSize = LevelPlayAdSize.CreateAdaptiveAdSize();  
-                IronSource.Agent.loadBanner(adaptiveSize, ConvertPosition(position)); 
+                var ironSize = IronSourceBannerSize.SMART;
+                ironSize.SetAdaptive(true);
+                var ironPosition = ConvertPosition(position);
+                IronSource.Agent.loadBanner(ironSize, ironPosition);
+               
             }
             else
             {
@@ -53,6 +56,7 @@ namespace Dreamsim.Publishing
                 var ironPosition = ConvertPosition(position);
                 IronSource.Agent.loadBanner(ironSize, ironPosition);
             }
+            
             DreamsimLogger.Log("Banner loading requested");
             #endif
             //_mediation.LoadBanner();
