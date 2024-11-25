@@ -52,29 +52,45 @@ public class Analytics : MonoBehaviour
 
     private async UniTask ProcessConsentAsync(List<string> testDeviceHashedIds)
     {
+        ConsentFlowBase consentFlow = null;
+        
         #if UNITY_IOS
-        var consentFlow = new IOSConsentFlow();
+        consentFlow = new IOSConsentFlow();
         await consentFlow.ProcessAsync();
         #endif
 
-        var googleConsentFlow = new GoogleConsentFlow();
-        try
+        if (consentFlow != null)
         {
-            await googleConsentFlow.ProcessAsync(testDeviceHashedIds);
+            if (!consentFlow.TrackingEnabled)
+            {
+                consentFlow = new GoogleConsentFlow();
+                try
+                {
+                    await consentFlow.ProcessAsync(testDeviceHashedIds);
+                }
+                catch (Exception e)
+                {
+                    DreamsimLogger.LogError("Failed to process Google Consent Flow");
+                    DreamsimLogger.LogException(e);
+                }
+            }
         }
-        catch (Exception e)
+        else
         {
-            DreamsimLogger.LogError("Failed to process Google Consent Flow");
-            DreamsimLogger.LogException(e);
+            consentFlow = new GoogleConsentFlow();
+            try
+            {
+                await consentFlow.ProcessAsync(testDeviceHashedIds);
+            }
+            catch (Exception e)
+            {
+                DreamsimLogger.LogError("Failed to process Google Consent Flow");
+                DreamsimLogger.LogException(e);
+            }
         }
 
-        #if UNITY_IOS
         AdvertisingId = consentFlow.AdvertisingId;
-        TrackingEnabled = consentFlow.TrackingEnabled && googleConsentFlow.TrackingEnabled;
-        #elif UNITY_ANDROID
-        AdvertisingId = googleConsentFlow.AdvertisingId;
-        TrackingEnabled = googleConsentFlow.TrackingEnabled;
-        #endif
+        TrackingEnabled = consentFlow.TrackingEnabled;
 
         #if UNITY_IOS && !UNITY_EDITOR
         if (new Version(UnityEngine.iOS.Device.systemVersion).CompareTo(new Version("14.5")) != -1)

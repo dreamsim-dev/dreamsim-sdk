@@ -5,12 +5,9 @@ using UnityEngine;
 
 namespace Dreamsim.Publishing
 {
-public class IOSConsentFlow
+public class IOSConsentFlow : ConsentFlowBase
 {
-    public string AdvertisingId { get; private set; }
-    public bool TrackingEnabled { get; private set; }
-
-    public async UniTask ProcessAsync()
+    public override async UniTask ProcessAsync()
     {
         if (Application.isEditor)
         {
