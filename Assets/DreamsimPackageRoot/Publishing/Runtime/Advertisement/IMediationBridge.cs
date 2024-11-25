@@ -14,6 +14,7 @@ namespace Dreamsim.Publishing
         event Action<string, AdInfo> OnAdOpened;
         event Action<string> OnAdClicked;
         
+               
         void Init();
         
         void ValidateIntegration();
@@ -57,5 +58,6 @@ namespace Dreamsim.Publishing
         void SubscribeAdRewarded(Action<string> onAdRewarded);
         
         void SubscribeAdClicked(Action<string> onAdClicked);
-    }
+        
+      }
 }

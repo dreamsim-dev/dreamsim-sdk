@@ -95,9 +95,11 @@ namespace Dreamsim.Publishing
          private MediationType _mediation;
 
          [SerializeField] private bool _useRewardedVideo = true;
+         [SerializeField] private bool _useBannerAds = true;
          
          internal MediationType Mediation => _mediation;
          internal bool UseRewardedVideo => _useRewardedVideo;
+         internal bool UseBannerAds => _useBannerAds;
 
          [SerializeField]
          private LevelPlaySettings _levelPlay;
