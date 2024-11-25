@@ -139,6 +139,8 @@ public class SettingsWindow : EditorWindow
         EditorGUILayout.PropertyField(mediationProp);
         var useRewardedVideoProp = settingsObject.FindProperty("_advertisement._useRewardedVideo");
         EditorGUILayout.PropertyField(useRewardedVideoProp);
+        var useBannerAds = settingsObject.FindProperty("_advertisement._useBannerAds");
+        EditorGUILayout.PropertyField(useBannerAds);
 
         var levelPlayProp = settingsObject.FindProperty("_advertisement._levelPlay");
         if (_settings.Advertisement.Mediation == Settings.AdvertisementSettings.MediationType.LevelPlay)

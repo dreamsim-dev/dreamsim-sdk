@@ -6,6 +6,7 @@ namespace Dreamsim.Publishing
 public class Advertisement : MonoBehaviour
 {
     public readonly RewardedVideoListener RewardedVideo = new();
+    public readonly BannerAdListener Banner = new();
 
     private static IMediationBridge _mediation;
 
@@ -30,9 +31,9 @@ public class Advertisement : MonoBehaviour
         _mediation = new AppLovinMediation(settings.AppLovin.UnitId);
         #endif
 
-        if (settings.UseRewardedVideo)
+        if (settings.UseRewardedVideo||settings.UseBannerAds)
         {
-            await InitMediationAsync(settings.UseRewardedVideo);
+            await InitMediationAsync(settings.UseRewardedVideo, settings.UseBannerAds);
         }
         else
         {
@@ -40,7 +41,7 @@ public class Advertisement : MonoBehaviour
         }
     }
 
-    private async UniTask InitMediationAsync(bool useRewardedVideo)
+    private async UniTask InitMediationAsync(bool useRewardedVideo,bool useBannerAds)
     {
         DreamsimLogger.Log("Mediator initialization started");
         _mediation.SubscribeSdkInitializationCompleted(Handle_SkdInitialized);
@@ -58,6 +59,11 @@ public class Advertisement : MonoBehaviour
         if (useRewardedVideo)
         {
             RewardedVideo.Init(_mediation);
+        }
+
+        if (useBannerAds)
+        {
+            Banner.Init(_mediation);
         }
         
         _mediation.InitiatingWithoutAdvertising();
@@ -81,6 +87,7 @@ public class Advertisement : MonoBehaviour
         DreamsimLogger.Log("Mediator initialized");
 
         RewardedVideo.Load();
+        Banner.Load();
         _isInitialized = true;
 
         DreamsimLogger.Log("Advertisement initialized");
