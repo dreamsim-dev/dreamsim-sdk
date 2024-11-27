@@ -52,46 +52,50 @@ public class Analytics : MonoBehaviour
 
     private async UniTask ProcessConsentAsync(List<string> testDeviceHashedIds)
     {
-        ConsentFlowBase consentFlow = null;
-        
+        // ReSharper disable once ConvertToConstant.Local
+        var skipGoogleConsentFlow = false;
+
         #if UNITY_IOS
-        consentFlow = new IOSConsentFlow();
+        var consentFlow = new IOSConsentFlow();
         await consentFlow.ProcessAsync();
+        if (!consentFlow.TrackingEnabled)
+        {
+            skipGoogleConsentFlow = true;
+        }
         #endif
 
-        if (consentFlow != null)
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+        if (skipGoogleConsentFlow)
         {
-            if (!consentFlow.TrackingEnabled)
-            {
-                consentFlow = new GoogleConsentFlow();
-                try
-                {
-                    await consentFlow.ProcessAsync(testDeviceHashedIds);
-                }
-                catch (Exception e)
-                {
-                    DreamsimLogger.LogError("Failed to process Google Consent Flow");
-                    DreamsimLogger.LogException(e);
-                }
-            }
+            // ReSharper disable once HeuristicUnreachableCode
+            #if UNITY_IOS
+            AdvertisingId = consentFlow.AdvertisingId;
+            TrackingEnabled = consentFlow.TrackingEnabled;
+            #endif
         }
         else
         {
-            consentFlow = new GoogleConsentFlow();
+            var googleConsentFlow = new GoogleConsentFlow();
             try
             {
-                await consentFlow.ProcessAsync(testDeviceHashedIds);
+                await googleConsentFlow.ProcessAsync(testDeviceHashedIds);
             }
             catch (Exception e)
             {
                 DreamsimLogger.LogError("Failed to process Google Consent Flow");
                 DreamsimLogger.LogException(e);
             }
+
+            #if UNITY_IOS
+            AdvertisingId = consentFlow.AdvertisingId;
+            TrackingEnabled = consentFlow.TrackingEnabled && googleConsentFlow.TrackingEnabled;
+            #elif UNITY_ANDROID
+            AdvertisingId = googleConsentFlow.AdvertisingId;
+            TrackingEnabled = googleConsentFlow.TrackingEnabled;
+            #endif
         }
 
-        AdvertisingId = consentFlow.AdvertisingId;
-        TrackingEnabled = consentFlow.TrackingEnabled;
-
+        // TODO: Move to "Advertisement"
         #if UNITY_IOS && !UNITY_EDITOR
         if (new Version(UnityEngine.iOS.Device.systemVersion).CompareTo(new Version("14.5")) != -1)
         {

@@ -5,11 +5,14 @@ using GoogleMobileAds.Ump.Api;
 
 namespace Dreamsim.Publishing
 {
-public class GoogleConsentFlow : ConsentFlowBase
+public class GoogleConsentFlow
 {
+    public string AdvertisingId { get; private set; }
+    public bool TrackingEnabled { get; private set; }
+
     private ConsentForm _form;
 
-    public override async UniTask ProcessAsync(List<string> testDeviceHashedIds)
+    public async UniTask ProcessAsync(List<string> testDeviceHashedIds)
     {
         var done = false;
         
@@ -53,7 +56,7 @@ public class GoogleConsentFlow : ConsentFlowBase
         
             _form = form;
             DreamsimLogger.Log("UMP: Consent form loaded");
-            
+        
             if (ConsentInformation.ConsentStatus == ConsentStatus.Required)
             {
                 ShowForm();
