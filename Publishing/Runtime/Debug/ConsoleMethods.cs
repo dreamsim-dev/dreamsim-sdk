@@ -7,6 +7,6 @@ public static class ConsoleMethods
 {
     [ConsoleMethod("debugads", "Validate advertisement integration")]
     // ReSharper disable once UnusedMember.Global
-    public static void DebugAds() { Advertisement.ValidateIntegration(); }
+    public static void DebugAds() { DreamsimPublishing.Advertisement.ValidateIntegration(); }
 }
 }
