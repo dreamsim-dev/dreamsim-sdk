@@ -9,6 +9,8 @@ UPM package for publishing purposes.
     - Facebook
 - Advertisement
     - LevelPlay (IronSource)
+      - Rewarded video
+      - Banner
     - ApplovinMAX (WIP)
 - Consent flow
   - ATT (App Tracking Transparency) flow
@@ -86,15 +88,54 @@ DreamsimPublishing.Create();
 await DreamsimPublishing.InitAsync();
 ```
 ## Advertisement
-### Serving
+### Rewarded Video
+#### Serving
 ```cs
 // Use following method to show ad. Use different placements for each ad point in application.
 DreamsimPublishing.Advertisement.RewardedVideo.Show(string placement)
 
-// Check ad availability via following method.
-DreamsimPublishing.Advertisement.RewardedVideo.IsAvailable
+// Check ad availability via following property.
+DreamsimPublishing.Advertisement.RewardedVideo.IsAvailable;
 ```
-### Callbacks
+#### Callbacks
+```cs
+// Ad completed (give reward here).
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted;
+
+// Ad closed (application took control).
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdClosed;
+
+/// Loading error.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdLoadFailed;
+
+// Impression error.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdShowFailed;
+
+// Availability changed.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAvailabilityChanged;
+
+// Ad opened (impression).
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened;
+
+// Ad clicked. Ad itself. Not button.
+DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked;
+```
+### Banner
+#### Serving
+```cs
+// Use following method to load ad
+DreamsimPublishing.Advertisement.Banner.Load();
+
+// Use following method to show ad
+DreamsimPublishing.Advertisement.Banner.Show();
+
+// Use following method to hide ad (if you will to show it again later)
+DreamsimPublishing.Advertisement.Banner.Show();
+
+// Use following method to destroy ad
+DreamsimPublishing.Advertisement.Banner.Show();
+```
+#### Callbacks
 ```cs
 // Ad completed (give reward here).
 DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted

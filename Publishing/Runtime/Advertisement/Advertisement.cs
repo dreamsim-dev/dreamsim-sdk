@@ -5,14 +5,22 @@ namespace Dreamsim.Publishing
 {
 public class Advertisement : MonoBehaviour
 {
-    public readonly RewardedVideoListener RewardedVideo = new();
+    public readonly RewardedVideoListener RewardedVideo;
     public readonly IBannerListener Banner;
 
-    private static IMediationBridge _mediation;
+    private IMediationBridge _mediation;
 
     private bool _isInitialized;
 
-    public static void ValidateIntegration() { _mediation.ValidateIntegration(); }
+    public void ValidateIntegration() { _mediation.ValidateIntegration(); }
+
+    public Advertisement()
+    {
+        RewardedVideo = new RewardedVideoListener();
+        #if DREAMSIM_USE_IRONSOURCE
+        Banner = new IronSourceBannerListener();
+        #endif
+    }
 
     internal async UniTask InitAsync(Settings.AdvertisementSettings settings)
     {
@@ -27,12 +35,11 @@ public class Advertisement : MonoBehaviour
 
         #if DREAMSIM_USE_IRONSOURCE
         _mediation = new IronSourceMediation(settings.LevelPlay.AppKey);
-        Banner = new IronSourceBannerListener();
         #elif DREAMSIM_USE_APPLOVIN
         _mediation = new AppLovinMediation(settings.AppLovin.UnitId);
         #endif
 
-        if (settings.UseRewardedVideo||settings.UseBannerAds)
+        if (settings.UseRewardedVideo || settings.UseBannerAds)
         {
             await InitMediationAsync(settings.UseRewardedVideo, settings.UseBannerAds);
         }
@@ -42,7 +49,7 @@ public class Advertisement : MonoBehaviour
         }
     }
 
-    private async UniTask InitMediationAsync(bool useRewardedVideo,bool useBannerAds)
+    private async UniTask InitMediationAsync(bool useRewardedVideo, bool useBannerAds)
     {
         DreamsimLogger.Log("Mediator initialization started");
         _mediation.SubscribeSdkInitializationCompleted(Handle_SkdInitialized);
@@ -54,7 +61,7 @@ public class Advertisement : MonoBehaviour
         _mediation.SetMetaData("Facebook_IS_CacheFlag", "IMAGE");
         _mediation.SetMetaData("Meta_Mixed_Audience", "true");
         #endif
-        
+
         _mediation.SetCOPPA(false);
 
         if (useRewardedVideo)
@@ -66,7 +73,7 @@ public class Advertisement : MonoBehaviour
         {
             Banner.Init();
         }
-        
+
         _mediation.InitiatingWithoutAdvertising();
         _mediation.Init();
 
@@ -88,7 +95,6 @@ public class Advertisement : MonoBehaviour
         DreamsimLogger.Log("Mediator initialized");
 
         RewardedVideo.Load();
-        Banner.Load(IBannerListener.BannerSize.Banner,IBannerListener.BannerPosition.Bottom);
         _isInitialized = true;
 
         DreamsimLogger.Log("Advertisement initialized");
