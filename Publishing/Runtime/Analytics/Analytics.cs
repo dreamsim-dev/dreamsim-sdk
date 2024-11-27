@@ -171,22 +171,22 @@ public class Analytics : MonoBehaviour
 
     private void LogRewardedAdRequest(string adSource)
     {
-        CallLoggersAction(l => l.LogRewardedAdRequest(adSource), $"Ad requested ({adSource})");
+        CallLoggersAction(l => l.LogRewardedAdRequest(adSource), $"Rewarded video requested ({adSource})");
     }
 
     private void LogRewardedAdImpression(string adSource)
     {
-        CallLoggersAction(l => l.LogRewardedAdImpression(adSource), $"Ad impression ({adSource})");
+        CallLoggersAction(l => l.LogRewardedAdImpression(adSource), $"Rewarded video impression ({adSource})");
     }
 
     private void LogRewardedAdClicked(string adSource)
     {
-        CallLoggersAction(l => l.LogRewardedAdClicked(adSource), $"Ad clicked ({adSource})");
+        CallLoggersAction(l => l.LogRewardedAdClicked(adSource), $"Rewarded video clicked ({adSource})");
     }
 
     private void LogRewardedAdRewardReceived(string adSource)
     {
-        CallLoggersAction(l => l.LogRewardedAdRewardReceived(adSource), $"Ad reward ({adSource})");
+        CallLoggersAction(l => l.LogRewardedAdRewardReceived(adSource), $"Rewarded video reward ({adSource})");
 
         const string pref = "[Dreamsim].Advertisement.RewardedVideo.TotalRewardsReceived";
         const int interval = 30;
@@ -202,7 +202,22 @@ public class Analytics : MonoBehaviour
     private void LogRewardedAdRewardReceivedTimes(int times)
     {
         CallLoggersAction(l => l.LogRewardedAdRewardReceivedTimes(times),
-            $"Reward received {times} times");
+            $"Rewarded video reward received {times} times");
+    }
+
+    private void LogBannerAdRequest(string adSource)
+    {
+        CallLoggersAction(l => l.LogBannerAdRequest(adSource), $"Banner requested ({adSource})");
+    }
+
+    private void LogBannerAdImpression(string adSource)
+    {
+        CallLoggersAction(l => l.LogBannerAdImpression(adSource), $"Banner impression ({adSource})");
+    }
+
+    private void LogBannerAdClicked(string adSource)
+    {
+        CallLoggersAction(l => l.LogBannerAdClicked(adSource), $"Banner clicked ({adSource})");
     }
 
     private void CallLoggersAction(Action<IInternalAnalyticsLogger> action, string logMsg)
@@ -213,11 +228,16 @@ public class Analytics : MonoBehaviour
 
     private void InitAdvertisementEvents()
     {
+        DreamsimPublishing.Advertisement.OnImpressionDataReady += OnAdImpressionDataReady;
+
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdRequested += OnRewardedAdRequested;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened += OnRewardedAdOpened;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked += OnRewardedAdClicked;
         DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted += OnRewardedAdCompleted;
-        DreamsimPublishing.Advertisement.RewardedVideo.OnImpressionDataReady += OnRewardedAdImpressionDataReady;
+
+        DreamsimPublishing.Advertisement.Banner.OnAdRequested += OnBannerAdRequested;
+        DreamsimPublishing.Advertisement.Banner.OnAdDisplayed += OnBannerAdDisplayed;
+        DreamsimPublishing.Advertisement.Banner.OnAdClicked += OnBannerAdClicked;
     }
 
     private void OnRewardedAdRequested(string adSource) { LogRewardedAdRequest(adSource); }
@@ -228,7 +248,13 @@ public class Analytics : MonoBehaviour
 
     private void OnRewardedAdCompleted(string adSource) { LogRewardedAdRewardReceived(adSource); }
 
-    private static void OnRewardedAdImpressionDataReady(ImpressionData impressionData)
+    private void OnBannerAdRequested(string adSource) { LogBannerAdRequest(adSource); }
+
+    private void OnBannerAdDisplayed(string adSource) { LogBannerAdImpression(adSource); }
+
+    private void OnBannerAdClicked(string adSource) { LogBannerAdClicked(adSource); }
+
+    private static void OnAdImpressionDataReady(ImpressionData impressionData)
     {
         if (Application.isEditor) return;
         if (impressionData.Revenue == null) return;

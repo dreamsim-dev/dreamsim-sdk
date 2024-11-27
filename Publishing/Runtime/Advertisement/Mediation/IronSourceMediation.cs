@@ -1,5 +1,4 @@
 ﻿using System;
-using DevToDev.Analytics;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
@@ -160,7 +159,6 @@ public class IronSourceMediation : MediationBase, IMediationBridge
     public void SubscribeAdUnavailable(Action<bool> onAdUnavailable)
     {
         OnAvailabilityChanged += onAdUnavailable;
-
         IronSourceRewardedVideoEvents.onAdUnavailableEvent += Handle_OnAdUnavailable;
     }
 

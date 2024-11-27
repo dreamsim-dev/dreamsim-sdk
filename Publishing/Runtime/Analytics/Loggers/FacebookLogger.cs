@@ -51,6 +51,21 @@ public class FacebookLogger : IInternalAnalyticsLogger
         // Intentionally empty
     }
 
+    public void LogBannerAdRequest(string adSource)
+    {
+        // Intentionally empty
+    }
+
+    public void LogBannerAdImpression(string adSource)
+    {
+        // Intentionally empty
+    }
+
+    public void LogBannerAdClicked(string adSource)
+    {
+        // Intentionally empty
+    }
+
     public void LogTutorialStart()
     {
         // Intentionally empty

@@ -1,10 +1,13 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Dreamsim.Publishing
 {
 public class Advertisement : MonoBehaviour
 {
+    public event Action<ImpressionData> OnImpressionDataReady;
+
     public readonly RewardedVideoListener RewardedVideo;
     public readonly IBannerListener Banner;
 
@@ -39,9 +42,9 @@ public class Advertisement : MonoBehaviour
         _mediation = new AppLovinMediation(settings.AppLovin.UnitId);
         #endif
 
-        if (settings.UseRewardedVideo || settings.UseBannerAds)
+        if (settings.UseRewardedVideo || settings.UseBanner)
         {
-            await InitMediationAsync(settings.UseRewardedVideo, settings.UseBannerAds);
+            await InitMediationAsync(settings.UseRewardedVideo, settings.UseBanner);
         }
         else
         {
@@ -64,15 +67,10 @@ public class Advertisement : MonoBehaviour
 
         _mediation.SetCOPPA(false);
 
-        if (useRewardedVideo)
-        {
-            RewardedVideo.Init(_mediation);
-        }
+        if (useRewardedVideo) RewardedVideo.Init(_mediation);
+        if (useBannerAds) Banner.Init();
 
-        if (useBannerAds)
-        {
-            Banner.Init();
-        }
+        _mediation.SubscribeImpressionDataReady(data => OnImpressionDataReady?.Invoke(data));
 
         _mediation.InitiatingWithoutAdvertising();
         _mediation.Init();

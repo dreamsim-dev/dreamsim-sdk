@@ -8,10 +8,7 @@ namespace Dreamsim.Publishing
 {
 public class AppsFlyerLogger : IInternalAnalyticsLogger
 {
-    public void Log(string eventName)
-    {
-        AppsFlyer.sendEvent(eventName, null);
-    }
+    public void Log(string eventName) { AppsFlyer.sendEvent(eventName, null); }
 
     public void Log(string eventName, List<EventParam> eventParams)
     {
@@ -53,25 +50,43 @@ public class AppsFlyerLogger : IInternalAnalyticsLogger
     public void LogRewardedAdImpression(string adSource)
     {
         var @params = new Dictionary<string, string> { { "ad_source", adSource } };
-        AppsFlyer.sendEvent("ad_impression", @params);
+        AppsFlyer.sendEvent("ad_rewarded_impression", @params);
     }
 
     public void LogRewardedAdRequest(string adSource)
     {
         var @params = new Dictionary<string, string> { { "ad_source", adSource } };
-        AppsFlyer.sendEvent("ad_request", @params);
+        AppsFlyer.sendEvent("ad_rewarded_request", @params);
     }
 
     public void LogRewardedAdClicked(string adSource)
     {
         var @params = new Dictionary<string, string> { { "ad_source", adSource } };
-        AppsFlyer.sendEvent("ad_clicked", @params);
+        AppsFlyer.sendEvent("ad_rewarded_clicked", @params);
     }
 
     public void LogRewardedAdRewardReceived(string adSource)
     {
         var @params = new Dictionary<string, string> { { "ad_source", adSource } };
-        AppsFlyer.sendEvent("ad_reward", @params);
+        AppsFlyer.sendEvent("ad_rewarded_reward", @params);
+    }
+
+    public void LogBannerAdRequest(string adSource)
+    {
+        var @params = new Dictionary<string, string> { { "ad_source", adSource } };
+        AppsFlyer.sendEvent("ad_banner_request", @params);
+    }
+
+    public void LogBannerAdImpression(string adSource)
+    {
+        var @params = new Dictionary<string, string> { { "ad_source", adSource } };
+        AppsFlyer.sendEvent("ad_banner_impression", @params);
+    }
+
+    public void LogBannerAdClicked(string adSource)
+    {
+        var @params = new Dictionary<string, string> { { "ad_source", adSource } };
+        AppsFlyer.sendEvent("ad_banner_clicked", @params);
     }
 
     public void LogRewardedAdRewardReceivedTimes(int times) { AppsFlyer.sendEvent(AFInAppEvents.ADD_TO_CART, null); }
@@ -80,19 +95,13 @@ public class AppsFlyerLogger : IInternalAnalyticsLogger
     {
         var @params = eventParams
             .ToDictionary(eventParam => eventParam.Key, eventParam => eventParam.Value.ToString());
-        
+
         AppsFlyer.recordCrossPromoteImpression(appId, campaign, @params);
     }
 
-    public void LogTutorialStart()
-    {
-        AppsFlyer.sendEvent("tutorial_start", null);
-    }
+    public void LogTutorialStart() { AppsFlyer.sendEvent("tutorial_start", null); }
 
-    public void LogTutorialSkipped()
-    {
-        AppsFlyer.sendEvent("tutorial_skipped", null);
-    }
+    public void LogTutorialSkipped() { AppsFlyer.sendEvent("tutorial_skipped", null); }
 
     public void LogTutorialStepCompletion(int step)
     {
@@ -100,17 +109,14 @@ public class AppsFlyerLogger : IInternalAnalyticsLogger
         AppsFlyer.sendEvent("tutorial_step_completion", @params);
     }
 
-    public void LogTutorialCompletion()
-    {
-        AppsFlyer.sendEvent(AFInAppEvents.TUTORIAL_COMPLETION, null);
-    }
+    public void LogTutorialCompletion() { AppsFlyer.sendEvent(AFInAppEvents.TUTORIAL_COMPLETION, null); }
 
     public void LogLevelUp(int level)
     {
         var @params = new Dictionary<string, string> { { AFInAppEvents.LEVEL, level.ToString() } };
         AppsFlyer.sendEvent(AFInAppEvents.LEVEL_ACHIEVED, @params);
     }
-    
+
     public void LogContentView(string contentId)
     {
         var @params = new Dictionary<string, string> { { "content_id", contentId } };

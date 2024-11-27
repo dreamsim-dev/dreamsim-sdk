@@ -20,6 +20,12 @@ namespace Dreamsim.Publishing
         void LogRewardedAdClicked(string adSource);
 
         void LogRewardedAdRewardReceived(string adSource);
+
+        void LogBannerAdRequest(string adSource);
+
+        void LogBannerAdImpression(string adSource);
+
+        void LogBannerAdClicked(string adSource);
         
         void LogTutorialStart();
 
