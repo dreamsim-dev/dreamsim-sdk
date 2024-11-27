@@ -12,9 +12,9 @@ public class SettingsWindow : EditorWindow
     private static Settings _settings;
 
     [MenuItem("Dreamsim/Publishing Settings")]
-    public static void Editor_Settings() { OpenWindow(); }
+    public static void Editor_Settings() { Open(); }
 
-    private static void OpenWindow()
+    public static void Open()
     {
         const int w = 500;
         const int h = 750;
@@ -67,6 +67,26 @@ public class SettingsWindow : EditorWindow
         EditorGUILayout.Space(2);
     }
 
+    private static void DrawGUI()
+    {
+        EditorGUILayout.Separator();
+        H1(Title);
+        SeparateLine();
+
+        var settingsEditor = UnityEditor.Editor.CreateEditor(_settings);
+        var settingsObject = settingsEditor.serializedObject;
+        settingsObject.UpdateIfRequiredOrScript();
+
+        GeneralArea(settingsObject);
+        if (_settings.General.UseAnalytics) AnalyticsArea(settingsObject);
+        if (_settings.General.useAdvertisement) AdvertisementArea(settingsObject);
+        FacebookArea(settingsObject);
+        GDPRArea(settingsObject);
+        ButtonsArea();
+
+        settingsObject.ApplyModifiedProperties();
+    }
+
     private void OnGUI()
     {
         FindSettings();
@@ -78,31 +98,13 @@ public class SettingsWindow : EditorWindow
             position.height - (padding.top + padding.bottom));
 
         GUILayout.BeginArea(area);
-
-        EditorGUILayout.Separator();
-        H1(Title);
-        SeparateLine();
-
-        var settingsEditor = UnityEditor.Editor.CreateEditor(_settings);
-        var settingsObject = settingsEditor.serializedObject;
-        settingsObject.UpdateIfRequiredOrScript();
-
         EditorGUI.BeginChangeCheck();
-
-        GeneralArea(settingsObject);
-        if (_settings.General.UseAnalytics) AnalyticsArea(settingsObject);
-        if (_settings.General.useAdvertisement) AdvertisementArea(settingsObject);
-        FacebookArea(settingsObject);
-        GDPRArea(settingsObject);
-        ButtonsArea();
-
-        settingsObject.ApplyModifiedProperties();
+        DrawGUI();
         EditorGUI.EndChangeCheck();
-
         GUILayout.EndArea();
     }
 
-    private void GeneralArea(SerializedObject settingsObject)
+    private static void GeneralArea(SerializedObject settingsObject)
     {
         H2("General");
 
@@ -116,7 +118,7 @@ public class SettingsWindow : EditorWindow
         SeparateLine();
     }
 
-    private void AnalyticsArea(SerializedObject settingsObject)
+    private static void AnalyticsArea(SerializedObject settingsObject)
     {
         H2("Analytics");
 
@@ -130,7 +132,7 @@ public class SettingsWindow : EditorWindow
         SeparateLine();
     }
 
-    private void AdvertisementArea(SerializedObject settingsObject)
+    private static void AdvertisementArea(SerializedObject settingsObject)
     {
         H2("Advertisement");
 
@@ -158,7 +160,7 @@ public class SettingsWindow : EditorWindow
         SeparateLine();
     }
 
-    private void FacebookArea(SerializedObject settingsObject)
+    private static void FacebookArea(SerializedObject settingsObject)
     {
         H2("Facebook");
 
@@ -171,7 +173,7 @@ public class SettingsWindow : EditorWindow
         SeparateLine();
     }
 
-    private void GDPRArea(SerializedObject settingsObject)
+    private static void GDPRArea(SerializedObject settingsObject)
     {
         H2("GDPR");
 
@@ -182,13 +184,13 @@ public class SettingsWindow : EditorWindow
         Tip($"How to obtain: <a href=\"{link}\">{link}</a>", link);
         SeparateLine();
     }
-    
-    private void ButtonsArea()
+
+    private static void ButtonsArea()
     {
         GUILayout.Space(20);
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-        
+
         if (GUILayout.Button("Update Dependencies", GUILayout.Height(30), GUILayout.Width(200)))
         {
             DependenciesUpdater.Update(_settings);
@@ -199,7 +201,7 @@ public class SettingsWindow : EditorWindow
         GUILayout.Space(20);
     }
 
-    private void SeparateLine()
+    private static void SeparateLine()
     {
         EditorGUILayout.Separator();
         var rect = EditorGUILayout.GetControlRect(false, 1);

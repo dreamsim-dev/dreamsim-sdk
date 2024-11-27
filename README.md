@@ -1,11 +1,10 @@
 # Dreamsim SDK
 UPM package for publishing purposes.
 ## Features
-- CI
 - Analytics
     - AppsFlyer
     - devtodev
-    - Firebase
+    - Firebase (currently disabled)
     - Facebook
 - Advertisement
     - LevelPlay (IronSource)
@@ -18,6 +17,8 @@ UPM package for publishing purposes.
 - In-app purchases server-based fraud filter
 - Network reachability logging
 - Cross-promo attribution
+- CI
+    - Build number available at runtime via file
 ## Installation
 1. Add OpenUPM as a scoped registry using [documentation](https://developers.google.com/admob/unity/quick-start#import_the_mobile_ads_for_unity_plugin) or simply add following entry into manifest.json (at root level):
    ```json
@@ -90,6 +91,7 @@ await DreamsimPublishing.InitAsync();
 ## Advertisement
 ### Rewarded Video
 #### Serving
+Make sure that "Use Rewarded Video" is checked in Dreamsim Publishing Settings.
 ```cs
 // Use following method to show ad. Use different placements for each ad point in application.
 DreamsimPublishing.Advertisement.RewardedVideo.Show(string placement)
@@ -121,6 +123,7 @@ DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened;
 DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked;
 ```
 ### Banner
+Make sure that "Use Banner" is checked in Dreamsim Publishing Settings.
 #### Serving
 ```cs
 // Use following method to load ad
@@ -191,7 +194,7 @@ DreamsimPublishing.Analytics.LogLevelUp(int level);
 // Content view (contentId is unique string). Prefer using enum with ToString() method.
 DreamsimPublishing.Analytics.LogContentView(string contentId);
 
-// Cross promo impression
+// Cross promo impression/
 DreamsimPublishing.CrossPromo.LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams);
 ```
 ### Automatically Logging Events
@@ -199,19 +202,28 @@ DreamsimPublishing.CrossPromo.LogCrossPromoImpression(string appId, string campa
 // Rewarded video ad request (e.g. ad button click).
 DreamsimPublishing.Analytics.LogRewardedAdRequest(string adSource);
 
-// Rewarded video ad impression
+// Rewarded video ad impression.
 DreamsimPublishing.Analytics.LogRewardedAdImpression(string adSource);
 
 // Click on rewarded video ad.
 DreamsimPublishing.Analytics.LogRewardedAdClicked(string adSource);
 
-// Reward received.
+// Rewarded video reward received.
 DreamsimPublishing.Analytics.LogRewardedAdRewardReceived(string adSource);
 
-// First purchase
+// Banner ad request (loading started).
+DreamsimPublishing.Analytics.LogBannerAdRequest(string adSource);
+
+// Banner ad impression.
+DreamsimPublishing.Analytics.LogBannerAdImpression(string adSource);
+
+// Click on banner ad.
+DreamsimPublishing.Analytics.LogBannerAdClicked(string adSource);
+
+// First purchase.
 DreamsimPublishing.Analytics.LogFirstPurchase(PurchaseEventArgs args);
 
-// Rewrad received 30 (by default) times
+// Rewrad received 30 (by default) times.
 DreamsimPublishing.Analytics.LogRewardedAdRewardReceivedTimes(int times);
 ```
 ## Cross Promo
