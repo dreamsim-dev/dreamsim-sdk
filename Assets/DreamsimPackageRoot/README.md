@@ -105,7 +105,7 @@ DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted;
 // Ad closed (application took control).
 DreamsimPublishing.Advertisement.RewardedVideo.OnAdClosed;
 
-/// Loading error.
+// Loading error.
 DreamsimPublishing.Advertisement.RewardedVideo.OnAdLoadFailed;
 
 // Impression error.
@@ -124,39 +124,38 @@ DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked;
 #### Serving
 ```cs
 // Use following method to load ad
-DreamsimPublishing.Advertisement.Banner.Load();
+DreamsimPublishing.Advertisement.Banner.Load(string adSource,
+    BannerSize size = BannerSize.Default,
+    BannerPosition position = BannerPosition.Bottom);
 
 // Use following method to show ad
 DreamsimPublishing.Advertisement.Banner.Show();
 
 // Use following method to hide ad (if you will to show it again later)
-DreamsimPublishing.Advertisement.Banner.Show();
+DreamsimPublishing.Advertisement.Banner.Hide();
 
 // Use following method to destroy ad
-DreamsimPublishing.Advertisement.Banner.Show();
+DreamsimPublishing.Advertisement.Banner.Destroy();
 ```
 #### Callbacks
 ```cs
-// Ad completed (give reward here).
-DreamsimPublishing.Advertisement.RewardedVideo.OnAdCompleted
+// Ad loaded
+DreamsimPublishing.Advertisement.Banner.OnAdLoaded
 
-// Ad closed (application took control).
-DreamsimPublishing.Advertisement.RewardedVideo.OnAdClosed;
+// Ad failed to load
+DreamsimPublishing.Advertisement.Banner.OnAdLoadFailed;
 
-/// Loading error.
-DreamsimPublishing.Advertisement.RewardedVideo.OnAdLoadFailed;
+// Ad shown (impression)
+DreamsimPublishing.Advertisement.Banner.OnAdDisplayed;
 
-// Impression error.
-DreamsimPublishing.Advertisement.RewardedVideo.OnAdShowFailed;
+// Ad clicked
+DreamsimPublishing.Advertisement.Banner.OnAdClicked;
 
-// Availability changed.
-DreamsimPublishing.Advertisement.RewardedVideo.OnAvailabilityChanged;
+// Ad dismissed
+DreamsimPublishing.Advertisement.Banner.OnAdDismissed;
 
-// Ad opened (impression).
-DreamsimPublishing.Advertisement.RewardedVideo.OnAdOpened;
-
-// Ad clicked. Ad itself. Not button.
-DreamsimPublishing.Advertisement.RewardedVideo.OnAdClicked;
+// Ad left application
+DreamsimPublishing.Advertisement.Banner.OnAdLeftApplication;
 ```
 ## Analytics
 ### Custom Events

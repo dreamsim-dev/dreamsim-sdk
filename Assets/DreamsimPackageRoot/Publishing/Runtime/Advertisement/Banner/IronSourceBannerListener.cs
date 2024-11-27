@@ -4,16 +4,15 @@ namespace Dreamsim.Publishing
 {
 public class IronSourceBannerListener : IBannerListener
 {
+    public event Action<string> OnAdRequested;
     public event Action<string> OnAdLoaded;
     public event Action<string> OnAdLoadFailed;
     public event Action<string> OnAdDisplayed;
-    public event Action<string> OnAdDisplayFailed;
     public event Action<string> OnAdClicked;
-    public event Action<string> OnAdCollapsed;
-    public event Action<string> OnAdExpanded;
+    public event Action<string> OnAdDismissed;
     public event Action<string> OnAdLeftApplication;
 
-    private IMediationBridge _mediation;
+    private string _adSource;
 
     public void Init()
     {
@@ -21,14 +20,18 @@ public class IronSourceBannerListener : IBannerListener
         IronSourceBannerEvents.onAdLoadFailedEvent += HandleBannerAdLoadFailed;
         IronSourceBannerEvents.onAdClickedEvent += HandleBannerAdClicked;
         IronSourceBannerEvents.onAdScreenPresentedEvent += HandleBannerAdDisplayed;
-        IronSourceBannerEvents.onAdScreenDismissedEvent += HandleBannerAdCollapsed;
+        IronSourceBannerEvents.onAdScreenDismissedEvent += HandleBannerAdDismissed;
         IronSourceBannerEvents.onAdLeftApplicationEvent += HandleBannerAdLeftApplication;
 
         DreamsimLogger.Log("Banner ads initialized");
     }
 
-    public void Load(BannerSize size = BannerSize.Banner, BannerPosition position = BannerPosition.Bottom)
+    public void Load(string adSource,
+        BannerSize size = BannerSize.Default,
+        BannerPosition position = BannerPosition.Bottom)
     {
+        _adSource = adSource;
+
         if (size == BannerSize.Adaptive)
         {
             var ironSourceSize = IronSourceBannerSize.SMART;
@@ -43,34 +46,24 @@ public class IronSourceBannerListener : IBannerListener
             IronSource.Agent.loadBanner(ironSize, ironPosition);
         }
 
+        OnAdRequested?.Invoke(_adSource);
+
         DreamsimLogger.Log("Banner loading requested.");
     }
 
-    public void Show()
-    {
-        IronSource.Agent.displayBanner();
-        DreamsimLogger.Log("Banner is shown.");
-    }
+    public void Show() { IronSource.Agent.displayBanner(); }
 
-    public void Hide()
-    {
-        IronSource.Agent.hideBanner();
-        DreamsimLogger.Log("Banner hidden.");
-    }
+    public void Hide() { IronSource.Agent.hideBanner(); }
 
-    public void Destroy()
-    {
-        IronSource.Agent.destroyBanner();
-        DreamsimLogger.Log("Banner destroyed.");
-    }
+    public void Destroy() { IronSource.Agent.destroyBanner(); }
 
     private static IronSourceBannerSize ConvertSize(BannerSize size)
     {
         return size switch
         {
-            BannerSize.Banner => IronSourceBannerSize.BANNER,
+            BannerSize.Default => IronSourceBannerSize.BANNER,
             BannerSize.Large => IronSourceBannerSize.LARGE,
-            BannerSize.MediumRectangle => IronSourceBannerSize.RECTANGLE,
+            BannerSize.MREC => IronSourceBannerSize.RECTANGLE,
             _ => IronSourceBannerSize.BANNER
         };
     }
@@ -85,19 +78,41 @@ public class IronSourceBannerListener : IBannerListener
         };
     }
 
-    private void HandleBannerAdLoaded(IronSourceAdInfo adInfo) { OnAdLoaded?.Invoke(adInfo.ToString()); }
+    private void HandleBannerAdLoaded(IronSourceAdInfo adInfo)
+    {
+        DreamsimLogger.Log("Banner loaded");
+        OnAdLoaded?.Invoke(_adSource);
+    }
 
-    private void HandleBannerAdLoadFailed(IronSourceError error) { OnAdLoadFailed?.Invoke(error.getDescription()); }
+    private void HandleBannerAdLoadFailed(IronSourceError error)
+    {
+        DreamsimLogger.LogError("Banner load failed");
+        DreamsimLogger.LogError(error.ToString());
+        OnAdLoadFailed?.Invoke(_adSource);
+    }
 
-    private void HandleBannerAdClicked(IronSourceAdInfo adInfo) { OnAdClicked?.Invoke(adInfo.ToString()); }
+    private void HandleBannerAdClicked(IronSourceAdInfo adInfo)
+    {
+        DreamsimLogger.Log("Banner clicked");
+        OnAdClicked?.Invoke(_adSource);
+    }
 
-    private void HandleBannerAdDisplayed(IronSourceAdInfo adInfo) { OnAdDisplayed?.Invoke(adInfo.ToString()); }
+    private void HandleBannerAdDisplayed(IronSourceAdInfo adInfo)
+    {
+        DreamsimLogger.Log("Banner shown");
+        OnAdDisplayed?.Invoke(_adSource);
+    }
 
-    private void HandleBannerAdCollapsed(IronSourceAdInfo adInfo) { OnAdCollapsed?.Invoke(adInfo.ToString()); }
+    private void HandleBannerAdDismissed(IronSourceAdInfo adInfo)
+    {
+        DreamsimLogger.Log("Banner dismissed");
+        OnAdDismissed?.Invoke(_adSource);
+    }
 
     private void HandleBannerAdLeftApplication(IronSourceAdInfo adInfo)
     {
-        OnAdLeftApplication?.Invoke(adInfo.ToString());
+        DreamsimLogger.Log("Banner left application");
+        OnAdLeftApplication?.Invoke(_adSource);
     }
 }
 }

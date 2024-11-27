@@ -13,7 +13,6 @@ public class RewardedVideoListener
     public event Action<bool> OnAvailabilityChanged;
     public event Action<string, AdInfo> OnAdOpened;
     public event Action<string> OnAdClicked;
-    public event Action<ImpressionData> OnImpressionDataReady;
 
     private IMediationBridge _mediation;
 
@@ -37,7 +36,6 @@ public class RewardedVideoListener
         _mediation.SubscribeAdShowFailed(adSource => OnAdShowFailed?.Invoke(adSource));
         _mediation.SubscribeAdRewarded(adSource => OnAdCompleted?.Invoke(adSource));
         _mediation.SubscribeAdClicked(adSource => OnAdClicked?.Invoke(adSource));
-        _mediation.SubscribeImpressionDataReady(data => OnImpressionDataReady?.Invoke(data));
 
         DreamsimLogger.Log("Rewarded ads initialized");
     }

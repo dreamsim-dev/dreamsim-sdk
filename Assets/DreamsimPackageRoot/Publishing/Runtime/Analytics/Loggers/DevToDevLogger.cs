@@ -6,10 +6,7 @@ namespace Dreamsim.Publishing
 {
 public class DevToDevLogger : IInternalAnalyticsLogger
 {
-    public void Log(string eventName)
-    {
-        DTDAnalytics.CustomEvent(eventName);
-    }
+    public void Log(string eventName) { DTDAnalytics.CustomEvent(eventName); }
 
     public void Log(string eventName, List<EventParam> eventParams)
     {
@@ -20,7 +17,7 @@ public class DevToDevLogger : IInternalAnalyticsLogger
             if (eventParam.ValueType == typeof(double)) @params.Add(eventParam.Key, (double)eventParam.Value);
             if (eventParam.ValueType == typeof(string)) @params.Add(eventParam.Key, (string)eventParam.Value);
         }
-        
+
         DTDAnalytics.CustomEvent(eventName, @params);
     }
 
@@ -54,26 +51,47 @@ public class DevToDevLogger : IInternalAnalyticsLogger
     {
         var @params = new DTDCustomEventParameters();
         @params.Add("ad_source", adSource);
-        DTDAnalytics.CustomEvent("ad_request", @params);
+        DTDAnalytics.CustomEvent("ad_rewarded_request", @params);
     }
 
     public void LogRewardedAdClicked(string adSource)
     {
         var @params = new DTDCustomEventParameters();
         @params.Add("ad_source", adSource);
-        DTDAnalytics.CustomEvent("ad_clicked", @params);
+        DTDAnalytics.CustomEvent("ad_rewarded_clicked", @params);
     }
 
     public void LogRewardedAdRewardReceived(string adSource)
     {
         var @params = new DTDCustomEventParameters();
         @params.Add("ad_source", adSource);
-        DTDAnalytics.CustomEvent("ad_reward", @params);
+        DTDAnalytics.CustomEvent("ad_rewarded_reward", @params);
+    }
+
+    public void LogBannerAdRequest(string adSource)
+    {
+        var @params = new DTDCustomEventParameters();
+        @params.Add("ad_source", adSource);
+        DTDAnalytics.CustomEvent("ad_banner_request", @params);
+    }
+
+    public void LogBannerAdImpression(string adSource)
+    {
+        var @params = new DTDCustomEventParameters();
+        @params.Add("ad_source", adSource);
+        DTDAnalytics.CustomEvent("ad_banner_impression", @params);
+    }
+
+    public void LogBannerAdClicked(string adSource)
+    {
+        var @params = new DTDCustomEventParameters();
+        @params.Add("ad_source", adSource);
+        DTDAnalytics.CustomEvent("ad_banner_clicked", @params);
     }
 
     public void LogRewardedAdRewardReceivedTimes(int times)
     {
-        DTDAnalytics.CustomEvent($"ad_reward_received_{times}_times");
+        DTDAnalytics.CustomEvent($"ad_rewarded_reward_received_{times}_times");
     }
 
     public void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
@@ -81,15 +99,9 @@ public class DevToDevLogger : IInternalAnalyticsLogger
         // Intentionally empty
     }
 
-    public void LogTutorialStart()
-    {
-        DTDAnalytics.Tutorial(-1);
-    }
+    public void LogTutorialStart() { DTDAnalytics.Tutorial(-1); }
 
-    public void LogTutorialSkipped()
-    {
-        DTDAnalytics.Tutorial(0);
-    }
+    public void LogTutorialSkipped() { DTDAnalytics.Tutorial(0); }
 
     public void LogTutorialStepCompletion(int step)
     {
@@ -97,15 +109,9 @@ public class DevToDevLogger : IInternalAnalyticsLogger
         DTDAnalytics.Tutorial(step);
     }
 
-    public void LogTutorialCompletion()
-    {
-        DTDAnalytics.Tutorial(-2);
-    }
+    public void LogTutorialCompletion() { DTDAnalytics.Tutorial(-2); }
 
-    public void LogLevelUp(int level)
-    {
-        DTDAnalytics.LevelUp(level);
-    }
+    public void LogLevelUp(int level) { DTDAnalytics.LevelUp(level); }
 
     public void LogContentView(string contentId)
     {

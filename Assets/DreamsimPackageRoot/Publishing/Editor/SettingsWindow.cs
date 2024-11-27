@@ -69,7 +69,6 @@ public class SettingsWindow : EditorWindow
 
     private void OnGUI()
     {
-        // Your GUI Code
         FindSettings();
 
         var padding = new RectOffset(0, 0, 0, 0);
@@ -139,8 +138,8 @@ public class SettingsWindow : EditorWindow
         EditorGUILayout.PropertyField(mediationProp);
         var useRewardedVideoProp = settingsObject.FindProperty("_advertisement._useRewardedVideo");
         EditorGUILayout.PropertyField(useRewardedVideoProp);
-        var useBannerAds = settingsObject.FindProperty("_advertisement._useBannerAds");
-        EditorGUILayout.PropertyField(useBannerAds);
+        var useBannerProp = settingsObject.FindProperty("_advertisement._useBanner");
+        EditorGUILayout.PropertyField(useBannerProp);
 
         var levelPlayProp = settingsObject.FindProperty("_advertisement._levelPlay");
         if (_settings.Advertisement.Mediation == Settings.AdvertisementSettings.MediationType.LevelPlay)

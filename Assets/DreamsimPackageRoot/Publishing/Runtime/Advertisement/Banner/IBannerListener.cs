@@ -4,18 +4,19 @@ namespace Dreamsim.Publishing
 {
 public interface IBannerListener
 {
+    event Action<string> OnAdRequested;
     event Action<string> OnAdLoaded;
     event Action<string> OnAdLoadFailed;
     event Action<string> OnAdDisplayed;
-    event Action<string> OnAdDisplayFailed;
     event Action<string> OnAdClicked;
-    event Action<string> OnAdCollapsed;
-    event Action<string> OnAdExpanded;
+    event Action<string> OnAdDismissed;
     event Action<string> OnAdLeftApplication;
 
     void Init();
 
-    void Load(BannerSize size, BannerPosition position);
+    void Load(string adSource,
+        BannerSize size = BannerSize.Default,
+        BannerPosition position = BannerPosition.Bottom);
 
     void Show();
 

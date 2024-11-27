@@ -6,21 +6,21 @@ namespace Dreamsim.Publishing
 {
 public class FirebaseLogger : IInternalAnalyticsLogger
 {
-    public void Log(string eventName)
-    {
-        FirebaseAnalytics.LogEvent(eventName);
-    }
+    public void Log(string eventName) { FirebaseAnalytics.LogEvent(eventName); }
 
     public void Log(string eventName, List<EventParam> eventParams)
     {
         var @params = new List<Parameter>();
         foreach (var eventParam in eventParams)
         {
-            if (eventParam.ValueType == typeof(long)) @params.Add(new Parameter(eventParam.Key, (long)eventParam.Value));
-            if (eventParam.ValueType == typeof(double)) @params.Add(new Parameter(eventParam.Key, (double)eventParam.Value));
-            if (eventParam.ValueType == typeof(string)) @params.Add(new Parameter(eventParam.Key, (string)eventParam.Value));
+            if (eventParam.ValueType == typeof(long))
+                @params.Add(new Parameter(eventParam.Key, (long)eventParam.Value));
+            if (eventParam.ValueType == typeof(double))
+                @params.Add(new Parameter(eventParam.Key, (double)eventParam.Value));
+            if (eventParam.ValueType == typeof(string))
+                @params.Add(new Parameter(eventParam.Key, (string)eventParam.Value));
         }
-        
+
         FirebaseAnalytics.LogEvent(eventName, @params.ToArray());
     }
 
@@ -51,24 +51,42 @@ public class FirebaseLogger : IInternalAnalyticsLogger
     public void LogRewardedAdRequest(string adSource)
     {
         var @params = new Parameter[] { new("ad_source", adSource) };
-        FirebaseAnalytics.LogEvent("ad_request", @params);
+        FirebaseAnalytics.LogEvent("ad_rewarded_request", @params);
     }
 
     public void LogRewardedAdClicked(string adSource)
     {
         var @params = new Parameter[] { new("ad_source", adSource) };
-        FirebaseAnalytics.LogEvent("ad_request", @params);
+        FirebaseAnalytics.LogEvent("ad_rewarded_clicked", @params);
     }
 
     public void LogRewardedAdRewardReceived(string adSource)
     {
         var @params = new Parameter[] { new("ad_source", adSource) };
-        FirebaseAnalytics.LogEvent("ad_reward", @params);
+        FirebaseAnalytics.LogEvent("ad_rewarded_reward", @params);
+    }
+
+    public void LogBannerAdRequest(string adSource)
+    {
+        var @params = new Parameter[] { new("ad_source", adSource) };
+        FirebaseAnalytics.LogEvent("ad_banner_request", @params);
+    }
+
+    public void LogBannerAdImpression(string adSource)
+    {
+        var @params = new Parameter[] { new("ad_source", adSource) };
+        FirebaseAnalytics.LogEvent("ad_banner_impression", @params);
+    }
+
+    public void LogBannerAdClicked(string adSource)
+    {
+        var @params = new Parameter[] { new("ad_source", adSource) };
+        FirebaseAnalytics.LogEvent("ad_banner_clicked", @params);
     }
 
     public void LogRewardedAdRewardReceivedTimes(int times)
     {
-        FirebaseAnalytics.LogEvent($"ad_reward_received_{times}_times");
+        FirebaseAnalytics.LogEvent($"ad_rewarded_reward_received_{times}_times");
     }
 
     public void LogCrossPromoImpression(string appId, string campaign, List<EventParam> eventParams)
@@ -76,26 +94,17 @@ public class FirebaseLogger : IInternalAnalyticsLogger
         // Intentionally empty
     }
 
-    public void LogTutorialStart()
-    {
-        FirebaseAnalytics.LogEvent("tutorial_start");
-    }
+    public void LogTutorialStart() { FirebaseAnalytics.LogEvent("tutorial_start"); }
 
-    public void LogTutorialSkipped()
-    {
-        FirebaseAnalytics.LogEvent("tutorial_skipped");
-    }
+    public void LogTutorialSkipped() { FirebaseAnalytics.LogEvent("tutorial_skipped"); }
 
     public void LogTutorialStepCompletion(int step)
     {
-        var @params = new Parameter[] { new ("step", step) };
+        var @params = new Parameter[] { new("step", step) };
         FirebaseAnalytics.LogEvent($"tutorial_step_completion", @params);
     }
 
-    public void LogTutorialCompletion()
-    {
-        FirebaseAnalytics.LogEvent($"tutorial_completed");
-    }
+    public void LogTutorialCompletion() { FirebaseAnalytics.LogEvent($"tutorial_completed"); }
 
     public void LogLevelUp(int level)
     {
