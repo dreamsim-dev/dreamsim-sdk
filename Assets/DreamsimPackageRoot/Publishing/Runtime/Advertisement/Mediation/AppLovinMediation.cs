@@ -42,16 +42,16 @@ namespace Dreamsim.Publishing
             MaxSdk.SetHasUserConsent(consent);    
         }
 
-        public void SetCOPPA(bool value) { throw new NotImplementedException(); }
+        public void SetCOPPA(bool value) {  }
 
-        public void OnApplicationPause(bool isPaused) { throw new NotImplementedException(); }
+        public void OnApplicationPause(bool isPaused) {  }
 
         public void SubscribeSdkInitializationCompleted(Action handle_SkdInitialized)
         {
             MaxSdkCallbacks.OnSdkInitializedEvent += _ => { handle_SkdInitialized?.Invoke(); };
         }
         
-        public void SubscribeImpressionDataReady(Action<ImpressionData> onImpressionDataReady) { throw new NotImplementedException(); }
+        public void SubscribeImpressionDataReady(Action<ImpressionData> onImpressionDataReady) {  }
 
         public void LoadRewardedVideo()
         {
@@ -78,8 +78,8 @@ namespace Dreamsim.Publishing
             MaxSdk.ShowRewardedAd(_adUnitId, placement);
         }
         
-        public bool IsRewardedVideoAvailable() { throw new NotImplementedException(); }
-        public void SetManualLoadRewardedVideo(bool isOn) { throw new NotImplementedException(); }
+        public bool IsRewardedVideoAvailable() { return MaxSdk.IsRewardedAdReady(_adSource); }
+        public void SetManualLoadRewardedVideo(bool isOn) {  }
 
         public void SubscribeAdOpened(Action<string, AdInfo> onAdOpened)
         {
@@ -94,8 +94,13 @@ namespace Dreamsim.Publishing
             MaxSdkCallbacks.Rewarded.OnAdHiddenEvent += Handle_OnAdClosed;
         }
         
-        public void SubscribeAdAvailable(Action<bool> onAdAvailable) { throw new NotImplementedException(); }
-        public void SubscribeAdUnavailable(Action<bool> onAdUnavailable) { throw new NotImplementedException(); }
+        public void SubscribeAdAvailable(Action<bool> onAdAvailable) {
+            //MaxSdkCallbacks.Rewarded.OnAdLoadedEvent + Handle_OnAdLoadFailed;
+        //    throw new NotImplementedException();
+        }
+        public void SubscribeAdUnavailable(Action<bool> onAdUnavailable) { 
+            //throw new NotImplementedException();
+            }
 
         public void SubscribeAdLoadFailed(Action<string> onAdLoadFailed)
         {
