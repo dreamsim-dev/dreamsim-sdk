@@ -52,7 +52,17 @@ public class DreamsimPublishing : MonoBehaviour
                     settings.Analytics,
                     settings.GDPR);
             }
+        }
+        catch (Exception e)
+        {
+            hasError = true;
+            var error = e.Message;
+            DreamsimLogger.LogError("Error occured during initialization. See next error log");
+            DreamsimLogger.LogError(error.Trim());
+        }
 
+        try
+        {
             if (settings.General.useAdvertisement) await Advertisement.InitAsync(settings.Advertisement);
         }
         catch (Exception e)

@@ -261,7 +261,13 @@ public class Analytics : MonoBehaviour
 
         Firebase.Analytics.Parameter[] adParameters =
         {
+#if DREAMSIM_USE_IRONSOURCE
             new("ad_platform", "ironSource"),
+#elif DREAMSIM_USE_APPLOVIN
+            new("ad_platform", "AppLovin"),
+#else
+            new("ad_platform", "UNKNOWN"),
+#endif
             new("ad_source", impressionData.AdNetwork),
             new("ad_unit_name", impressionData.InstanceName),
             new("ad_format", impressionData.AdUnit),
