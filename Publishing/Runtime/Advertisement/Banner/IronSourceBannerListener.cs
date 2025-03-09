@@ -2,7 +2,9 @@ using System;
 
 namespace Dreamsim.Publishing
 {
-public class IronSourceBannerListener : IBannerListener
+
+#if DREAMSIM_USE_IRONSOURCE
+    public class IronSourceBannerListener : IBannerListener
 {
     public event Action<string> OnAdRequested;
     public event Action<string> OnAdLoaded;
@@ -115,4 +117,5 @@ public class IronSourceBannerListener : IBannerListener
         OnAdLeftApplication?.Invoke(_adSource);
     }
 }
+#endif
 }

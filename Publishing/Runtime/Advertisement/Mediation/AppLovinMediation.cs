@@ -28,11 +28,11 @@ namespace Dreamsim.Publishing
         public void Init()
         {
             MaxSdk.InitializeSdk();
-            /* for testing only
+            // for testing only
             MaxSdkCallbacks.OnSdkInitializedEvent += (MaxSdkBase.SdkConfiguration sdkConfiguration) => {
                 // Show Mediation Debugger
                 MaxSdk.ShowMediationDebugger();
-            };*/
+            };
         }
 
         public void ValidateIntegration()

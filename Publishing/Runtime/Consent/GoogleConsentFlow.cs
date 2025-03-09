@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GoogleMobileAds.Ump.Api;
+using UnityEngine;
 
 namespace Dreamsim.Publishing
 {
@@ -107,9 +108,20 @@ public class GoogleConsentFlow
         }
         
         await UniTask.WaitUntil(() => done);
-        
-        AdvertisingId = IronSource.Agent.getAdvertiserId();
-        DreamsimLogger.Log("UMP: Consent flow process finished");
+
+#if DREAMSIM_USE_IRONSOURCE
+            AdvertisingId = IronSource.Agent.getAdvertiserId();
+#elif DREAMSIM_USE_APPLOVIN
+            AdvertisingId = "";
+            var requestDone = false;
+            Application.RequestAdvertisingIdentifierAsync((advertisingId, trackingEnabled, errorMsg) =>
+            {
+                AdvertisingId = advertisingId;
+                requestDone = true;
+            });
+            await UniTask.WaitUntil(() => requestDone);
+#endif
+            DreamsimLogger.Log("UMP: Consent flow process finished");
     }
 }
 }
