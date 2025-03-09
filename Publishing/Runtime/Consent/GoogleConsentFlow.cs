@@ -112,14 +112,38 @@ public class GoogleConsentFlow
 #if DREAMSIM_USE_IRONSOURCE
             AdvertisingId = IronSource.Agent.getAdvertiserId();
 #elif DREAMSIM_USE_APPLOVIN
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            static string GetAndroidAdvertiserId()
+            {
+                string advertisingID = "";
+                try
+                {
+                    AndroidJavaClass up = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                    AndroidJavaObject currentActivity = up.GetStatic<AndroidJavaObject>("currentActivity");
+                    AndroidJavaClass client = new AndroidJavaClass("com.google.android.gms.ads.identifier.AdvertisingIdClient");
+                    AndroidJavaObject adInfo = client.CallStatic<AndroidJavaObject>("getAdvertisingIdInfo", currentActivity);
+
+                    advertisingID = adInfo.Call<string>("getId").ToString();
+                }
+                catch (Exception)
+                {
+                }
+                return advertisingID;
+            }
+
+            AdvertisingId = GetAndroidAdvertiserId();
+#else
             AdvertisingId = "";
-            var requestDone = false;
+#endif
+
+            /*var requestDone = false;
             Application.RequestAdvertisingIdentifierAsync((advertisingId, trackingEnabled, errorMsg) =>
             {
                 AdvertisingId = advertisingId;
                 requestDone = true;
             });
-            await UniTask.WaitUntil(() => requestDone);
+            await UniTask.WaitUntil(() => requestDone);*/
 #endif
             DreamsimLogger.Log("UMP: Consent flow process finished");
     }
