@@ -36,7 +36,7 @@ UPM package for publishing purposes.
     - UnityPurchasing
     - GoogleMobileAds SDK ([GitHub](https://github.com/googleads/googleads-mobile-unity))
     - AppsFlyer SDK ([GitHub](https://github.com/AppsFlyerSDK/appsflyer-unity-plugin), [Documentation](https://dev.appsflyer.com/hc/docs/installation))
-    - devtodev SDK Analytics + Messaging ([Analytics](https://github.com/devtodev-analytics/package_Analytics), [Messaging](https://github.com/devtodev-analytics/package_Messaging) [Documentation](https://docs.devtodev.com/integration/integration-of-sdk-v2/sdk-integration/unity))
+    - devtodev SDK Analytics + Messaging ([Analytics](https://github.com/devtodev-analytics/package_Analytics), [Messaging](https://github.com/devtodev-analytics/package_Messaging), [Documentation](https://docs.devtodev.com/integration/integration-of-sdk-v2/sdk-integration/unity))
     - UniTask ([GitHub](https://github.com/Cysharp/UniTask))
     - DeviceHelper ([GitHub](https://github.com/lexscite/UnityDeviceHelper))
     - IngameDebugConsole ([GitHub](https://github.com/yasirkula/UnityIngameDebugConsole))
@@ -67,7 +67,7 @@ UPM package for publishing purposes.
     - IronSource/LevelPlay SDK ([Documentation](https://developers.is.com/ironsource-mobile/unity/unity-plugin))
       - Don't forget to add EmbedInMobiSDK.cs and IronSourceAdQualityDependencies.xml (also described in documentation)
     - ApplovinMAX
-5. Install upm branch of this repository via PackageManager (replace [VERSION] with actual value).
+5. Install upm branch of this repository via PackageManager (replace [VERSION] with actual value (1.0.5)).
    ```
    https://github.com/dreamsim-dev/dreamsim-sdk.git#[VERSION]
    ```
