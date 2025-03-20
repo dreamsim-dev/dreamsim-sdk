@@ -27,7 +27,7 @@ public class PurchaseValidator
         if (Application.isEditor) return true;
 
         var product = args.purchasedProduct;
-        var data = new PurchaseValidationData(_slug, product, DreamsimCommon.DebugManager.IsConsoleActive);
+        var data = null;//new PurchaseValidationData(_slug, product, DreamsimCommon.DebugManager.IsConsoleActive); TODO Integrate Facebook SDK
         var requestContents = JsonConvert.SerializeObject(data);
         var response = await Client.SendPostAsync(Url, requestContents);
         var responseContents = response.Item2;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Facebook.Unity.Settings;
+//using Facebook.Unity.Settings; TODO Integrate Facebook SDK
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public static class DependenciesUpdater
     public static void Update(Settings settings)
     {
         UpdateGADSettings(settings.Advertisement.AdMob.AndroidAppId, settings.Advertisement.AdMob.iOSAppId);
-        UpdateFacebookSettings(settings.Facebook.AppLabel, settings.Facebook.AppId, settings.Facebook.ClientToken);
+        //UpdateFacebookSettings(settings.Facebook.AppLabel, settings.Facebook.AppId, settings.Facebook.ClientToken); TODO Integrate Facebook SDK
         UpdateMediationSettings(settings.Advertisement.Mediation);
         UpdateAndroidManifest(settings.Advertisement.AdMob.AndroidAppId);
     }
@@ -32,14 +32,14 @@ public static class DependenciesUpdater
         EditorUtility.SetDirty(gadSettings);
     }
 
-    private static void UpdateFacebookSettings(string appLabel, string appId, string clientToken)
-    {
-        FacebookSettings.AppLabels = new List<string> { appLabel };
-        FacebookSettings.AppIds = new List<string> { appId };
-        FacebookSettings.ClientTokens = new List<string> { clientToken };
-
-        EditorUtility.SetDirty(FacebookSettings.Instance);
-    }
+    // private static void UpdateFacebookSettings(string appLabel, string appId, string clientToken) TODO Integrate Facebook SDK
+    // {
+    //     FacebookSettings.AppLabels = new List<string> { appLabel };
+    //     FacebookSettings.AppIds = new List<string> { appId };
+    //     FacebookSettings.ClientTokens = new List<string> { clientToken };
+    //
+    //     EditorUtility.SetDirty(FacebookSettings.Instance);
+    // }
 
     private static void UpdateMediationSettings(Settings.AdvertisementSettings.MediationType mediationType)
     {

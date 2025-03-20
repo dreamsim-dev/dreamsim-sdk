@@ -80,7 +80,7 @@ public class SettingsWindow : EditorWindow
         GeneralArea(settingsObject);
         if (_settings.General.UseAnalytics) AnalyticsArea(settingsObject);
         if (_settings.General.useAdvertisement) AdvertisementArea(settingsObject);
-        FacebookArea(settingsObject);
+        //FacebookArea(settingsObject); TODO Integrate Facebook SDK
         GDPRArea(settingsObject);
         ButtonsArea();
 
@@ -160,18 +160,18 @@ public class SettingsWindow : EditorWindow
         SeparateLine();
     }
 
-    private static void FacebookArea(SerializedObject settingsObject)
-    {
-        H2("Facebook");
-
-        var appLabelProp = settingsObject.FindProperty("_facebook._appLabel");
-        EditorGUILayout.PropertyField(appLabelProp);
-        var appIdProp = settingsObject.FindProperty("_facebook._appId");
-        EditorGUILayout.PropertyField(appIdProp);
-        var clientTokenProp = settingsObject.FindProperty("_facebook._clientToken");
-        EditorGUILayout.PropertyField(clientTokenProp);
-        SeparateLine();
-    }
+    // private static void FacebookArea(SerializedObject settingsObject) TODO Integrate Facebook SDK
+    // {
+    //     H2("Facebook");
+    //
+    //     var appLabelProp = settingsObject.FindProperty("_facebook._appLabel");
+    //     EditorGUILayout.PropertyField(appLabelProp);
+    //     var appIdProp = settingsObject.FindProperty("_facebook._appId");
+    //     EditorGUILayout.PropertyField(appIdProp);
+    //     var clientTokenProp = settingsObject.FindProperty("_facebook._clientToken");
+    //     EditorGUILayout.PropertyField(clientTokenProp);
+    //     SeparateLine();
+    // }
 
     private static void GDPRArea(SerializedObject settingsObject)
     {
