@@ -10,7 +10,8 @@ UPM package for publishing purposes.
     - LevelPlay (IronSource)
       - Rewarded video
       - Banner
-    - ApplovinMAX (WIP)
+    - ApplovinMAX
+    - com.unity.ads.ios-support (iOS 14 Advertising Support)
 - Consent flow
   - ATT (App Tracking Transparency) flow
   - DMA (Google AdMob consent) flow
