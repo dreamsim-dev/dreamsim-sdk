@@ -1,14 +1,11 @@
 {
   "name": "world.dreamsim.sdk",
   "displayName": "Dreamsim SDK",
-  "version": "1.0.5",
+  "version": "1.0.0",
   "unity": "2022.3",
   "description": "Aggregated SDK for publishing",
   "keywords": [ "android", "ios", "sdk", "plugin" ],
   "category": "plugins",
-  "dependencies": {
-    "com.unity.purchasing": "4.12.2"
-  },
   "author": {
     "name": "Dreamsim Team",
     "email": "support@dreamsim.world"
