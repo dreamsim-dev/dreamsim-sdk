@@ -28,7 +28,7 @@ namespace Dreamsim.CI
         {
             if (Environment.GetCommandLineArgs().Contains("-keyaliaspass"))
             {
-                DreamsimLogger.Log("Set keystore settings from command line arguments");
+                Debug.Log("Set keystore settings from command line arguments");
                 return;
             }
 
